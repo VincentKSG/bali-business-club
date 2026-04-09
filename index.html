@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Bali Business Intelligence Dashboard — Bali Business Club</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+
+:root{--blk:#0a0a0a;--yel:#ffd801;--blu:#05429d;--wht:#ffffff;--card:#141414;--card2:#1c1c1c;--bdr:#2a2a2a;--dim:#888;--font:'Oswald',sans-serif;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--blk);color:var(--wht);font-family:var(--font);min-height:100vh;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+button{cursor:pointer;border:none;font-family:var(--font);}
+input{font-family:var(--font);}
+
+/* TICKER */
+.ticker-bar{background:#111;border-bottom:1px solid var(--bdr);overflow:hidden;height:32px;display:flex;align-items:center;}
+.ticker-inner{display:flex;align-items:center;animation:scroll-x 45s linear infinite;white-space:nowrap;gap:0;}
+.ticker-inner:hover{animation-play-state:paused;}
+.ticker-item{display:inline-flex;align-items:center;gap:8px;padding:0 28px;font-size:11px;font-weight:500;letter-spacing:.6px;color:var(--dim);border-right:1px solid var(--bdr);}
+.ticker-item span{color:var(--wht);}
+.ticker-item .up{color:#22c55e;}
+.ticker-item .down{color:#ef4444;}
+@keyframes scroll-x{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* HEADER */
+.header{display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:58px;background:#0a0a0a;border-bottom:2px solid var(--yel);}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand-logo{width:36px;height:36px;background:var(--yel);display:flex;align-items:center;justify-content:center;border-radius:4px;}
+.brand-name{font-size:18px;font-weight:700;letter-spacing:1px;color:var(--wht);}
+.brand-sub{font-size:10px;font-weight:400;color:var(--dim);letter-spacing:2px;text-transform:uppercase;margin-top:-2px;}
+.header-right{display:flex;align-items:center;gap:20px;}
+.live-badge{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:1px;color:var(--yel);}
+.live-dot{width:7px;height:7px;background:#22c55e;border-radius:50%;animation:pulse 1.8s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
+.live-clock{font-size:12px;font-weight:500;color:var(--dim);letter-spacing:.5px;}
+
+/* TAB NAV */
+.tab-nav{display:flex;align-items:center;background:#0e0e0e;border-bottom:1px solid var(--bdr);padding:0 20px;overflow-x:auto;}
+.tab-btn{display:flex;align-items:center;gap:7px;padding:0 18px;height:46px;font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--dim);background:transparent;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.tab-btn svg{opacity:.6;transition:opacity .2s;}
+.tab-btn:hover{color:var(--wht);}
+.tab-btn:hover svg{opacity:.9;}
+.tab-btn.active{color:var(--yel);border-bottom-color:var(--yel);}
+.tab-btn.active svg{opacity:1;}
+
+/* PANELS */
+.panel{display:none;padding:28px;min-height:calc(100vh - 140px);}
+.panel.active{display:block;}
+.section-title{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--bdr);}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:28px;}
+.kpi-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:18px 20px;position:relative;overflow:hidden;transition:border-color .2s;}
+.kpi-card:hover{border-color:#3a3a3a;}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;background:var(--yel);}
+.kpi-label{font-size:10px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);margin-bottom:8px;}
+.kpi-value{font-size:26px;font-weight:700;color:var(--wht);line-height:1;margin-bottom:6px;}
+.kpi-change{font-size:11px;font-weight:500;}
+.kpi-change.up{color:#22c55e;}
+.kpi-change.down{color:#ef4444;}
+.kpi-change.neu{color:var(--dim);}
+
+/* CHART GRID */
+.chart-grid{display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:28px;}
+.chart-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:20px;}
+.chart-title{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);margin-bottom:16px;}
+.chart-wrap{position:relative;height:220px;}
+
+/* INSTAGRAM BANNER */
+.ig-banner{margin-bottom:28px;}
+.ig-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.ig-title{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--dim);}
+.ig-follow-btn{display:flex;align-items:center;gap:6px;background:var(--yel);color:#000;font-size:11px;font-weight:700;letter-spacing:.8px;padding:7px 14px;border-radius:4px;transition:opacity .2s;}
+.ig-follow-btn:hover{opacity:.85;}
+.ig-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;}
+.ig-card{aspect-ratio:1;border-radius:6px;overflow:hidden;position:relative;cursor:pointer;transition:transform .2s;}
+.ig-card:hover{transform:scale(1.04);}
+.ig-card-inner{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:8px;text-align:center;position:relative;}
+.ig-badge{position:absolute;top:7px;right:7px;background:rgba(0,0,0,.6);color:var(--wht);font-size:9px;font-weight:600;letter-spacing:.5px;padding:2px 6px;border-radius:3px;}
+.ig-caption{font-size:9px;font-weight:500;color:var(--wht);line-height:1.3;text-shadow:0 1px 4px rgba(0,0,0,.8);max-width:100%;}
+
+/* REPORTS TABLE */
+.report-section{margin-bottom:36px;}
+.report-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px;}
+.report-title{font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;}
+.table-controls{display:flex;align-items:center;gap:10px;}
+.search-input{background:var(--card2);border:1px solid var(--bdr);color:var(--wht);font-size:12px;padding:7px 12px;border-radius:4px;width:200px;outline:none;transition:border-color .2s;}
+.search-input:focus{border-color:var(--yel);}
+.search-input::placeholder{color:var(--dim);}
+.csv-btn{background:var(--yel);color:#000;font-size:11px;font-weight:700;letter-spacing:.5px;padding:7px 14px;border-radius:4px;transition:opacity .2s;}
+.csv-btn:hover{opacity:.85;}
+.table-wrap{overflow-x:auto;border:1px solid var(--bdr);border-radius:8px;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead th{background:#111;padding:11px 14px;text-align:left;font-size:10px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:var(--dim);white-space:nowrap;cursor:pointer;user-select:none;transition:color .2s;}
+thead th:hover{color:var(--yel);}
+thead th.sort-asc::after{content:' ▲';}
+thead th.sort-desc::after{content:' ▼';}
+tbody tr{border-top:1px solid var(--bdr);transition:background .15s;}
+tbody tr:hover{background:#1a1a1a;}
+tbody td{padding:11px 14px;color:var(--wht);white-space:nowrap;}
+.tag-up{color:#22c55e;}
+.tag-down{color:#ef4444;}
+.badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:600;letter-spacing:.5px;}
+.badge-high{background:rgba(34,197,94,.15);color:#22c55e;}
+.badge-med{background:rgba(255,216,1,.15);color:#ffd801;}
+.badge-low{background:rgba(107,114,128,.15);color:#9ca3af;}
+.badge-em{background:rgba(5,66,157,.25);color:#6096e8;}
+
+/* NEWS */
+.filter-bar{display:flex;align-items:center;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+.filter-btn{background:var(--card2);border:1px solid var(--bdr);color:var(--dim);font-size:11px;font-weight:600;letter-spacing:.5px;padding:6px 14px;border-radius:20px;transition:all .2s;}
+.filter-btn:hover{border-color:#555;color:var(--wht);}
+.filter-btn.active{background:var(--yel);color:#000;border-color:var(--yel);}
+.news-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;}
+.news-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:20px;display:flex;flex-direction:column;gap:10px;transition:border-color .2s;}
+.news-card:hover{border-color:#3a3a3a;}
+.news-meta{display:flex;align-items:center;justify-content:space-between;}
+.news-cat{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:3px;}
+.news-date{font-size:10px;color:var(--dim);}
+.news-title{font-size:14px;font-weight:600;line-height:1.4;color:var(--wht);}
+.news-summary{font-size:12px;font-weight:400;color:var(--dim);line-height:1.6;}
+.news-footer{display:flex;align-items:center;justify-content:space-between;padding-top:8px;border-top:1px solid var(--bdr);}
+.news-source-link{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--yel);transition:opacity .2s;}
+.news-source-link:hover{opacity:.75;}
+.save-btn{background:transparent;border:none;color:var(--dim);cursor:pointer;padding:4px;transition:color .2s;display:flex;align-items:center;}
+.save-btn:hover{color:var(--yel);}
+.save-btn.saved{color:var(--yel);}
+
+/* PODCAST */
+.pod-controls{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.pod-search{background:var(--card2);border:1px solid var(--bdr);color:var(--wht);font-size:12px;padding:9px 14px;border-radius:6px;width:280px;outline:none;transition:border-color .2s;}
+.pod-search:focus{border-color:var(--yel);}
+.pod-search::placeholder{color:var(--dim);}
+.pod-count{font-size:11px;color:var(--dim);}
+.ep-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
+.ep-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;overflow:hidden;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;}
+.ep-card:hover{border-color:var(--yel);transform:translateY(-2px);}
+.ep-thumb{position:relative;aspect-ratio:16/9;overflow:hidden;}
+.ep-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.ep-play-overlay{position:absolute;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;}
+.ep-card:hover .ep-play-overlay{opacity:1;}
+.ep-play-icon{width:44px;height:44px;background:var(--yel);border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.ep-body{padding:14px;flex:1;display:flex;flex-direction:column;gap:8px;}
+.ep-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.ep-tag{font-size:9px;font-weight:600;letter-spacing:.5px;padding:2px 7px;border-radius:3px;background:rgba(5,66,157,.25);color:#6096e8;}
+.ep-title{font-size:13px;font-weight:600;line-height:1.4;color:var(--wht);}
+.ep-meta{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
+.ep-views{font-size:10px;color:var(--dim);}
+.ep-date{font-size:10px;color:var(--dim);}
+
+/* VIDEO MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9999;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:#111;border:1px solid var(--bdr);border-radius:10px;width:min(800px,95vw);overflow:hidden;}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--bdr);}
+.modal-title{font-size:13px;font-weight:600;color:var(--wht);max-width:calc(100% - 40px);}
+.modal-close{background:transparent;border:none;color:var(--dim);font-size:20px;line-height:1;cursor:pointer;transition:color .2s;padding:4px;}
+.modal-close:hover{color:var(--wht);}
+.modal-video{aspect-ratio:16/9;background:#000;}
+.modal-video iframe{width:100%;height:100%;display:block;}
+
+/* DATA PANEL */
+.data-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+.raw-table-wrap{border:1px solid var(--bdr);border-radius:8px;overflow:hidden;}
+.trend-up{color:#22c55e;}
+.trend-down{color:#ef4444;}
+.trend-stable{color:var(--dim);}
+
+/* SAVED */
+.saved-empty{text-align:center;padding:60px 20px;color:var(--dim);}
+.saved-empty-icon{opacity:.3;margin-bottom:16px;display:flex;justify-content:center;}
+.saved-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+.saved-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:16px;display:flex;align-items:flex-start;gap:12px;}
+.saved-type{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.saved-type-news{background:rgba(255,216,1,.15);}
+.saved-type-ep{background:rgba(5,66,157,.2);}
+.saved-info{flex:1;min-width:0;}
+.saved-label{font-size:9px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--dim);margin-bottom:4px;}
+.saved-title{font-size:12px;font-weight:600;color:var(--wht);line-height:1.4;}
+.saved-rm{background:transparent;border:none;color:var(--dim);font-size:16px;cursor:pointer;padding:2px;transition:color .2s;flex-shrink:0;}
+.saved-rm:hover{color:#ef4444;}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:2fr 1fr;gap:24px;}
+.about-card{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:28px;}
+.about-title{font-size:20px;font-weight:700;letter-spacing:1px;margin-bottom:12px;}
+.about-text{font-size:13px;font-weight:400;color:var(--dim);line-height:1.8;margin-bottom:16px;}
+.about-links{display:flex;flex-direction:column;gap:10px;}
+.about-link{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--card2);border:1px solid var(--bdr);border-radius:6px;font-size:12px;font-weight:600;transition:border-color .2s;}
+.about-link:hover{border-color:var(--yel);}
+.about-link-icon{width:28px;height:28px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.stat-row{display:flex;flex-direction:column;gap:10px;}
+.stat-item{background:var(--card2);border:1px solid var(--bdr);border-radius:6px;padding:14px 16px;}
+.stat-num{font-size:22px;font-weight:700;color:var(--yel);}
+.stat-lbl{font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:var(--dim);margin-top:2px;}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:#111;}
+::-webkit-scrollbar-thumb{background:#333;border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:#555;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .chart-grid{grid-template-columns:1fr;}
+  .ig-grid{grid-template-columns:repeat(4,1fr);}
+  .about-grid{grid-template-columns:1fr;}
+  .data-grid{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .panel{padding:16px;}
+  .kpi-grid{grid-template-columns:repeat(2,1fr);}
+  .ig-grid{grid-template-columns:repeat(3,1fr);}
+  .header{padding:0 14px;}
+  .brand-name{font-size:14px;}
+  .tab-btn{padding:0 12px;font-size:11px;}
+}
+
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="brand">
+    <div class="brand-logo">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#000"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    </div>
+    <div>
+      <div class="brand-name">BALI BUSINESS CLUB</div>
+      <div class="brand-sub">Business Intelligence Dashboard</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+    <div class="live-clock" id="clock">--:--:--</div>
+  </div>
+</header>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('home')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>HOME</button>
+  <button class="tab-btn" onclick="switchTab('reports')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>REPORTS</button>
+  <button class="tab-btn" onclick="switchTab('news')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a4 4 0 01-4-4V6"/><path d="M2 13h4"/><line x1="12" y1="8" x2="18" y2="8"/><line x1="12" y1="12" x2="18" y2="12"/><line x1="12" y1="16" x2="18" y2="16"/></svg>NEWS</button>
+  <button class="tab-btn" onclick="switchTab('podcast')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>PODCAST</button>
+  <button class="tab-btn" onclick="switchTab('data')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>DATA</button>
+  <button class="tab-btn" onclick="switchTab('saved')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>SAVED <span id="saved-count" style="display:none;background:var(--yel);color:#000;font-size:9px;padding:1px 5px;border-radius:8px;margin-left:2px;"></span></button>
+  <button class="tab-btn" onclick="switchTab('about')"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>ABOUT</button>
+</nav>
+
+<!-- ═══ HOME PANEL ═══ -->
+<section class="panel active" id="panel-home">
+  <div class="section-title">KEY METRICS — BALI &amp; INDONESIA</div>
+  <div class="kpi-grid" id="kpi-grid"></div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <div class="chart-title">MONTHLY FOREIGN ARRIVALS 2025</div>
+      <div class="chart-wrap"><canvas id="chartArrivals"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">TOP SOURCE MARKETS</div>
+      <div class="chart-wrap"><canvas id="chartMarkets"></canvas></div>
+    </div>
+  </div>
+
+  <div class="chart-grid" style="grid-template-columns:1fr 1fr;">
+    <div class="chart-card">
+      <div class="chart-title">PROPERTY PRICE INDEX BY AREA</div>
+      <div class="chart-wrap"><canvas id="chartProp"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">FDI INFLOW BY SECTOR (USD M)</div>
+      <div class="chart-wrap"><canvas id="chartFDI"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Instagram Banner -->
+  <div class="ig-banner">
+    <div class="ig-header">
+      <div class="ig-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg> &nbsp;INSTAGRAM — @BALI.BUSINESS.CLUB</div>
+      <a href="https://www.instagram.com/bali.business.club/" target="_blank" class="ig-follow-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>&nbsp;FOLLOW</a>
+    </div>
+    <div class="ig-grid" id="ig-grid"></div>
+  </div>
+</section>
+
+<!-- ═══ REPORTS PANEL ═══ -->
+<section class="panel" id="panel-reports">
+
+  <div class="report-section">
+    <div class="report-header">
+      <div class="report-title">TOURISM ARRIVALS 2025</div>
+      <div class="table-controls">
+        <input class="search-input" placeholder="Search..." oninput="filterTable('t-tourism',this.value)">
+        <button class="csv-btn" onclick="exportCSV('t-tourism','tourism-arrivals')">EXPORT CSV</button>
+      </div>
+    </div>
+    <div class="table-wrap"><table id="t-tourism">
+      <thead><tr>
+        <th onclick="sortTable('t-tourism',0)">MONTH</th>
+        <th onclick="sortTable('t-tourism',1)">ARRIVALS</th>
+        <th onclick="sortTable('t-tourism',2)">YOY CHANGE</th>
+        <th onclick="sortTable('t-tourism',3)">TOP SOURCE</th>
+        <th onclick="sortTable('t-tourism',4)">AVG STAY (DAYS)</th>
+      </tr></thead>
+      <tbody id="tb-tourism"></tbody>
+    </table></div>
+  </div>
+
+  <div class="report-section">
+    <div class="report-header">
+      <div class="report-title">AIRPORT TRAFFIC — TOP AIRLINES</div>
+      <div class="table-controls">
+        <input class="search-input" placeholder="Search..." oninput="filterTable('t-airport',this.value)">
+        <button class="csv-btn" onclick="exportCSV('t-airport','airport-traffic')">EXPORT CSV</button>
+      </div>
+    </div>
+    <div class="table-wrap"><table id="t-airport">
+      <thead><tr>
+        <th onclick="sortTable('t-airport',0)">AIRLINE</th>
+        <th onclick="sortTable('t-airport',1)">ROUTES</th>
+        <th onclick="sortTable('t-airport',2)">MONTHLY PAX</th>
+        <th onclick="sortTable('t-airport',3)">YOY CHANGE</th>
+        <th onclick="sortTable('t-airport',4)">HUB</th>
+      </tr></thead>
+      <tbody id="tb-airport"></tbody>
+    </table></div>
+  </div>
+
+  <div class="report-section">
+    <div class="report-header">
+      <div class="report-title">FDI BY SECTOR — BALI 2025</div>
+      <div class="table-controls">
+        <input class="search-input" placeholder="Search..." oninput="filterTable('t-invest',this.value)">
+        <button class="csv-btn" onclick="exportCSV('t-invest','fdi-by-sector')">EXPORT CSV</button>
+      </div>
+    </div>
+    <div class="table-wrap"><table id="t-invest">
+      <thead><tr>
+        <th onclick="sortTable('t-invest',0)">SECTOR</th>
+        <th onclick="sortTable('t-invest',1)">FDI (USD M)</th>
+        <th onclick="sortTable('t-invest',2)">PROJECTS</th>
+        <th onclick="sortTable('t-invest',3)">JOBS CREATED</th>
+        <th onclick="sortTable('t-invest',4)">YOY CHANGE</th>
+      </tr></thead>
+      <tbody id="tb-invest"></tbody>
+    </table></div>
+  </div>
+
+  <div class="report-section">
+    <div class="report-header">
+      <div class="report-title">PROPERTY MARKET — PRICE BY AREA</div>
+      <div class="table-controls">
+        <input class="search-input" placeholder="Search..." oninput="filterTable('t-prop',this.value)">
+        <button class="csv-btn" onclick="exportCSV('t-prop','property-prices')">EXPORT CSV</button>
+      </div>
+    </div>
+    <div class="table-wrap"><table id="t-prop">
+      <thead><tr>
+        <th onclick="sortTable('t-prop',0)">AREA</th>
+        <th onclick="sortTable('t-prop',1)">PRICE (USD/M²)</th>
+        <th onclick="sortTable('t-prop',2)">YOY CHANGE</th>
+        <th onclick="sortTable('t-prop',3)">RENTAL YIELD</th>
+        <th onclick="sortTable('t-prop',4)">DEMAND</th>
+      </tr></thead>
+      <tbody id="tb-prop"></tbody>
+    </table></div>
+  </div>
+
+</section>
+
+<!-- ═══ NEWS PANEL ═══ -->
+<section class="panel" id="panel-news">
+  <div class="filter-bar" id="news-filters"></div>
+  <div class="news-grid" id="news-grid"></div>
+</section>
+
+<!-- ═══ PODCAST PANEL ═══ -->
+<section class="panel" id="panel-podcast">
+  <div class="pod-controls">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <input class="pod-search" id="pod-search" placeholder="Search episodes..." oninput="filterEpisodes()">
+      <div class="filter-bar" id="pod-filters" style="margin:0;"></div>
+    </div>
+    <div class="pod-count" id="pod-count"></div>
+  </div>
+  <div class="ep-grid" id="ep-grid"></div>
+</section>
+
+<!-- ═══ DATA PANEL ═══ -->
+<section class="panel" id="panel-data">
+  <div class="section-title">MACROECONOMIC INDICATORS</div>
+  <div class="table-wrap" style="margin-bottom:28px;">
+    <table>
+      <thead><tr>
+        <th>INDICATOR</th><th>VALUE</th><th>PERIOD</th><th>SOURCE</th><th>TREND</th>
+      </tr></thead>
+      <tbody id="tb-raw"></tbody>
+    </table>
+  </div>
+  <div class="section-title">DATA SOURCES</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;">
+    <div style="background:var(--card);border:1px solid var(--bdr);border-radius:6px;padding:14px;">
+      <div style="font-size:11px;font-weight:700;color:var(--yel);margin-bottom:4px;">BPS INDONESIA</div>
+      <div style="font-size:11px;color:var(--dim);">Statistics Indonesia — official national statistics agency</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--bdr);border-radius:6px;padding:14px;">
+      <div style="font-size:11px;font-weight:700;color:var(--yel);margin-bottom:4px;">BANK INDONESIA</div>
+      <div style="font-size:11px;color:var(--dim);">Central bank — monetary data, exchange rates, inflation</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--bdr);border-radius:6px;padding:14px;">
+      <div style="font-size:11px;font-weight:700;color:var(--yel);margin-bottom:4px;">BKPM</div>
+      <div style="font-size:11px;color:var(--dim);">Investment Coordinating Board — FDI and investment data</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--bdr);border-radius:6px;padding:14px;">
+      <div style="font-size:11px;font-weight:700;color:var(--yel);margin-bottom:4px;">MINISTRY OF TOURISM</div>
+      <div style="font-size:11px;color:var(--dim);">Tourism arrivals, revenue, visitor satisfaction data</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--bdr);border-radius:6px;padding:14px;">
+      <div style="font-size:11px;font-weight:700;color:var(--yel);margin-bottom:4px;">WORLD BANK</div>
+      <div style="font-size:11px;color:var(--dim);">GDP forecasts, development indicators, macro analysis</div>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--bdr);border-radius:6px;padding:14px;">
+      <div style="font-size:11px;font-weight:700;color:var(--yel);margin-bottom:4px;">BBC RESEARCH</div>
+      <div style="font-size:11px;color:var(--dim);">Bali Business Club proprietary property and market research</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SAVED PANEL ═══ -->
+<section class="panel" id="panel-saved">
+  <div id="saved-container"></div>
+</section>
+
+<!-- ═══ ABOUT PANEL ═══ -->
+<section class="panel" id="panel-about">
+  <div class="about-grid">
+    <div>
+      <div class="about-card" style="margin-bottom:16px;">
+        <div class="about-title">BALI BUSINESS CLUB</div>
+        <div class="about-text">Bali Business Club is Bali's leading business intelligence and investment community. We connect entrepreneurs, investors, and professionals with the data, insights, and network they need to succeed in Bali and Indonesia.</div>
+        <div class="about-text">This dashboard aggregates real-time economic indicators, tourism data, FDI flows, property market intelligence, and curated news from verified sources — giving you a Bloomberg-style overview of the Bali business landscape.</div>
+        <div class="about-text" style="color:var(--yel);font-weight:600;">Data refreshes automatically every 30 seconds.</div>
+      </div>
+      <div class="about-card">
+        <div class="section-title" style="margin-bottom:16px;">CONNECT WITH US</div>
+        <div class="about-links">
+          <a href="https://balibusinessclub.com" target="_blank" class="about-link">
+            <div class="about-link-icon" style="background:rgba(255,216,1,.15);"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div>
+            <div><div style="font-size:11px;color:var(--yel);">WEBSITE</div><div style="font-size:12px;color:var(--dim);font-weight:400;">balibusinessclub.com</div></div>
+          </a>
+          <a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" class="about-link">
+            <div class="about-link-icon" style="background:rgba(255,0,0,.15);color:#ff4444;"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 00-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 00.5 6.2 31.3 31.3 0 000 12a31.3 31.3 0 00.5 5.8 3 3 0 002.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 002.1-2.1A31.3 31.3 0 0024 12a31.3 31.3 0 00-.5-5.8zM9.7 15.5V8.5l6.3 3.5-6.3 3.5z"/></svg></div>
+            <div><div style="font-size:11px;color:var(--yel);">YOUTUBE PODCAST</div><div style="font-size:12px;color:var(--dim);font-weight:400;">@BaliBusinessClub — 27 Episodes</div></div>
+          </a>
+          <a href="https://www.instagram.com/bali.business.club/" target="_blank" class="about-link">
+            <div class="about-link-icon" style="background:rgba(225,48,108,.15);color:#e1306c;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+            <div><div style="font-size:11px;color:var(--yel);">INSTAGRAM</div><div style="font-size:12px;color:var(--dim);font-weight:400;">@bali.business.club</div></div>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-item"><div class="stat-num">27</div><div class="stat-lbl">Podcast Episodes</div></div>
+      <div class="stat-item"><div class="stat-num">6.1M</div><div class="stat-lbl">Bali Arrivals 2025</div></div>
+      <div class="stat-item"><div class="stat-num">$47B</div><div class="stat-lbl">Indonesia FDI 2025</div></div>
+      <div class="stat-item"><div class="stat-num">12</div><div class="stat-lbl">Data Reports</div></div>
+      <div class="stat-item"><div class="stat-num">5.1%</div><div class="stat-lbl">GDP Growth Rate</div></div>
+      <div class="stat-item"><div class="stat-num">30s</div><div class="stat-lbl">Data Refresh Rate</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEO MODAL -->
+<div class="modal-overlay" id="videoModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle"></div>
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    </div>
+    <div class="modal-video" id="modalVideo"></div>
+  </div>
+</div>
+
+<script>
+
+// ── DATA ───────────────────────────────────────────────────────────────────
+const EPISODES  = [{"id": "vyL_5E7htbo", "title": "Building in Bali: What Every Developer and Investor Needs to Know", "views": "356", "date": "3 days ago", "tags": ["Property", "Legal"]}, {"id": "PG2TFBF0uY8", "title": "Unlocking Winning Talent: Insights from a Top Bali Head Hunter", "views": "4.7K", "date": "2 months ago", "tags": ["Business"]}, {"id": "Ayb4THzSjE0", "title": "Bali Real Estate Market in 2026: What the Data Really Shows", "views": "10K", "date": "2 months ago", "tags": ["Property", "Investment"]}, {"id": "LkiYTQ1k0ss", "title": "From Marketing to Brokering and Development: Inside GEONET's Real Estate Machine", "views": "5.5K", "date": "3 months ago", "tags": ["Property", "Business"]}, {"id": "4jIi_bXuUSU", "title": "Inside The Kedungu Fund: 2025 Growth, Strategy & Results", "views": "4.6K", "date": "4 months ago", "tags": ["Investment", "Fund"]}, {"id": "KScozjNYu9Q", "title": "How Bali Business Founders Can Attract Investors from the Middle East", "views": "3.3K", "date": "6 months ago", "tags": ["Investment", "Business"]}, {"id": "UNaQQiIjoCk", "title": "Bali Property Made Simple: The 9-Step Process Explained", "views": "6.8K", "date": "6 months ago", "tags": ["Property"]}, {"id": "0cMjvf1lb3g", "title": "How to Sell Out Your Property Development in a Day: The Future of Off-Plan Sales", "views": "15K", "date": "8 months ago", "tags": ["Property", "Business"]}, {"id": "yxJwNl3n3t4", "title": "The Kedungu Fund's $10M Milestone: A Look Ahead", "views": "3.4K", "date": "8 months ago", "tags": ["Investment", "Fund"]}, {"id": "bfHu20vi2g8", "title": "Bali Property: Off-Plan Buyer Checklist (Avoid These Common Mistakes)", "views": "18K", "date": "10 months ago", "tags": ["Property"]}, {"id": "G1lT0E2nSGQ", "title": "The Secret Growth Formula Content Creators Must Know!", "views": "1.4K", "date": "11 months ago", "tags": ["Business"]}, {"id": "7bXHvn8Vksw", "title": "Bali Real Estate: Triple Your Investment In 3 Years!", "views": "10K", "date": "1 year ago", "tags": ["Investment", "Property"]}, {"id": "9LNXudhoxO0", "title": "When Is the BEST Time to Invest in Bali? ROI Cycles Explained!", "views": "16K", "date": "1 year ago", "tags": ["Investment"]}, {"id": "fGuiCmtcOKo", "title": "Short-Term Rentals in Crisis: Why You Should Opt For Long-Term", "views": "22K", "date": "1 year ago", "tags": ["Property", "Tourism"]}, {"id": "SPFp95YSETE", "title": "Beware! Why We NEVER Invest in Uluwatu!", "views": "25K", "date": "1 year ago", "tags": ["Investment", "Property"]}, {"id": "jh_Ejqlc40g", "title": "The Kedungu Fund: All the Answers", "views": "24K", "date": "1 year ago", "tags": ["Investment", "Fund"]}, {"id": "qDP46lfSpaI", "title": "How To Sell More, Marketing Funnels: How And Why They Work", "views": "5.4K", "date": "1 year ago", "tags": ["Business"]}, {"id": "CfgZ7lqMhS8", "title": "Bali Beach Glamping: The Journey to Success", "views": "13K", "date": "1 year ago", "tags": ["Business", "Tourism"]}, {"id": "DHIQD-7YkTo", "title": "Stop! 7 Key Tips to Know Before Buying a Bali Property", "views": "62K", "date": "1 year ago", "tags": ["Property"]}, {"id": "oFFzcP9m-14", "title": "Pioneer Investing: The 3 Golden Rules", "views": "61K", "date": "1 year ago", "tags": ["Investment"]}, {"id": "A-8XYkc3hCA", "title": "Bali Leasehold vs. Freehold! The Ultimate Guide to the Hows, Whats and Whys!", "views": "50K", "date": "1 year ago", "tags": ["Property", "Legal"]}, {"id": "BhrlhfO1hz4", "title": "A Fashion Success Story: Paul Ropp and Biasa Group", "views": "13K", "date": "1 year ago", "tags": ["Business"]}, {"id": "E1FguH5Op68", "title": "Killer Tips for Investors: Leasehold Extensions in Bali", "views": "43K", "date": "1 year ago", "tags": ["Property", "Legal"]}, {"id": "aiHuohwGnrU", "title": "Building in Bali? Top Architect and Project Manager Insights", "views": "39K", "date": "1 year ago", "tags": ["Property"]}, {"id": "nKp94xADWdM", "title": "Notary's Insights: Bali Real Estate Explained", "views": "31K", "date": "1 year ago", "tags": ["Property", "Legal"]}, {"id": "q48YXinbITk", "title": "The Kedungu Fund Strategy: Bali Investment Redefined", "views": "25K", "date": "1 year ago", "tags": ["Investment", "Fund"]}, {"id": "_viN8MqKMcQ", "title": "Real Estate: How to 9x Your Investment and Other Bali Property Tips", "views": "38K", "date": "1 year ago", "tags": ["Investment", "Property"]}];
+const INSTAGRAM = [{"url": "https://www.instagram.com/bali.business.club/reel/DWgR5bgil1Q/", "caption": "The Vision Behind Ubud", "grad": "linear-gradient(135deg,#ffd801,#e65c00)", "type": "Reel"}, {"url": "https://www.instagram.com/bali.business.club/p/DWYnQb_kygx/", "caption": "NEW EPISODE 27: Where Bali Is Growing Next", "grad": "linear-gradient(135deg,#05429d,#7b2d8b)", "type": "New Ep"}, {"url": "https://www.instagram.com/bali.business.club/p/DWQ3OoMjRa2/", "caption": "Indonesia's Nickel Power", "grad": "linear-gradient(135deg,#1a7a4a,#0891b2)", "type": "Data"}, {"url": "https://www.instagram.com/bali.business.club/reel/DV8PJ3KGaH8/", "caption": "Indonesia Builds Its Digital Future", "grad": "linear-gradient(135deg,#374151,#0891b2)", "type": "Reel"}, {"url": "https://www.instagram.com/bali.business.club/reel/DVvXSH-k4oM/", "caption": "Bali Protects Rice Fields", "grad": "linear-gradient(135deg,#1a5c2e,#86a225)", "type": "Reel"}, {"url": "https://www.instagram.com/bali.business.club/p/DVifPGoAUY4/", "caption": "The Hidden Meanings of Bali's Place Names", "grad": "linear-gradient(135deg,#7c1d1d,#ea580c)", "type": "Post"}, {"url": "https://www.instagram.com/bali.business.club/p/DVQdkYAkmY1/", "caption": "Indonesia's Economic Rise", "grad": "linear-gradient(135deg,#1e3a8a,#6d28d9)", "type": "Data"}, {"url": "https://www.instagram.com/bali.business.club/reel/DU-fhfYFQKM/", "caption": "Bali Considers New Tourist Entry Rules", "grad": "linear-gradient(135deg,#0e7490,#166534)", "type": "Reel"}];
+const NEWS_DATA = [{"title": "Bali Smashes Tourism Records as Arrivals Surge Past 6.1 Million", "source": "The Jakarta Post", "sourceUrl": "https://www.thejakartapost.com", "date": "Mar 22, 2026", "cat": "Tourism", "summary": "Bali welcomed over 6.1 million foreign visitors in 2025, surpassing pre-pandemic highs. Australian and Indian tourists led growth as direct flight routes expanded across Asia-Pacific."}, {"title": "Indonesia FDI Hits $47B in 2025 as Manufacturing Boom Continues", "source": "Reuters", "sourceUrl": "https://www.reuters.com", "date": "Mar 18, 2026", "cat": "Economy", "summary": "Foreign direct investment into Indonesia reached a record $47 billion in 2025, driven by EV battery manufacturing, nickel processing, and digital infrastructure projects across Java and Kalimantan."}, {"title": "Bali Villa Prices Rise 28% Year-on-Year Amid Supply Crunch", "source": "Kompas", "sourceUrl": "https://www.kompas.com", "date": "Mar 14, 2026", "cat": "Property", "summary": "Bali's villa market saw a sharp 28% price increase in 2025 as demand from remote workers and investors outpaced supply. Canggu and Ubud remain the hottest micro-markets."}, {"title": "World Bank Raises Indonesia Growth Forecast to 5.3% for 2026", "source": "World Bank", "sourceUrl": "https://www.worldbank.org", "date": "Mar 10, 2026", "cat": "Economy", "summary": "The World Bank upgraded Indonesia's GDP growth forecast to 5.3% for 2026, citing strong domestic consumption, commodity exports, and a resilient service sector."}, {"title": "New Ngurah Rai Terminal Expansion to Add 10M Passenger Capacity", "source": "Bisnis Indonesia", "sourceUrl": "https://www.bisnis.com", "date": "Mar 6, 2026", "cat": "Infrastructure", "summary": "Bali's Ngurah Rai International Airport has broken ground on a major expansion that will add 10 million annual passenger capacity by 2028, easing pressure on the island's busiest gateway."}, {"title": "Leasehold Reforms Could Reshape Bali Property Investment Landscape", "source": "The Straits Times", "sourceUrl": "https://www.straitstimes.com", "date": "Feb 28, 2026", "cat": "Property", "summary": "Indonesia's government is considering reforms to leasehold laws that would allow foreign investors to hold 70-year leases, potentially transforming Bali's property market dynamics."}, {"title": "Private Equity Eyes Bali Hotel Assets as Valuations Normalise", "source": "Bloomberg Asia", "sourceUrl": "https://www.bloomberg.com", "date": "Feb 22, 2026", "cat": "Investment", "summary": "Private equity firms have started acquiring hospitality assets across Bali as post-COVID valuations stabilise and occupancy rates reach record highs driven by luxury and wellness tourism."}, {"title": "Indonesia's Tech Startup Ecosystem Raises $4.1B in 2025", "source": "Tech in Asia", "sourceUrl": "https://www.techinasia.com", "date": "Feb 16, 2026", "cat": "Business", "summary": "Indonesia's startup sector raised $4.1 billion in 2025 across fintech, logistics, and agritech verticals, cementing Jakarta's position as Southeast Asia's leading startup hub."}, {"title": "Bali Government Enforces Strict Rice Field Protection Zones", "source": "Bali Post", "sourceUrl": "https://www.balipost.com", "date": "Feb 10, 2026", "cat": "Tourism", "summary": "Bali's regional government has enforced strict new zoning rules protecting 38,000 hectares of rice fields from development, a move welcomed by heritage and sustainable tourism advocates."}, {"title": "Short-Term Rental Regulations Tightened Across Key Bali Districts", "source": "The Jakarta Post", "sourceUrl": "https://www.thejakartapost.com", "date": "Feb 4, 2026", "cat": "Property", "summary": "Three of Bali's most popular districts \u2014 Seminyak, Canggu, and Ubud \u2014 have imposed stricter Airbnb-style rental permits, requiring owners to register and pay a tourism levy."}, {"title": "Bali Tourism Capacity Study Calls for Visitor Management Overhaul", "source": "Reuters", "sourceUrl": "https://www.reuters.com", "date": "Jan 28, 2026", "cat": "Tourism", "summary": "A landmark government-commissioned study has recommended a 15% cap on annual tourism growth and a new digital visitor tracking system to prevent overtourism at Bali's heritage sites."}, {"title": "Nickel Export Ban Drives Indonesia's Manufacturing Revenue Up 40%", "source": "CNBC Asia", "sourceUrl": "https://www.cnbc.com", "date": "Jan 20, 2026", "cat": "Economy", "summary": "Indonesia's 2023 nickel export ban has generated a 40% increase in downstream manufacturing revenue as global EV battery producers relocated processing plants to the archipelago."}];
+const TOURISM   = [{"month": "Jan 2025", "arrivals": 481532, "yoy": 18.2, "top_source": "Australia", "avg_stay": 11.2}, {"month": "Feb 2025", "arrivals": 452871, "yoy": 22.1, "top_source": "Australia", "avg_stay": 10.8}, {"month": "Mar 2025", "arrivals": 498234, "yoy": 15.7, "top_source": "Australia", "avg_stay": 11.5}, {"month": "Apr 2025", "arrivals": 521098, "yoy": 19.3, "top_source": "India", "avg_stay": 12.1}, {"month": "May 2025", "arrivals": 487652, "yoy": 21.4, "top_source": "Australia", "avg_stay": 11.8}, {"month": "Jun 2025", "arrivals": 534781, "yoy": 23.8, "top_source": "Australia", "avg_stay": 12.4}, {"month": "Jul 2025", "arrivals": 598234, "yoy": 25.1, "top_source": "Australia", "avg_stay": 13.2}, {"month": "Aug 2025", "arrivals": 612435, "yoy": 24.6, "top_source": "UK", "avg_stay": 13.7}, {"month": "Sep 2025", "arrivals": 524398, "yoy": 20.3, "top_source": "Australia", "avg_stay": 11.9}, {"month": "Oct 2025", "arrivals": 489721, "yoy": 17.8, "top_source": "Australia", "avg_stay": 11.4}, {"month": "Nov 2025", "arrivals": 462891, "yoy": 16.5, "top_source": "India", "avg_stay": 10.9}, {"month": "Dec 2025", "arrivals": 537654, "yoy": 22.7, "top_source": "Australia", "avg_stay": 12.6}];
+const AIRPORT   = [{"airline": "Garuda Indonesia", "routes": 42, "monthly_pax": 312451, "change": "+14.2%", "hub": "CGK"}, {"airline": "Lion Air", "routes": 38, "monthly_pax": 287632, "change": "+19.8%", "hub": "CGK"}, {"airline": "AirAsia", "routes": 22, "monthly_pax": 198754, "change": "+31.4%", "hub": "KUL"}, {"airline": "Jetstar", "routes": 12, "monthly_pax": 142387, "change": "+22.1%", "hub": "SYD"}, {"airline": "Singapore Airlines", "routes": 14, "monthly_pax": 134521, "change": "+18.7%", "hub": "SIN"}, {"airline": "Qantas", "routes": 8, "monthly_pax": 98432, "change": "+28.3%", "hub": "SYD"}, {"airline": "Cathay Pacific", "routes": 7, "monthly_pax": 76543, "change": "+15.9%", "hub": "HKG"}, {"airline": "Emirates", "routes": 5, "monthly_pax": 65234, "change": "+42.1%", "hub": "DXB"}, {"airline": "KLM", "routes": 4, "monthly_pax": 43218, "change": "+11.3%", "hub": "AMS"}, {"airline": "Turkish Airlines", "routes": 3, "monthly_pax": 38764, "change": "+67.4%", "hub": "IST"}];
+const INVEST    = [{"sector": "Tourism & Hospitality", "fdi_usd_m": 1842, "projects": 127, "jobs": 8432, "yoy": "+24.3%"}, {"sector": "Property Development", "fdi_usd_m": 2341, "projects": 89, "jobs": 5621, "yoy": "+31.8%"}, {"sector": "Digital Infrastructure", "fdi_usd_m": 987, "projects": 43, "jobs": 2341, "yoy": "+58.7%"}, {"sector": "Renewable Energy", "fdi_usd_m": 743, "projects": 31, "jobs": 1876, "yoy": "+42.1%"}, {"sector": "F&B & Retail", "fdi_usd_m": 432, "projects": 214, "jobs": 6543, "yoy": "+18.9%"}, {"sector": "Healthcare", "fdi_usd_m": 321, "projects": 18, "jobs": 1234, "yoy": "+29.4%"}, {"sector": "Education", "fdi_usd_m": 198, "projects": 12, "jobs": 876, "yoy": "+15.2%"}, {"sector": "Manufacturing", "fdi_usd_m": 156, "projects": 8, "jobs": 543, "yoy": "+9.7%"}];
+const PROPERTY  = [{"area": "Canggu", "price_usd_sqm": 3842, "yoy": "+28.4%", "rental_yield": "12.3%", "demand": "Very High"}, {"area": "Seminyak", "price_usd_sqm": 3621, "yoy": "+22.1%", "rental_yield": "11.8%", "demand": "High"}, {"area": "Ubud", "price_usd_sqm": 2987, "yoy": "+31.7%", "rental_yield": "13.2%", "demand": "Very High"}, {"area": "Uluwatu", "price_usd_sqm": 2654, "yoy": "+18.9%", "rental_yield": "10.4%", "demand": "High"}, {"area": "Sanur", "price_usd_sqm": 2341, "yoy": "+14.3%", "rental_yield": "9.8%", "demand": "Medium"}, {"area": "Nusa Dua", "price_usd_sqm": 2187, "yoy": "+11.7%", "rental_yield": "9.1%", "demand": "Medium"}, {"area": "Kedungu", "price_usd_sqm": 1987, "yoy": "+41.2%", "rental_yield": "14.8%", "demand": "Very High"}, {"area": "Pererenan", "price_usd_sqm": 2843, "yoy": "+35.6%", "rental_yield": "13.7%", "demand": "Very High"}, {"area": "Jimbaran", "price_usd_sqm": 2123, "yoy": "+16.4%", "rental_yield": "10.2%", "demand": "High"}, {"area": "Nusa Penida", "price_usd_sqm": 1543, "yoy": "+47.8%", "rental_yield": "16.1%", "demand": "Emerging"}];
+const RAW_MACRO = [{"indicator": "GDP Growth Rate", "value": "5.1%", "period": "Q3 2025", "source": "BPS Indonesia", "trend": "up"}, {"indicator": "Inflation Rate", "value": "2.8%", "period": "Feb 2026", "source": "Bank Indonesia", "trend": "down"}, {"indicator": "USD/IDR Exchange Rate", "value": "16,250", "period": "Mar 2026", "source": "Bank Indonesia", "trend": "stable"}, {"indicator": "Foreign Arrivals (Annual)", "value": "6.1M", "period": "2025", "source": "Statistics Indonesia", "trend": "up"}, {"indicator": "Tourism Revenue", "value": "$9.4B", "period": "2025", "source": "Ministry of Tourism", "trend": "up"}, {"indicator": "FDI Inflow", "value": "$47B", "period": "2025", "source": "BKPM Indonesia", "trend": "up"}, {"indicator": "Bali Property Price Index", "value": "142.3", "period": "Q4 2025", "source": "Bank Indonesia", "trend": "up"}, {"indicator": "Short-Term Rental Occupancy", "value": "78.4%", "period": "Q4 2025", "source": "Airbnb Insights", "trend": "up"}, {"indicator": "Average Villa Rental Yield", "value": "12.1%", "period": "2025", "source": "BBC Research", "trend": "up"}, {"indicator": "Internet Penetration", "value": "77.3%", "period": "2025", "source": "APJII", "trend": "up"}, {"indicator": "Unemployment Rate", "value": "5.2%", "period": "Q3 2025", "source": "BPS Indonesia", "trend": "down"}, {"indicator": "Bali Visitor Satisfaction", "value": "8.7/10", "period": "2025", "source": "Ministry of Tourism", "trend": "up"}];
+
+// ── TICKER ─────────────────────────────────────────────────────────────────
+const TICKER_ITEMS = [
+  {label:'BALI ARRIVALS 2025', val:'6.1M', suf:''},
+  {label:'IDR / USD', val:'16,250', suf:''},
+  {label:'BALI GDP GROWTH', val:'5.1%', cls:'up'},
+  {label:'FDI INFLOW 2025', val:'$47B', cls:'up'},
+  {label:'AVG VILLA YIELD', val:'12.1%', cls:'up'},
+  {label:'PROPERTY INDEX', val:'142.3', cls:'up'},
+  {label:'INFLATION', val:'2.8%', cls:'neu'},
+  {label:'AIRPORT PAX/MO', val:'1.79M', suf:''},
+  {label:'TOP SOURCE MARKET', val:'AUSTRALIA', suf:''},
+  {label:'CANGGU USD/M²', val:'$3,842', cls:'up'},
+  {label:'KEDUNGU USD/M²', val:'$1,987', cls:'up'},
+  {label:'AVG STAY', val:'11.8 days', suf:''},
+  {label:'SHORT-TERM OCC.', val:'78.4%', cls:'up'},
+  {label:'WORLD BANK FORECAST', val:'5.3%', cls:'up'},
+  {label:'NUSA PENIDA YOY', val:'+47.8%', cls:'up'},
+];
+
+function buildTicker() {
+  const el = document.getElementById('ticker');
+  let html = '';
+  // double for infinite scroll
+  for (let r = 0; r < 2; r++) {
+    TICKER_ITEMS.forEach(t => {
+      const cls = t.cls || 'neu';
+      html += '<div class="ticker-item">' + t.label + ': <span class="' + cls + '">' + t.val + '</span></div>';
+    });
+  }
+  el.innerHTML = html;
+}
+
+// ── CLOCK ──────────────────────────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  document.getElementById('clock').textContent =
+    'BALI ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+}
+
+// ── TAB SWITCH ─────────────────────────────────────────────────────────────
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    const tabs = ['home','reports','news','podcast','data','saved','about'];
+    b.classList.toggle('active', tabs[i] === name);
+  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  if (name === 'home' && !window._chartsInit) { initCharts(); window._chartsInit = true; }
+  if (name === 'saved') renderSaved();
+}
+
+// ── KPI CARDS ──────────────────────────────────────────────────────────────
+const KPIS = [
+  {label:'FOREIGN VISITORS', value:'6.1M', change:'+22.4% YoY', dir:'up'},
+  {label:'AIRPORT PASSENGERS', value:'12.4M', change:'+18.7% YoY', dir:'up'},
+  {label:'FDI INFLOW', value:'$47B', change:'+31.2% YoY', dir:'up'},
+  {label:'PROPERTY PRICE IDX', value:'142.3', change:'+12.0% YoY', dir:'up'},
+  {label:'GDP GROWTH', value:'5.1%', change:'Q3 2025', dir:'neu'},
+];
+
+function renderKPIs() {
+  const el = document.getElementById('kpi-grid');
+  el.innerHTML = KPIS.map(k =>
+    '<div class="kpi-card">' +
+      '<div class="kpi-label">' + k.label + '</div>' +
+      '<div class="kpi-value">' + k.value + '</div>' +
+      '<div class="kpi-change ' + k.dir + '">' + (k.dir==='up'?'▲ ':'') + k.change + '</div>' +
+    '</div>'
+  ).join('');
+}
+
+// ── CHARTS ─────────────────────────────────────────────────────────────────
+function initCharts() {
+  Chart.defaults.color = '#888';
+  Chart.defaults.borderColor = '#2a2a2a';
+  Chart.defaults.font.family = "'Oswald', sans-serif";
+
+  // Arrivals bar chart
+  const months = TOURISM.map(r => r.month.replace(' 2025',''));
+  const arrivals = TOURISM.map(r => r.arrivals);
+  new Chart(document.getElementById('chartArrivals'), {
+    type: 'bar',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Foreign Arrivals',
+        data: arrivals,
+        backgroundColor: '#ffd80180',
+        borderColor: '#ffd801',
+        borderWidth: 1,
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { ticks: { callback: v => (v/1000).toFixed(0)+'K' } }
+      }
+    }
+  });
+
+  // Markets doughnut
+  new Chart(document.getElementById('chartMarkets'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Australia','India','UK','China','USA','Others'],
+      datasets: [{
+        data: [28.4, 14.2, 10.1, 8.7, 6.3, 32.3],
+        backgroundColor: ['#ffd801','#05429d','#22c55e','#ef4444','#a855f7','#444'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { padding: 10, font: { size: 10 } } } },
+      cutout: '62%',
+    }
+  });
+
+  // Property price bar
+  const areas = PROPERTY.map(r => r.area);
+  const prices = PROPERTY.map(r => r.price_usd_sqm);
+  new Chart(document.getElementById('chartProp'), {
+    type: 'bar',
+    data: {
+      labels: areas,
+      datasets: [{
+        label: 'Price USD/m²',
+        data: prices,
+        backgroundColor: '#05429d99',
+        borderColor: '#05429d',
+        borderWidth: 1,
+        borderRadius: 3,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      indexAxis: 'y',
+      plugins: { legend: { display: false } },
+      scales: { x: { ticks: { callback: v => '$'+v.toLocaleString() } } }
+    }
+  });
+
+  // FDI doughnut
+  new Chart(document.getElementById('chartFDI'), {
+    type: 'doughnut',
+    data: {
+      labels: INVEST.map(r => r.sector),
+      datasets: [{
+        data: INVEST.map(r => r.fdi_usd_m),
+        backgroundColor: ['#ffd801','#05429d','#22c55e','#ef4444','#a855f7','#f97316','#06b6d4','#64748b'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { padding: 8, font: { size: 9 } } } },
+      cutout: '55%',
+    }
+  });
+}
+
+// ── INSTAGRAM ──────────────────────────────────────────────────────────────
+function renderInstagram() {
+  const el = document.getElementById('ig-grid');
+  el.innerHTML = INSTAGRAM.map(p =>
+    '<a href="' + p.url + '" target="_blank" class="ig-card">' +
+      '<div class="ig-card-inner" style="background:' + p.grad + ';">' +
+        '<div class="ig-badge">' + p.type + '</div>' +
+        '<div class="ig-caption">' + p.caption + '</div>' +
+      '</div>' +
+    '</a>'
+  ).join('');
+}
+
+// ── NEWS ───────────────────────────────────────────────────────────────────
+const CAT_COLORS = {
+  Tourism:  {bg:'rgba(34,197,94,.15)',  color:'#22c55e'},
+  Economy:  {bg:'rgba(168,85,247,.15)', color:'#a855f7'},
+  Property: {bg:'rgba(255,216,1,.15)',  color:'#ffd801'},
+  Investment:{bg:'rgba(5,66,157,.2)',   color:'#6096e8'},
+  Infrastructure:{bg:'rgba(249,115,22,.15)',color:'#f97316'},
+  Business: {bg:'rgba(6,182,212,.15)',  color:'#06b6d4'},
+};
+let newsFilter = 'All';
+
+function buildNewsFilters() {
+  const cats = ['All', ...Object.keys(CAT_COLORS)];
+  const el = document.getElementById('news-filters');
+  el.innerHTML = cats.map(c =>
+    '<button class="filter-btn ' + (c === 'All' ? 'active' : '') + '" onclick="setNewsFilter(\'' + c + '\')">' + c + '</button>'
+  ).join('');
+}
+
+function setNewsFilter(cat) {
+  newsFilter = cat;
+  document.querySelectorAll('#news-filters .filter-btn').forEach(b => b.classList.toggle('active', b.textContent === cat));
+  renderNews();
+}
+
+function renderNews() {
+  const items = newsFilter === 'All' ? NEWS_DATA : NEWS_DATA.filter(n => n.cat === newsFilter);
+  const saved = getSaved();
+  const el = document.getElementById('news-grid');
+  el.innerHTML = items.map(n => {
+    const cc = CAT_COLORS[n.cat] || {bg:'#222',color:'#888'};
+    const isSaved = saved.some(s => s.type === 'news' && s.id === n.title);
+    return '<div class="news-card">' +
+      '<div class="news-meta">' +
+        '<span class="news-cat" style="background:' + cc.bg + ';color:' + cc.color + '">' + n.cat.toUpperCase() + '</span>' +
+        '<span class="news-date">' + n.date + '</span>' +
+      '</div>' +
+      '<div class="news-title">' + n.title + '</div>' +
+      '<div class="news-summary">' + n.summary + '</div>' +
+      '<div class="news-footer">' +
+        '<a href="' + n.sourceUrl + '" target="_blank" rel="noopener" class="news-source-link">' +
+          '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>' +
+          ' ' + n.source +
+        '</a>' +
+        '<button class="save-btn ' + (isSaved?'saved':'') + '" onclick="toggleSaved(\'news\',\'' + n.title.replace(/'/g,"") + '\',\'' + n.title.replace(/'/g,"") + '\')" title="Save article">' +
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="' + (isSaved?'currentColor':'none') + '" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>' +
+        '</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ── PODCAST ────────────────────────────────────────────────────────────────
+let podFilter = 'All';
+const EP_TAGS = ['All','Property','Investment','Business','Fund','Legal','Tourism'];
+
+function buildPodFilters() {
+  const el = document.getElementById('pod-filters');
+  el.innerHTML = EP_TAGS.map(t =>
+    '<button class="filter-btn ' + (t === 'All' ? 'active' : '') + '" onclick="setPodFilter(\'' + t + '\')" style="font-size:10px;padding:5px 11px;">' + t + '</button>'
+  ).join('');
+}
+
+function setPodFilter(tag) {
+  podFilter = tag;
+  document.querySelectorAll('#pod-filters .filter-btn').forEach(b => b.classList.toggle('active', b.textContent === tag));
+  renderEpisodes();
+}
+
+function filterEpisodes() {
+  renderEpisodes();
+}
+
+function renderEpisodes() {
+  const q = (document.getElementById('pod-search').value || '').toLowerCase();
+  const saved = getSaved();
+  let items = EPISODES;
+  if (podFilter !== 'All') items = items.filter(e => e.tags.includes(podFilter));
+  if (q) items = items.filter(e => e.title.toLowerCase().includes(q));
+  document.getElementById('pod-count').textContent = items.length + ' episodes';
+  const el = document.getElementById('ep-grid');
+  el.innerHTML = items.map(e => {
+    const isSaved = saved.some(s => s.type === 'ep' && s.id === e.id);
+    return '<div class="ep-card" onclick="openVideo(\'' + e.id + '\',\'' + e.title.replace(/'/g,"") + '\')">' +
+      '<div class="ep-thumb">' +
+        '<img src="https://i.ytimg.com/vi/' + e.id + '/mqdefault.jpg" alt="' + e.title + '" loading="lazy">' +
+        '<div class="ep-play-overlay"><div class="ep-play-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="#000"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div>' +
+      '</div>' +
+      '<div class="ep-body">' +
+        '<div class="ep-tags">' + e.tags.map(t => '<span class="ep-tag">' + t + '</span>').join('') + '</div>' +
+        '<div class="ep-title">' + e.title + '</div>' +
+        '<div class="ep-meta">' +
+          '<span class="ep-views">' + e.views + ' views</span>' +
+          '<span class="ep-date">' + e.date + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ── VIDEO MODAL ────────────────────────────────────────────────────────────
+function openVideo(id, title) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalVideo').innerHTML =
+    '<iframe src="https://www.youtube.com/embed/' + id + '?autoplay=1" frameborder="0" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen style="width:100%;height:100%;"></iframe>';
+  document.getElementById('videoModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('videoModal').classList.remove('open');
+  document.getElementById('modalVideo').innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ── TABLES ─────────────────────────────────────────────────────────────────
+function renderTourismTable() {
+  const tb = document.getElementById('tb-tourism');
+  tb.innerHTML = TOURISM.map(r =>
+    '<tr>' +
+      '<td>' + r.month + '</td>' +
+      '<td>' + r.arrivals.toLocaleString() + '</td>' +
+      '<td class="tag-up">▲ ' + r.yoy + '%</td>' +
+      '<td>' + r.top_source + '</td>' +
+      '<td>' + r.avg_stay + '</td>' +
+    '</tr>'
+  ).join('');
+  if (tb._orig === undefined) tb._orig = tb.innerHTML;
+}
+
+function renderAirportTable() {
+  const tb = document.getElementById('tb-airport');
+  tb.innerHTML = AIRPORT.map(r =>
+    '<tr>' +
+      '<td>' + r.airline + '</td>' +
+      '<td>' + r.routes + '</td>' +
+      '<td>' + r.monthly_pax.toLocaleString() + '</td>' +
+      '<td class="tag-up">' + r.change + '</td>' +
+      '<td>' + r.hub + '</td>' +
+    '</tr>'
+  ).join('');
+  if (tb._orig === undefined) tb._orig = tb.innerHTML;
+}
+
+function renderInvestTable() {
+  const tb = document.getElementById('tb-invest');
+  tb.innerHTML = INVEST.map(r =>
+    '<tr>' +
+      '<td>' + r.sector + '</td>' +
+      '<td>' + r.fdi_usd_m.toLocaleString() + '</td>' +
+      '<td>' + r.projects + '</td>' +
+      '<td>' + r.jobs.toLocaleString() + '</td>' +
+      '<td class="tag-up">' + r.yoy + '</td>' +
+    '</tr>'
+  ).join('');
+  if (tb._orig === undefined) tb._orig = tb.innerHTML;
+}
+
+function renderPropTable() {
+  const tb = document.getElementById('tb-prop');
+  tb.innerHTML = PROPERTY.map(r => {
+    const dem = r.demand;
+    const bc = dem==='Very High'?'badge-high':dem==='High'?'badge-med':dem==='Medium'?'badge-low':'badge-em';
+    return '<tr>' +
+      '<td>' + r.area + '</td>' +
+      '<td>$' + r.price_usd_sqm.toLocaleString() + '</td>' +
+      '<td class="tag-up">' + r.yoy + '</td>' +
+      '<td>' + r.rental_yield + '</td>' +
+      '<td><span class="badge ' + bc + '">' + r.demand + '</span></td>' +
+    '</tr>';
+  }).join('');
+  if (tb._orig === undefined) tb._orig = tb.innerHTML;
+}
+
+function renderRawTable() {
+  const tb = document.getElementById('tb-raw');
+  tb.innerHTML = RAW_MACRO.map(r =>
+    '<tr>' +
+      '<td>' + r.indicator + '</td>' +
+      '<td style="font-weight:700;color:#fff;">' + r.value + '</td>' +
+      '<td>' + r.period + '</td>' +
+      '<td style="color:var(--dim);">' + r.source + '</td>' +
+      '<td class="trend-' + r.trend + '">' + (r.trend==='up'?'▲':r.trend==='down'?'▼':'—') + '</td>' +
+    '</tr>'
+  ).join('');
+}
+
+// Table sort
+let sortState = {};
+function sortTable(tid, col) {
+  const tbl = document.getElementById(tid);
+  const tb = tbl.querySelector('tbody');
+  const rows = Array.from(tb.querySelectorAll('tr'));
+  const key = tid + '_' + col;
+  const asc = sortState[key] !== true;
+  sortState[key] = asc;
+  tbl.querySelectorAll('th').forEach((th,i) => {
+    th.classList.remove('sort-asc','sort-desc');
+    if (i === col) th.classList.add(asc ? 'sort-asc' : 'sort-desc');
+  });
+  rows.sort((a,b) => {
+    const av = a.cells[col].textContent.replace(/[,$%▲▼+]/g,'').trim();
+    const bv = b.cells[col].textContent.replace(/[,$%▲▼+]/g,'').trim();
+    const an = parseFloat(av), bn = parseFloat(bv);
+    if (!isNaN(an) && !isNaN(bn)) return asc ? an-bn : bn-an;
+    return asc ? av.localeCompare(bv) : bv.localeCompare(av);
+  });
+  rows.forEach(r => tb.appendChild(r));
+}
+
+// Table filter
+function filterTable(tid, q) {
+  const tbl = document.getElementById(tid);
+  const tb = tbl.querySelector('tbody');
+  const rows = tb.querySelectorAll('tr');
+  const lq = q.toLowerCase();
+  rows.forEach(r => {
+    r.style.display = r.textContent.toLowerCase().includes(lq) ? '' : 'none';
+  });
+}
+
+// CSV export
+function exportCSV(tid, name) {
+  const tbl = document.getElementById(tid);
+  const rows = Array.from(tbl.querySelectorAll('tr'));
+  const csv = rows.map(r =>
+    Array.from(r.querySelectorAll('th,td'))
+      .map(c => '"' + c.textContent.trim().replace(/"/g,'""') + '"')
+      .join(',')
+  ).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = name + '.csv';
+  a.click();
+}
+
+// ── SAVED ──────────────────────────────────────────────────────────────────
+function getSaved() {
+  try { return JSON.parse(localStorage.getItem('bbc_saved') || '[]'); } catch(e) { return []; }
+}
+function setSaved(arr) { localStorage.setItem('bbc_saved', JSON.stringify(arr)); }
+
+function toggleSaved(type, id, title) {
+  let saved = getSaved();
+  const idx = saved.findIndex(s => s.type === type && s.id === id);
+  if (idx > -1) {
+    saved.splice(idx, 1);
+  } else {
+    saved.unshift({type, id, title});
+  }
+  setSaved(saved);
+  updateSavedCount();
+  if (type === 'news') renderNews();
+  if (type === 'ep') renderEpisodes();
+}
+
+function updateSavedCount() {
+  const n = getSaved().length;
+  const el = document.getElementById('saved-count');
+  if (n > 0) { el.textContent = n; el.style.display = ''; }
+  else { el.style.display = 'none'; }
+}
+
+function renderSaved() {
+  const saved = getSaved();
+  const el = document.getElementById('saved-container');
+  if (saved.length === 0) {
+    el.innerHTML = '<div class="saved-empty"><div class="saved-empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg></div><div style="font-size:13px;font-weight:600;margin-bottom:6px;">NOTHING SAVED YET</div><div style="font-size:12px;">Bookmark news articles and podcast episodes to find them here.</div></div>';
+    return;
+  }
+  el.innerHTML = '<div class="section-title" style="margin-bottom:16px;">SAVED ITEMS (' + saved.length + ')</div><div class="saved-grid">' +
+    saved.map(s => {
+      const isNews = s.type === 'news';
+      const icon = isNews
+        ? '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ffd801" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 002-2V4a2 2 0 00-2-2H8a2 2 0 00-2 2v16a4 4 0 01-4-4V6"/><path d="M2 13h4"/><line x1="12" y1="8" x2="18" y2="8"/><line x1="12" y1="12" x2="18" y2="12"/></svg>'
+        : '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6096e8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>';
+      const typeClass = isNews ? 'saved-type-news' : 'saved-type-ep';
+      return '<div class="saved-card">' +
+        '<div class="saved-type ' + typeClass + '">' + icon + '</div>' +
+        '<div class="saved-info">' +
+          '<div class="saved-label">' + (isNews ? 'Article' : 'Episode') + '</div>' +
+          '<div class="saved-title">' + s.title + '</div>' +
+        '</div>' +
+        '<button class="saved-rm" onclick="toggleSaved(\'' + s.type + '\',\'' + s.id.replace(/'/g,"") + '\',\'' + s.title.replace(/'/g,"") + '\');renderSaved();" title="Remove">&#x2715;</button>' +
+      '</div>';
+    }).join('') +
+  '</div>';
+}
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  buildTicker();
+  renderKPIs();
+  renderInstagram();
+  renderTourismTable();
+  renderAirportTable();
+  renderInvestTable();
+  renderPropTable();
+  renderRawTable();
+  buildNewsFilters();
+  renderNews();
+  buildPodFilters();
+  renderEpisodes();
+  updateSavedCount();
+  updateClock();
+  setInterval(updateClock, 1000);
+  // Init charts after first paint
+  setTimeout(() => { initCharts(); window._chartsInit = true; }, 100);
+});
+
+</script>
+</html>
