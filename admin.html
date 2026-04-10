@@ -6,6 +6,7 @@
 <title>BBC Admin Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -122,7 +123,7 @@ input, select, textarea { font-family: var(--font-body); }
 .add-article-btn { background: var(--yellow); color: #000; padding: 10px 22px; border-radius: 6px; font-weight: 700; font-size: 14px; }
 .add-article-btn:hover { background: var(--yellow2); }
 .existing-articles { margin-top: 24px; }
-.existing-articlesles h4 { font-family: var(--font-head); font-size: 15px; color: var(--white); margin-bottom: 12px; }
+.existing-articles h4 { font-family: var(--font-head); font-size: 15px; color: var(--white); margin-bottom: 12px; }
 .article-row { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 12px; }
 .article-row-title { font-size: 14px; color: var(--white); flex: 1; }
 .article-row-meta { font-size: 12px; color: var(--grey); white-space: nowrap; }
@@ -177,7 +178,7 @@ input, select, textarea { font-family: var(--font-body); }
 <!-- LOGIN -->
 <div id="login-screen">
   <div class="login-box">
-    <div class="logo">🏝️ BBC Admin</div>
+    <div class="logo"><i class="fa-solid fa-chart-line"></i> BBC Admin</div>
     <p>Member Dashboard Administration Panel</p>
     <input type="text" id="admin-user" placeholder="Username" autocomplete="username">
     <input type="password" id="admin-pass" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
@@ -194,11 +195,11 @@ input, select, textarea { font-family: var(--font-body); }
 
 <!-- NAV -->
 <nav id="nav">
-  <div class="nav-tab active" data-tab="analytics">📊 Analytics</div>
-  <div class="nav-tab" data-tab="reporting">🔄 Reporting</div>
-  <div class="nav-tab" data-tab="news-mgr">📰 News Manager</div>
-  <div class="nav-tab" data-tab="database">👥 User Database</div>
-  <div class="nav-tab" data-tab="settings">⚙️ Settings</div>
+  <div class="nav-tab active" data-tab="analytics"><i class="fa-solid fa-chart-column"></i> Analytics</div>
+  <div class="nav-tab" data-tab="reporting"><i class="fa-solid fa-rotate"></i> Reporting</div>
+  <div class="nav-tab" data-tab="news-mgr"><i class="fa-solid fa-newspaper"></i> News Manager</div>
+  <div class="nav-tab" data-tab="database"><i class="fa-solid fa-users"></i> User Database</div>
+  <div class="nav-tab" data-tab="settings"><i class="fa-solid fa-gear"></i> Settings</div>
 </nav>
 
 <main id="main" style="margin-top:109px; padding:28px;">
@@ -211,21 +212,21 @@ input, select, textarea { font-family: var(--font-body); }
     <div class="stat-grid" id="local-stats"></div>
 
     <div class="ga-embed">
-      <h3>📈 Google Analytics 4</h3>
+      <h3><i class="fa-solid fa-chart-line"></i> Google Analytics 4</h3>
       <p style="font-size:13px;color:var(--grey);margin-bottom:14px;">Enter your GA4 Measurement ID below and open Google Analytics to view live data for your dashboard.</p>
       <div class="ga-id-field">
         <input type="text" id="ga-id-input" placeholder="G-XXXXXXXXXX">
         <button class="save-ga-btn" onclick="saveGAID()">Save ID</button>
       </div>
-      <a id="ga-link" href="https://analytics.google.com" target="_blank" class="ga-link-btn">📊 Open Google Analytics</a>
+      <a id="ga-link" href="https://analytics.google.com" target="_blank" class="ga-link-btn"><i class="fa-solid fa-chart-column"></i> Open Google Analytics</a>
     </div>
 
     <div class="ga-embed">
-      <h3>📋 Google Analytics Embed</h3>
+      <h3><i class="fa-solid fa-table-columns"></i> Google Analytics Embed</h3>
       <p style="font-size:13px;color:var(--grey);margin-bottom:14px;">Use the embed code below in your GA4 property's "Reports Snapshot" share settings to embed live charts here. Or click the button above to view full analytics.</p>
       <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;min-height:200px;display:flex;align-items:center;justify-content:center;">
         <div>
-          <div style="font-size:32px;margin-bottom:12px;">📊</div>
+          <div style="font-size:32px;margin-bottom:12px;color:var(--grey);"><i class="fa-solid fa-chart-column"></i></div>
           <p style="color:var(--grey);font-size:14px;">To embed live GA4 charts, use <a href="https://lookerstudio.google.com" target="_blank">Google Looker Studio</a> and embed the report iframe here.</p>
           <p style="color:var(--grey);font-size:12px;margin-top:8px;">Set your Looker Studio report URL in Settings → Analytics Embed URL</p>
           <div id="analytics-iframe-container" style="margin-top:16px;"></div>
@@ -234,7 +235,7 @@ input, select, textarea { font-family: var(--font-body); }
     </div>
 
     <div class="ga-embed">
-      <h3>📱 Local Dashboard Stats</h3>
+      <h3><i class="fa-solid fa-mobile-screen"></i> Local Dashboard Stats</h3>
       <p style="font-size:13px;color:var(--grey);margin-bottom:14px;">Data collected locally from users who have set up their profile.</p>
       <div id="profile-stats-table"></div>
     </div>
@@ -247,45 +248,45 @@ input, select, textarea { font-family: var(--font-body); }
 
     <div class="reporting-grid">
       <div class="report-card">
-        <h3>📊 Market Insights</h3>
+        <h3><i class="fa-solid fa-chart-column"></i> Market Insights</h3>
         <p>Update REID market data, KPI figures, area profiles, and BBC takeaways.</p>
-        <button class="report-btn" onclick="triggerUpdate(this,'market')">🔄 Update Market Data</button>
+        <button class="report-btn" onclick="triggerUpdate(this,'market')"><i class="fa-solid fa-rotate"></i> Update Market Data</button>
         <div class="last-updated" id="lu-market">Never updated manually</div>
       </div>
       <div class="report-card">
-        <h3>📰 News Articles</h3>
+        <h3><i class="fa-solid fa-newspaper"></i> News Articles</h3>
         <p>Refresh news articles from all categories (Real Estate, Business, Visa & Legal).</p>
-        <button class="report-btn" onclick="triggerUpdate(this,'news')">🔄 Refresh News</button>
+        <button class="report-btn" onclick="triggerUpdate(this,'news')"><i class="fa-solid fa-rotate"></i> Refresh News</button>
         <div class="last-updated" id="lu-news">Never updated manually</div>
       </div>
       <div class="report-card">
-        <h3>🎙️ Podcasts</h3>
+        <h3><i class="fa-solid fa-microphone"></i> Podcasts</h3>
         <p>Force reload YouTube RSS feed for latest Bali Business Club episodes.</p>
-        <button class="report-btn" onclick="triggerUpdate(this,'podcasts')">🔄 Reload Episodes</button>
+        <button class="report-btn" onclick="triggerUpdate(this,'podcasts')"><i class="fa-solid fa-rotate"></i> Reload Episodes</button>
         <div class="last-updated" id="lu-podcasts">Never updated manually</div>
       </div>
       <div class="report-card">
-        <h3>📚 Resources</h3>
+        <h3><i class="fa-solid fa-book-open"></i> Resources</h3>
         <p>Refresh the ebooks and reports listings from Google Drive folders.</p>
-        <button class="report-btn" onclick="triggerUpdate(this,'resources')">🔄 Refresh Resources</button>
+        <button class="report-btn" onclick="triggerUpdate(this,'resources')"><i class="fa-solid fa-rotate"></i> Refresh Resources</button>
         <div class="last-updated" id="lu-resources">Never updated manually</div>
       </div>
       <div class="report-card">
-        <h3>🤝 Partners</h3>
+        <h3><i class="fa-solid fa-handshake"></i> Partners</h3>
         <p>Update partner information, offers, and codes.</p>
-        <button class="report-btn" onclick="triggerUpdate(this,'partners')">🔄 Update Partners</button>
+        <button class="report-btn" onclick="triggerUpdate(this,'partners')"><i class="fa-solid fa-rotate"></i> Update Partners</button>
         <div class="last-updated" id="lu-partners">Never updated manually</div>
       </div>
       <div class="report-card">
-        <h3>💬 Connect</h3>
+        <h3><i class="fa-solid fa-comments"></i> Connect</h3>
         <p>Refresh Instagram preview cards and social media links.</p>
-        <button class="report-btn" onclick="triggerUpdate(this,'connect')">🔄 Refresh Connect</button>
+        <button class="report-btn" onclick="triggerUpdate(this,'connect')"><i class="fa-solid fa-rotate"></i> Refresh Connect</button>
         <div class="last-updated" id="lu-connect">Never updated manually</div>
       </div>
     </div>
 
     <div class="ga-embed">
-      <h3>📋 Update Log</h3>
+      <h3><i class="fa-solid fa-clipboard-list"></i> Update Log</h3>
       <div id="update-log" style="font-size:13px;color:var(--grey);line-height:1.8;">No updates logged yet.</div>
     </div>
   </div>
@@ -296,13 +297,13 @@ input, select, textarea { font-family: var(--font-body); }
     <div class="section-sub">Add, edit, and remove news articles that appear on the main dashboard.</div>
 
     <div class="news-editor">
-      <h3>➕ Add New Article</h3>
+      <h3><i class="fa-solid fa-plus"></i> Add New Article</h3>
       <div class="form-row">
         <div class="form-group"><label>Category</label>
           <select id="na-cat">
-            <option value="real_estate">🏠 Real Estate</option>
-            <option value="business">💼 Business & Tax</option>
-            <option value="visa">🛂 Visa & Legal</option>
+            <option value="real_estate">Real Estate</option>
+            <option value="business">Business &amp; Tax</option>
+            <option value="visa">Visa &amp; Legal</option>
           </select>
         </div>
         <div class="form-group"><label>Date</label><input type="date" id="na-date"></div>
@@ -311,11 +312,11 @@ input, select, textarea { font-family: var(--font-body); }
       <div class="form-group"><label>Teaser (1–2 sentences) *</label><textarea id="na-teaser" rows="2" placeholder="Short preview shown before expanding..."></textarea></div>
       <div class="form-group"><label>Full Summary *</label><textarea id="na-summary" rows="4" placeholder="Full article summary shown when expanded..."></textarea></div>
       <div class="form-group"><label>Source</label><input type="text" id="na-source" placeholder="e.g. REID Market Intelligence / Bali Times"></div>
-      <button class="add-article-btn" onclick="addArticle()">➕ Add Article</button>
+      <button class="add-article-btn" onclick="addArticle()"><i class="fa-solid fa-plus"></i> Add Article</button>
     </div>
 
     <div class="news-editor">
-      <h3>📰 Existing Custom Articles</h3>
+      <h3><i class="fa-solid fa-newspaper"></i> Existing Custom Articles</h3>
       <p style="font-size:13px;color:var(--grey);margin-bottom:16px;">Articles added via this panel (built-in articles are managed in the source code).</p>
       <div id="custom-articles-list"></div>
     </div>
@@ -328,9 +329,9 @@ input, select, textarea { font-family: var(--font-body); }
 
     <div class="db-controls">
       <input type="text" class="search-input" id="db-search" placeholder="Search users..." onkeyup="renderUsers()">
-      <button class="db-btn green" onclick="exportCSV()">📥 Export CSV</button>
-      <button class="db-btn green" onclick="exportExcel()">📊 Export Excel</button>
-      <button class="db-btn" onclick="loadSampleUsers()">👁 Load Sample Data</button>
+      <button class="db-btn green" onclick="exportCSV()"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+      <button class="db-btn green" onclick="exportExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+      <button class="db-btn" onclick="loadSampleUsers()"><i class="fa-solid fa-eye"></i> Load Sample Data</button>
     </div>
 
     <div class="table-wrap">
@@ -352,14 +353,14 @@ input, select, textarea { font-family: var(--font-body); }
       </table>
     </div>
 
-    <p style="font-size:12px;color:var(--grey);margin-top:12px;">⚠️ User data is stored locally in each user's browser. To collect centralised user data, a backend database integration (e.g. Supabase, Firebase) is required. Contact BBC admin to enable this.</p>
+    <p style="font-size:12px;color:var(--grey);margin-top:12px;"><i class="fa-solid fa-triangle-exclamation"></i> User data is stored locally in each user's browser. To collect centralised user data, a backend database integration (e.g. Supabase, Firebase) is required. Contact BBC admin to enable this.</p>
 
     <hr class="divider">
-    <div class="section-title" style="font-size:18px;margin-bottom:12px;">📝 Partner Enquiries</div>
+    <div class="section-title" style="font-size:18px;margin-bottom:12px;"><i class="fa-solid fa-file-lines"></i> Partner Enquiries</div>
     <div id="partner-enquiries"></div>
 
     <hr class="divider">
-    <div class="section-title" style="font-size:18px;margin-bottom:12px;">🎙️ Podcast Recommendations</div>
+    <div class="section-title" style="font-size:18px;margin-bottom:12px;"><i class="fa-solid fa-microphone"></i> Podcast Recommendations</div>
     <div id="podcast-recommendations"></div>
   </div>
 
@@ -369,7 +370,7 @@ input, select, textarea { font-family: var(--font-body); }
     <div class="section-sub">Configure the Bali Business Club Member Dashboard.</div>
 
     <div class="settings-section">
-      <h3>🔐 Admin Access</h3>
+      <h3><i class="fa-solid fa-lock"></i> Admin Access</h3>
       <div class="setting-row">
         <div class="setting-info">
           <div class="setting-label">Admin Username</div>
@@ -388,7 +389,7 @@ input, select, textarea { font-family: var(--font-body); }
     </div>
 
     <div class="settings-section">
-      <h3>📊 Analytics</h3>
+      <h3><i class="fa-solid fa-chart-column"></i> Analytics</h3>
       <div class="setting-row">
         <div class="setting-info">
           <div class="setting-label">Google Analytics ID</div>
@@ -407,7 +408,7 @@ input, select, textarea { font-family: var(--font-body); }
     </div>
 
     <div class="settings-section">
-      <h3>🔗 Social Links</h3>
+      <h3><i class="fa-solid fa-link"></i> Social Links</h3>
       <div class="setting-row">
         <div class="setting-info"><div class="setting-label">YouTube Channel URL</div></div>
         <input type="text" class="setting-input" id="s-yt" value="https://www.youtube.com/@BaliBusinessClub">
@@ -428,7 +429,7 @@ input, select, textarea { font-family: var(--font-body); }
     </div>
 
     <div class="settings-section">
-      <h3>🗂️ Google Drive Folders</h3>
+      <h3><i class="fa-solid fa-folder-open"></i> Google Drive Folders</h3>
       <div class="setting-row">
         <div class="setting-info"><div class="setting-label">BBC Ebooks Folder URL</div></div>
         <input type="text" class="setting-input" id="s-ebooks" value="https://drive.google.com/drive/folders/1eBpxUHTMVwJMRMRLiKL2B8eR8W9x3iGr" style="width:360px;">
@@ -441,7 +442,7 @@ input, select, textarea { font-family: var(--font-body); }
     </div>
 
     <div class="settings-section">
-      <h3>⚠️ Danger Zone</h3>
+      <h3><i class="fa-solid fa-triangle-exclamation"></i> Danger Zone</h3>
       <div class="setting-row">
         <div class="setting-info">
           <div class="setting-label">Clear All Local Data</div>
@@ -512,6 +513,10 @@ function switchTab(tab) {
   if (tab === 'settings') loadSettings();
 }
 document.querySelectorAll('.nav-tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+document.getElementById('nav').addEventListener('click', function(e) {
+  var t = e.target.closest('.nav-tab');
+  if (t && t.dataset.tab) switchTab(t.dataset.tab);
+});
 
 // ── INIT ──────────────────────────────────────────────────
 function init() {
@@ -571,16 +576,16 @@ function saveGAID() {
 
 // ── REPORTING ─────────────────────────────────────────────
 function triggerUpdate(btn, section) {
-  btn.textContent = '⏳ Updating...';
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Updating...';
   btn.classList.add('updating');
   setTimeout(() => {
-    btn.textContent = '✅ Updated!';
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Updated!';
     const now = new Date().toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
     document.getElementById('lu-' + section).textContent = 'Last updated: ' + now;
     localStorage.setItem('bbc_lu_' + section, now);
     logUpdate(section, now);
     setTimeout(() => {
-      btn.textContent = '🔄 Update ' + section.charAt(0).toUpperCase() + section.slice(1);
+      btn.innerHTML = '<i class="fa-solid fa-rotate"></i> Update ' + section.charAt(0).toUpperCase() + section.slice(1);
       btn.classList.remove('updating');
     }, 2000);
   }, 1500);
@@ -597,7 +602,7 @@ function renderUpdateLog() {
   const el = document.getElementById('update-log');
   if (!el) return;
   if (!log.length) { el.textContent = 'No updates logged yet.'; return; }
-  el.innerHTML = log.map(l => `<div style="padding:4px 0;border-bottom:1px solid var(--border);">✅ <strong style="color:var(--white)">${l.section}</strong> — ${l.time}</div>`).join('');
+  el.innerHTML = log.map(l => `<div style="padding:4px 0;border-bottom:1px solid var(--border);"><i class="fa-solid fa-check" style="color:var(--yellow)"></i> <strong style="color:var(--white)">${l.section}</strong> — ${l.time}</div>`).join('');
   // Restore last updated labels
   ['market','news','podcasts','resources','partners','connect'].forEach(s => {
     const lu = localStorage.getItem('bbc_lu_' + s);
