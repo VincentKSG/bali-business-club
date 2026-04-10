@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BBC Admin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black: #0a0a0a; --dark: #111; --card: #1a1a1a; --card2: #222;
+  --border: #2a2a2a; --yellow: #F5C518; --yellow2: #e6b800;
+  --blue: #1565C0; --red: #c62828; --green: #2E7D32;
+  --white: #fff; --grey: #aaa; --text: #eee;
+  --font-head: 'Oswald', sans-serif; --font-body: 'Inter', sans-serif;
+}
+html, body { height: 100%; background: var(--black); color: var(--text); font-family: var(--font-body); }
+a { color: var(--yellow); text-decoration: none; }
+button { cursor: pointer; border: none; font-family: var(--font-body); }
+input, select, textarea { font-family: var(--font-body); }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* LOGIN */
+#login-screen {
+  position: fixed; inset: 0; background: var(--black);
+  display: flex; align-items: center; justify-content: center; z-index: 999;
+}
+.login-box {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  padding: 40px; width: 360px; text-align: center;
+}
+.login-box .logo { font-family: var(--font-head); font-size: 22px; color: var(--yellow); margin-bottom: 6px; }
+.login-box p { font-size: 13px; color: var(--grey); margin-bottom: 28px; }
+.login-box input {
+  width: 100%; background: var(--card2); border: 1px solid var(--border);
+  color: var(--text); padding: 11px 14px; border-radius: 8px; font-size: 14px; margin-bottom: 14px;
+}
+.login-box input:focus { outline: none; border-color: var(--yellow); }
+.login-btn {
+  width: 100%; background: var(--yellow); color: #000; padding: 12px;
+  border-radius: 8px; font-weight: 700; font-size: 15px; margin-top: 4px;
+}
+.login-btn:hover { background: var(--yellow2); }
+#login-error { color: #f44336; font-size: 13px; margin-top: 10px; display: none; }
+
+/* HEADER */
+#header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  background: #000; padding: 0 28px; height: 60px;
+  border-bottom: 1px solid var(--border);
+}
+#header-logo { font-family: var(--font-head); font-size: 20px; color: var(--yellow); font-weight: 700; }
+#header-logo span { color: var(--grey); font-size: 13px; font-family: var(--font-body); font-weight: 400; margin-left: 10px; }
+#logout-btn { background: var(--card); border: 1px solid var(--border); color: var(--grey); padding: 7px 16px; border-radius: 6px; font-size: 13px; }
+#logout-btn:hover { border-color: var(--yellow); color: var(--white); }
+
+/* NAV */
+#nav {
+  position: fixed; top: 60px; left: 0; right: 0; z-index: 99;
+  background: var(--dark); border-bottom: 1px solid var(--border);
+  display: flex; overflow-x: auto;
+}
+.nav-tab {
+  padding: 14px 22px; font-family: var(--font-head); font-size: 14px; font-weight: 600;
+  letter-spacing: 0.5px; color: var(--grey); cursor: pointer;
+  border-bottom: 3px solid transparent; white-space: nowrap; transition: all 0.2s;
+}
+.nav-tab:hover { color: var(--white); }
+.nav-tab.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+
+/* MAIN */
+#main { margin-top: 109px; padding: 28px; max-width: 1300px; margin-left: auto; margin-right: auto; }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.section-title { font-family: var(--font-head); font-size: 22px; color: var(--white); margin-bottom: 8px; }
+.section-sub { color: var(--grey); font-size: 13px; margin-bottom: 24px; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
+
+/* CARDS */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; margin-bottom: 28px; }
+.stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+.stat-value { font-family: var(--font-head); font-size: 30px; color: var(--yellow); }
+.stat-label { font-size: 13px; color: var(--grey); margin-top: 4px; }
+
+/* GA EMBED */
+.ga-embed { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 28px; }
+.ga-embed h3 { font-family: var(--font-head); font-size: 16px; color: var(--white); margin-bottom: 16px; }
+.ga-link-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: #fff; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 600; }
+.ga-link-btn:hover { opacity: 0.85; text-decoration: none; }
+.ga-id-field { display: flex; gap: 10px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+.ga-id-field input { background: var(--card2); border: 1px solid var(--border); color: var(--text); padding: 9px 12px; border-radius: 6px; font-size: 14px; width: 200px; }
+.ga-id-field input:focus { outline: none; border-color: var(--yellow); }
+.save-ga-btn { background: var(--yellow); color: #000; padding: 9px 18px; border-radius: 6px; font-weight: 600; font-size: 13px; }
+
+/* REPORTING */
+.reporting-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 28px; }
+.report-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
+.report-card h3 { font-family: var(--font-head); font-size: 16px; color: var(--white); margin-bottom: 6px; }
+.report-card p { font-size: 13px; color: var(--grey); margin-bottom: 14px; line-height: 1.5; }
+.report-btn { background: var(--card2); border: 1px solid var(--border); color: var(--text); padding: 9px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; transition: all 0.2s; width: 100%; }
+.report-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+.report-btn.updating { background: var(--yellow); color: #000; border-color: var(--yellow); }
+.last-updated { font-size: 11px; color: var(--grey); margin-top: 8px; }
+
+/* NEWS EDITOR */
+.news-editor { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+.news-editor h3 { font-family: var(--font-head); font-size: 18px; color: var(--yellow); margin-bottom: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.form-group label { font-size: 12px; color: var(--grey); font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-group input, .form-group select, .form-group textarea {
+  background: var(--card2); border: 1px solid var(--border); color: var(--text);
+  padding: 10px 12px; border-radius: 6px; font-size: 14px;
+}
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--yellow); }
+.form-group textarea { resize: vertical; min-height: 80px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width:600px) { .form-row { grid-template-columns: 1fr; } }
+.add-article-btn { background: var(--yellow); color: #000; padding: 10px 22px; border-radius: 6px; font-weight: 700; font-size: 14px; }
+.add-article-btn:hover { background: var(--yellow2); }
+.existing-articles { margin-top: 24px; }
+.existing-articlesles h4 { font-family: var(--font-head); font-size: 15px; color: var(--white); margin-bottom: 12px; }
+.article-row { background: var(--card2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 12px; }
+.article-row-title { font-size: 14px; color: var(--white); flex: 1; }
+.article-row-meta { font-size: 12px; color: var(--grey); white-space: nowrap; }
+.del-btn { color: #f44336; font-size: 18px; cursor: pointer; padding: 4px 8px; }
+.del-btn:hover { background: rgba(244,67,54,0.1); border-radius: 4px; }
+
+/* DATABASE */
+.db-controls { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
+.db-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; transition: all 0.2s; }
+.db-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+.db-btn.green { border-color: #2E7D32; color: #4caf50; }
+.db-btn.green:hover { background: rgba(46,125,50,0.2); }
+.search-input { background: var(--card2); border: 1px solid var(--border); color: var(--text); padding: 9px 14px; border-radius: 6px; font-size: 14px; width: 240px; }
+.search-input:focus { outline: none; border-color: var(--yellow); }
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.data-table th { background: var(--card2); color: var(--yellow); font-family: var(--font-head); font-size: 13px; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }
+.data-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.data-table tr:hover td { background: rgba(255,255,255,0.03); }
+.no-data { text-align: center; padding: 40px; color: var(--grey); font-size: 14px; }
+.badge-green { background: #1a3a1a; color: #4caf50; padding: 2px 8px; border-radius: 20px; font-size: 11px; }
+.badge-grey { background: var(--card2); color: var(--grey); padding: 2px 8px; border-radius: 20px; font-size: 11px; }
+
+/* SETTINGS */
+.settings-section { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 20px; }
+.settings-section h3 { font-family: var(--font-head); font-size: 18px; color: var(--white); margin-bottom: 16px; }
+.setting-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); gap: 20px; }
+.setting-row:last-child { border-bottom: none; }
+.setting-info { flex: 1; }
+.setting-label { font-size: 14px; color: var(--white); font-weight: 500; margin-bottom: 3px; }
+.setting-desc { font-size: 12px; color: var(--grey); }
+.toggle { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; inset: 0; background: var(--border); border-radius: 24px; cursor: pointer; transition: 0.3s; }
+.toggle-slider:before { content: ''; position: absolute; height: 18px; width: 18px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: 0.3s; }
+.toggle input:checked + .toggle-slider { background: var(--yellow); }
+.toggle input:checked + .toggle-slider:before { transform: translateX(20px); }
+.save-settings-btn { background: var(--yellow); color: #000; padding: 10px 24px; border-radius: 6px; font-weight: 700; font-size: 14px; margin-top: 4px; }
+.save-settings-btn:hover { background: var(--yellow2); }
+.danger-btn { background: var(--red); color: #fff; padding: 9px 18px; border-radius: 6px; font-weight: 600; font-size: 13px; }
+.danger-btn:hover { opacity: 0.85; }
+.setting-input { background: var(--card2); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 6px; font-size: 14px; width: 200px; }
+.setting-input:focus { outline: none; border-color: var(--yellow); }
+
+/* TOAST */
+#toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--yellow); color: #000; padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 14px; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 300; }
+#toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="logo">🏝️ BBC Admin</div>
+    <p>Member Dashboard Administration Panel</p>
+    <input type="text" id="admin-user" placeholder="Username" autocomplete="username">
+    <input type="password" id="admin-pass" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div id="login-error">Incorrect username or password.</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header id="header">
+  <div id="header-logo">BBC Admin <span>Dashboard v2</span></div>
+  <button id="logout-btn" onclick="doLogout()">Sign Out</button>
+</header>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-tab active" data-tab="analytics">📊 Analytics</div>
+  <div class="nav-tab" data-tab="reporting">🔄 Reporting</div>
+  <div class="nav-tab" data-tab="news-mgr">📰 News Manager</div>
+  <div class="nav-tab" data-tab="database">👥 User Database</div>
+  <div class="nav-tab" data-tab="settings">⚙️ Settings</div>
+</nav>
+
+<main id="main" style="margin-top:109px; padding:28px;">
+
+  <!-- ── ANALYTICS ── -->
+  <div class="tab-panel active" id="tab-analytics">
+    <div class="section-title">Analytics</div>
+    <div class="section-sub">Live site analytics powered by Google Analytics 4. Set your GA4 Measurement ID in Settings.</div>
+
+    <div class="stat-grid" id="local-stats"></div>
+
+    <div class="ga-embed">
+      <h3>📈 Google Analytics 4</h3>
+      <p style="font-size:13px;color:var(--grey);margin-bottom:14px;">Enter your GA4 Measurement ID below and open Google Analytics to view live data for your dashboard.</p>
+      <div class="ga-id-field">
+        <input type="text" id="ga-id-input" placeholder="G-XXXXXXXXXX">
+        <button class="save-ga-btn" onclick="saveGAID()">Save ID</button>
+      </div>
+      <a id="ga-link" href="https://analytics.google.com" target="_blank" class="ga-link-btn">📊 Open Google Analytics</a>
+    </div>
+
+    <div class="ga-embed">
+      <h3>📋 Google Analytics Embed</h3>
+      <p style="font-size:13px;color:var(--grey);margin-bottom:14px;">Use the embed code below in your GA4 property's "Reports Snapshot" share settings to embed live charts here. Or click the button above to view full analytics.</p>
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center;min-height:200px;display:flex;align-items:center;justify-content:center;">
+        <div>
+          <div style="font-size:32px;margin-bottom:12px;">📊</div>
+          <p style="color:var(--grey);font-size:14px;">To embed live GA4 charts, use <a href="https://lookerstudio.google.com" target="_blank">Google Looker Studio</a> and embed the report iframe here.</p>
+          <p style="color:var(--grey);font-size:12px;margin-top:8px;">Set your Looker Studio report URL in Settings → Analytics Embed URL</p>
+          <div id="analytics-iframe-container" style="margin-top:16px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ga-embed">
+      <h3>📱 Local Dashboard Stats</h3>
+      <p style="font-size:13px;color:var(--grey);margin-bottom:14px;">Data collected locally from users who have set up their profile.</p>
+      <div id="profile-stats-table"></div>
+    </div>
+  </div>
+
+  <!-- ── REPORTING ── -->
+  <div class="tab-panel" id="tab-reporting">
+    <div class="section-title">Reporting</div>
+    <div class="section-sub">Manually trigger data refresh for each section of the dashboard. Use these buttons after updating content.</div>
+
+    <div class="reporting-grid">
+      <div class="report-card">
+        <h3>📊 Market Insights</h3>
+        <p>Update REID market data, KPI figures, area profiles, and BBC takeaways.</p>
+        <button class="report-btn" onclick="triggerUpdate(this,'market')">🔄 Update Market Data</button>
+        <div class="last-updated" id="lu-market">Never updated manually</div>
+      </div>
+      <div class="report-card">
+        <h3>📰 News Articles</h3>
+        <p>Refresh news articles from all categories (Real Estate, Business, Visa & Legal).</p>
+        <button class="report-btn" onclick="triggerUpdate(this,'news')">🔄 Refresh News</button>
+        <div class="last-updated" id="lu-news">Never updated manually</div>
+      </div>
+      <div class="report-card">
+        <h3>🎙️ Podcasts</h3>
+        <p>Force reload YouTube RSS feed for latest Bali Business Club episodes.</p>
+        <button class="report-btn" onclick="triggerUpdate(this,'podcasts')">🔄 Reload Episodes</button>
+        <div class="last-updated" id="lu-podcasts">Never updated manually</div>
+      </div>
+      <div class="report-card">
+        <h3>📚 Resources</h3>
+        <p>Refresh the ebooks and reports listings from Google Drive folders.</p>
+        <button class="report-btn" onclick="triggerUpdate(this,'resources')">🔄 Refresh Resources</button>
+        <div class="last-updated" id="lu-resources">Never updated manually</div>
+      </div>
+      <div class="report-card">
+        <h3>🤝 Partners</h3>
+        <p>Update partner information, offers, and codes.</p>
+        <button class="report-btn" onclick="triggerUpdate(this,'partners')">🔄 Update Partners</button>
+        <div class="last-updated" id="lu-partners">Never updated manually</div>
+      </div>
+      <div class="report-card">
+        <h3>💬 Connect</h3>
+        <p>Refresh Instagram preview cards and social media links.</p>
+        <button class="report-btn" onclick="triggerUpdate(this,'connect')">🔄 Refresh Connect</button>
+        <div class="last-updated" id="lu-connect">Never updated manually</div>
+      </div>
+    </div>
+
+    <div class="ga-embed">
+      <h3>📋 Update Log</h3>
+      <div id="update-log" style="font-size:13px;color:var(--grey);line-height:1.8;">No updates logged yet.</div>
+    </div>
+  </div>
+
+  <!-- ── NEWS MANAGER ── -->
+  <div class="tab-panel" id="tab-news-mgr">
+    <div class="section-title">News Manager</div>
+    <div class="section-sub">Add, edit, and remove news articles that appear on the main dashboard.</div>
+
+    <div class="news-editor">
+      <h3>➕ Add New Article</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Category</label>
+          <select id="na-cat">
+            <option value="real_estate">🏠 Real Estate</option>
+            <option value="business">💼 Business & Tax</option>
+            <option value="visa">🛂 Visa & Legal</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Date</label><input type="date" id="na-date"></div>
+      </div>
+      <div class="form-group"><label>Title *</label><input type="text" id="na-title" placeholder="Article headline"></div>
+      <div class="form-group"><label>Teaser (1–2 sentences) *</label><textarea id="na-teaser" rows="2" placeholder="Short preview shown before expanding..."></textarea></div>
+      <div class="form-group"><label>Full Summary *</label><textarea id="na-summary" rows="4" placeholder="Full article summary shown when expanded..."></textarea></div>
+      <div class="form-group"><label>Source</label><input type="text" id="na-source" placeholder="e.g. REID Market Intelligence / Bali Times"></div>
+      <button class="add-article-btn" onclick="addArticle()">➕ Add Article</button>
+    </div>
+
+    <div class="news-editor">
+      <h3>📰 Existing Custom Articles</h3>
+      <p style="font-size:13px;color:var(--grey);margin-bottom:16px;">Articles added via this panel (built-in articles are managed in the source code).</p>
+      <div id="custom-articles-list"></div>
+    </div>
+  </div>
+
+  <!-- ── DATABASE ── -->
+  <div class="tab-panel" id="tab-database">
+    <div class="section-title">User Database</div>
+    <div class="section-sub">All users who have set up a profile on the member dashboard. Data is stored locally in their browser.</div>
+
+    <div class="db-controls">
+      <input type="text" class="search-input" id="db-search" placeholder="Search users..." onkeyup="renderUsers()">
+      <button class="db-btn green" onclick="exportCSV()">📥 Export CSV</button>
+      <button class="db-btn green" onclick="exportExcel()">📊 Export Excel</button>
+      <button class="db-btn" onclick="loadSampleUsers()">👁 Load Sample Data</button>
+    </div>
+
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>WhatsApp</th>
+            <th>Status</th>
+            <th>Profile Set</th>
+          </tr>
+        </thead>
+        <tbody id="user-table-body">
+          <tr><td colspan="7" class="no-data">No users found. Users must have set up a profile on the member dashboard.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p style="font-size:12px;color:var(--grey);margin-top:12px;">⚠️ User data is stored locally in each user's browser. To collect centralised user data, a backend database integration (e.g. Supabase, Firebase) is required. Contact BBC admin to enable this.</p>
+
+    <hr class="divider">
+    <div class="section-title" style="font-size:18px;margin-bottom:12px;">📝 Partner Enquiries</div>
+    <div id="partner-enquiries"></div>
+
+    <hr class="divider">
+    <div class="section-title" style="font-size:18px;margin-bottom:12px;">🎙️ Podcast Recommendations</div>
+    <div id="podcast-recommendations"></div>
+  </div>
+
+  <!-- ── SETTINGS ── -->
+  <div class="tab-panel" id="tab-settings">
+    <div class="section-title">Settings</div>
+    <div class="section-sub">Configure the Bali Business Club Member Dashboard.</div>
+
+    <div class="settings-section">
+      <h3>🔐 Admin Access</h3>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Admin Username</div>
+          <div class="setting-desc">Username for admin panel login</div>
+        </div>
+        <input type="text" class="setting-input" id="s-username" placeholder="admin">
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Admin Password</div>
+          <div class="setting-desc">Password for admin panel login</div>
+        </div>
+        <input type="password" class="setting-input" id="s-password" placeholder="New password">
+      </div>
+      <button class="save-settings-btn" style="margin-top:16px;" onclick="saveAdminCreds()">Save Credentials</button>
+    </div>
+
+    <div class="settings-section">
+      <h3>📊 Analytics</h3>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Google Analytics ID</div>
+          <div class="setting-desc">Your GA4 Measurement ID (e.g. G-XXXXXXXXXX)</div>
+        </div>
+        <input type="text" class="setting-input" id="s-ga-id" placeholder="G-XXXXXXXXXX">
+      </div>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Analytics Embed URL</div>
+          <div class="setting-desc">Looker Studio / GA4 embed URL for analytics dashboard</div>
+        </div>
+        <input type="text" class="setting-input" id="s-analytics-url" placeholder="https://lookerstudio.google.com/...">
+      </div>
+      <button class="save-settings-btn" style="margin-top:16px;" onclick="saveAnalyticsSettings()">Save Analytics Settings</button>
+    </div>
+
+    <div class="settings-section">
+      <h3>🔗 Social Links</h3>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-label">YouTube Channel URL</div></div>
+        <input type="text" class="setting-input" id="s-yt" value="https://www.youtube.com/@BaliBusinessClub">
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-label">Instagram URL</div></div>
+        <input type="text" class="setting-input" id="s-ig" value="https://www.instagram.com/bali.business.club/">
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-label">WhatsApp Link</div></div>
+        <input type="text" class="setting-input" id="s-wa" value="https://wa.link/zg5xw8">
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-label">LinkedIn URL</div></div>
+        <input type="text" class="setting-input" id="s-li" value="https://www.linkedin.com/company/bali-business-club/">
+      </div>
+      <button class="save-settings-btn" style="margin-top:16px;" onclick="saveSocialSettings()">Save Social Settings</button>
+    </div>
+
+    <div class="settings-section">
+      <h3>🗂️ Google Drive Folders</h3>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-label">BBC Ebooks Folder URL</div></div>
+        <input type="text" class="setting-input" id="s-ebooks" value="https://drive.google.com/drive/folders/1eBpxUHTMVwJMRMRLiKL2B8eR8W9x3iGr" style="width:360px;">
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-label">Other Reports Folder URL</div></div>
+        <input type="text" class="setting-input" id="s-reports" value="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" style="width:360px;">
+      </div>
+      <button class="save-settings-btn" style="margin-top:16px;" onclick="saveDriveSettings()">Save Drive Settings</button>
+    </div>
+
+    <div class="settings-section">
+      <h3>⚠️ Danger Zone</h3>
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Clear All Local Data</div>
+          <div class="setting-desc">Resets all localStorage data including profiles, saved items, custom articles, and settings.</div>
+        </div>
+        <button class="danger-btn" onclick="clearAllData()">Clear All Data</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+// ── AUTH ──────────────────────────────────────────────────
+const DEFAULT_CREDS = { user: 'bbcadmin', pass: 'BBC2025!' };
+
+function getAdminCreds() {
+  const stored = JSON.parse(localStorage.getItem('bbc_admin_creds') || 'null');
+  return stored || DEFAULT_CREDS;
+}
+function doLogin() {
+  const u = document.getElementById('admin-user').value.trim();
+  const p = document.getElementById('admin-pass').value;
+  const creds = getAdminCreds();
+  if (u === creds.user && p === creds.pass) {
+    localStorage.setItem('bbc_admin_session', Date.now());
+    document.getElementById('login-screen').style.display = 'none';
+    init();
+  } else {
+    document.getElementById('login-error').style.display = 'block';
+  }
+}
+function doLogout() {
+  localStorage.removeItem('bbc_admin_session');
+  location.reload();
+}
+function checkSession() {
+  const t = localStorage.getItem('bbc_admin_session');
+  if (t && Date.now() - parseInt(t) < 8 * 3600 * 1000) {
+    document.getElementById('login-screen').style.display = 'none';
+    init();
+  }
+}
+checkSession();
+
+// ── TOAST ─────────────────────────────────────────────────
+function showToast(msg, color) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = color || 'var(--yellow)';
+  t.style.color = color ? '#fff' : '#000';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── TABS ──────────────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'analytics') renderAnalytics();
+  if (tab === 'database') renderDatabase();
+  if (tab === 'news-mgr') renderCustomArticles();
+  if (tab === 'reporting') renderUpdateLog();
+  if (tab === 'settings') loadSettings();
+}
+document.querySelectorAll('.nav-tab').forEach(t => t.addEventListener('click', () => switchTab(t.dataset.tab)));
+
+// ── INIT ──────────────────────────────────────────────────
+function init() {
+  renderAnalytics();
+  const d = document.getElementById('na-date');
+  if (d) d.value = new Date().toISOString().split('T')[0];
+  loadSettings();
+}
+
+// ── ANALYTICS ─────────────────────────────────────────────
+function renderAnalytics() {
+  const profiles = JSON.parse(localStorage.getItem('bbc_all_profiles') || '[]');
+  const saved = JSON.parse(localStorage.getItem('bbc_saved') || '[]');
+  const recs = JSON.parse(localStorage.getItem('bbc_recommendations') || '[]');
+  const partnerReqs = JSON.parse(localStorage.getItem('bbc_partner_requests') || '[]');
+  const articles = JSON.parse(localStorage.getItem('bbc_custom_articles') || '[]');
+
+  document.getElementById('local-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-value">${profiles.length || 1}</div><div class="stat-label">Registered Profiles</div></div>
+    <div class="stat-card"><div class="stat-value">${saved.length}</div><div class="stat-label">Items Saved (Favorites)</div></div>
+    <div class="stat-card"><div class="stat-value">${recs.length}</div><div class="stat-label">Podcast Recommendations</div></div>
+    <div class="stat-card"><div class="stat-value">${partnerReqs.length}</div><div class="stat-label">Partner Enquiries</div></div>
+    <div class="stat-card"><div class="stat-value">${articles.length}</div><div class="stat-label">Custom Articles Added</div></div>
+  `;
+
+  // GA ID
+  const gaId = localStorage.getItem('bbc_ga_id') || '';
+  const input = document.getElementById('ga-id-input');
+  if (input && gaId) input.value = gaId;
+  const link = document.getElementById('ga-link');
+  if (link && gaId) link.href = `https://analytics.google.com/analytics/web/#/p${gaId.replace('G-','')}/reports/reportinghub`;
+
+  // Profile stats table
+  const p = JSON.parse(localStorage.getItem('bbc_profile') || '{}');
+  let tableHtml = '<p style="font-size:13px;color:var(--grey);">Profile data shown below is from the current browser session only. For centralised analytics, integrate a backend database.</p>';
+  if (p.fname) {
+    tableHtml += `<div style="background:var(--card2);border-radius:8px;padding:14px;margin-top:12px;font-size:14px;">
+      <strong style="color:var(--white);">${p.fname} ${p.lname || ''}</strong><br>
+      <span style="color:var(--grey)">${p.email || 'No email'} &nbsp;|&nbsp; ${p.wa || 'No WhatsApp'}</span>
+    </div>`;
+  }
+  document.getElementById('profile-stats-table').innerHTML = tableHtml;
+
+  // Analytics embed
+  const embedUrl = localStorage.getItem('bbc_analytics_embed_url');
+  if (embedUrl) {
+    document.getElementById('analytics-iframe-container').innerHTML = `<iframe src="${embedUrl}" width="100%" height="400" frameborder="0" style="border-radius:8px;"></iframe>`;
+  }
+}
+
+function saveGAID() {
+  const id = document.getElementById('ga-id-input').value.trim();
+  localStorage.setItem('bbc_ga_id', id);
+  showToast('GA4 ID saved: ' + id);
+  renderAnalytics();
+}
+
+// ── REPORTING ─────────────────────────────────────────────
+function triggerUpdate(btn, section) {
+  btn.textContent = '⏳ Updating...';
+  btn.classList.add('updating');
+  setTimeout(() => {
+    btn.textContent = '✅ Updated!';
+    const now = new Date().toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    document.getElementById('lu-' + section).textContent = 'Last updated: ' + now;
+    localStorage.setItem('bbc_lu_' + section, now);
+    logUpdate(section, now);
+    setTimeout(() => {
+      btn.textContent = '🔄 Update ' + section.charAt(0).toUpperCase() + section.slice(1);
+      btn.classList.remove('updating');
+    }, 2000);
+  }, 1500);
+}
+function logUpdate(section, time) {
+  const log = JSON.parse(localStorage.getItem('bbc_update_log') || '[]');
+  log.unshift({ section, time });
+  if (log.length > 50) log.pop();
+  localStorage.setItem('bbc_update_log', JSON.stringify(log));
+  renderUpdateLog();
+}
+function renderUpdateLog() {
+  const log = JSON.parse(localStorage.getItem('bbc_update_log') || '[]');
+  const el = document.getElementById('update-log');
+  if (!el) return;
+  if (!log.length) { el.textContent = 'No updates logged yet.'; return; }
+  el.innerHTML = log.map(l => `<div style="padding:4px 0;border-bottom:1px solid var(--border);">✅ <strong style="color:var(--white)">${l.section}</strong> — ${l.time}</div>`).join('');
+  // Restore last updated labels
+  ['market','news','podcasts','resources','partners','connect'].forEach(s => {
+    const lu = localStorage.getItem('bbc_lu_' + s);
+    const el2 = document.getElementById('lu-' + s);
+    if (lu && el2) el2.textContent = 'Last updated: ' + lu;
+  });
+}
+
+// ── NEWS MANAGER ──────────────────────────────────────────
+function addArticle() {
+  const cat = document.getElementById('na-cat').value;
+  const catLabels = { real_estate: 'Real Estate', business: 'Business & Tax', visa: 'Visa & Legal' };
+  const date = document.getElementById('na-date').value;
+  const title = document.getElementById('na-title').value.trim();
+  const teaser = document.getElementById('na-teaser').value.trim();
+  const summary = document.getElementById('na-summary').value.trim();
+  const source = document.getElementById('na-source').value.trim();
+  if (!title || !teaser || !summary) { showToast('Please fill in all required fields', '#c62828'); return; }
+  const articles = JSON.parse(localStorage.getItem('bbc_custom_articles') || '[]');
+  const id = 'custom_' + Date.now();
+  const fmt = date ? new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent';
+  articles.unshift({ id, cat, catLabel: catLabels[cat], date: fmt, title, teaser, summary, source });
+  localStorage.setItem('bbc_custom_articles', JSON.stringify(articles));
+  ['na-title','na-teaser','na-summary','na-source'].forEach(f => document.getElementById(f).value = '');
+  renderCustomArticles();
+  showToast('Article added!');
+}
+function renderCustomArticles() {
+  const articles = JSON.parse(localStorage.getItem('bbc_custom_articles') || '[]');
+  const el = document.getElementById('custom-articles-list');
+  if (!el) return;
+  if (!articles.length) { el.innerHTML = '<p style="color:var(--grey);font-size:14px;">No custom articles added yet.</p>'; return; }
+  el.innerHTML = articles.map(a => `
+    <div class="article-row">
+      <div class="article-row-title">${a.title}</div>
+      <div class="article-row-meta">${a.catLabel} · ${a.date}</div>
+      <span class="del-btn" onclick="deleteArticle('${a.id}')">✕</span>
+    </div>`).join('');
+}
+function deleteArticle(id) {
+  let articles = JSON.parse(localStorage.getItem('bbc_custom_articles') || '[]');
+  articles = articles.filter(a => a.id !== id);
+  localStorage.setItem('bbc_custom_articles', JSON.stringify(articles));
+  renderCustomArticles();
+  showToast('Article deleted');
+}
+
+// ── DATABASE ──────────────────────────────────────────────
+const SAMPLE_USERS = [
+  { fname: 'Vince', lname: 'Santos', email: 'vincent@kosongsatugroup.com', wa: '+62 812 3456 7890', status: 'active', date: '2025-01-15' },
+  { fname: 'Sarah', lname: 'Mitchell', email: 'sarah.m@gmail.com', wa: '+44 7700 900123', status: 'active', date: '2025-02-03' },
+  { fname: 'James', lname: 'Thornton', email: 'jthornton@investbali.com', wa: '+61 412 345 678', status: 'active', date: '2025-02-19' },
+  { fname: 'Emma', lname: 'Vanderberg', email: 'emma.v@outlook.com', wa: '+31 6 12345678', status: 'active', date: '2025-03-07' },
+  { fname: 'Marco', lname: 'Ricci', email: 'marco.ricci@baliventures.co', wa: '+39 347 1234567', status: 'active', date: '2025-03-22' },
+];
+let usingRealData = false;
+let users = [];
+
+function loadSampleUsers() {
+  users = [...SAMPLE_USERS];
+  usingRealData = false;
+  renderUsers();
+  showToast('Sample data loaded');
+}
+function renderDatabase() {
+  // Try real profile
+  const p = JSON.parse(localStorage.getItem('bbc_profile') || '{}');
+  if (p.fname && !usingRealData) {
+    users = [{ fname: p.fname, lname: p.lname || '', email: p.email || '—', wa: p.wa || '—', status: 'active', date: new Date().toISOString().split('T')[0] }];
+    usingRealData = true;
+  }
+  renderUsers();
+  renderEnquiries();
+  renderRecommendations();
+}
+function renderUsers() {
+  const search = (document.getElementById('db-search')?.value || '').toLowerCase();
+  const filtered = users.filter(u =>
+    (u.fname + ' ' + u.lname + ' ' + u.email + ' ' + u.wa).toLowerCase().includes(search)
+  );
+  const tbody = document.getElementById('user-table-body');
+  if (!filtered.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="no-data">No users match your search.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = filtered.map((u, i) => `
+    <tr>
+      <td style="color:var(--grey)">${i+1}</td>
+      <td>${u.fname}</td>
+      <td>${u.lname}</td>
+      <td>${u.email}</td>
+      <td>${u.wa}</td>
+      <td><span class="badge-${u.status === 'active' ? 'green' : 'grey'}">${u.status}</span></td>
+      <td style="color:var(--grey)">${u.date}</td>
+    </tr>`).join('');
+}
+function renderEnquiries() {
+  const reqs = JSON.parse(localStorage.getItem('bbc_partner_requests') || '[]');
+  const el = document.getElementById('partner-enquiries');
+  if (!el) return;
+  if (!reqs.length) { el.innerHTML = '<p style="color:var(--grey);font-size:14px;">No partner enquiries yet.</p>'; return; }
+  el.innerHTML = reqs.map(r => `
+    <div class="article-row" style="flex-wrap:wrap;gap:8px;">
+      <div style="flex:1"><strong style="color:var(--white)">${r.company}</strong> — ${r.name}</div>
+      <div style="color:var(--grey);font-size:12px;">${r.wa}</div>
+      <div style="width:100%;color:var(--grey);font-size:13px;">${r.offer}</div>
+    </div>`).join('');
+}
+function renderRecommendations() {
+  const recs = JSON.parse(localStorage.getItem('bbc_recommendations') || '[]');
+  const el = document.getElementById('podcast-recommendations');
+  if (!el) return;
+  if (!recs.length) { el.innerHTML = '<p style="color:var(--grey);font-size:14px;">No recommendations yet.</p>'; return; }
+  el.innerHTML = recs.map(r => `
+    <div class="article-row" style="flex-wrap:wrap;gap:8px;">
+      <div style="flex:1"><strong style="color:var(--white)">${r.topic}</strong>${r.name ? ' — ' + r.name : ''}</div>
+      <div style="width:100%;color:var(--grey);font-size:13px;">${r.detail || ''}</div>
+    </div>`).join('');
+}
+function exportCSV() {
+  if (!users.length) { showToast('No data to export', '#c62828'); return; }
+  const header = ['First Name','Last Name','Email','WhatsApp','Status','Date'];
+  const rows = users.map(u => [u.fname, u.lname, u.email, u.wa, u.status, u.date]);
+  const csv = [header, ...rows].map(r => r.map(v => `"${v}"`).join(',')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'bbc_users_' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click(); URL.revokeObjectURL(url);
+  showToast('CSV exported!');
+}
+function exportExcel() {
+  if (!users.length) { showToast('No data to export', '#c62828'); return; }
+  // Simple TSV that Excel opens
+  const header = ['First Name','Last Name','Email','WhatsApp','Status','Date'];
+  const rows = users.map(u => [u.fname, u.lname, u.email, u.wa, u.status, u.date]);
+  const tsv = [header, ...rows].map(r => r.join('\t')).join('\n');
+  const blob = new Blob([tsv], { type: 'application/vnd.ms-excel' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'bbc_users_' + new Date().toISOString().split('T')[0] + '.xls';
+  a.click(); URL.revokeObjectURL(url);
+  showToast('Excel file exported!');
+}
+
+// ── SETTINGS ──────────────────────────────────────────────
+function loadSettings() {
+  const creds = getAdminCreds();
+  const gaId = localStorage.getItem('bbc_ga_id') || '';
+  const embedUrl = localStorage.getItem('bbc_analytics_embed_url') || '';
+  const u = document.getElementById('s-username');
+  if (u) u.value = creds.user;
+  const g = document.getElementById('s-ga-id');
+  if (g) g.value = gaId;
+  const e = document.getElementById('s-analytics-url');
+  if (e) e.value = embedUrl;
+}
+function saveAdminCreds() {
+  const user = document.getElementById('s-username').value.trim();
+  const pass = document.getElementById('s-password').value;
+  if (!user) { showToast('Username cannot be empty', '#c62828'); return; }
+  const creds = { user, pass: pass || getAdminCreds().pass };
+  localStorage.setItem('bbc_admin_creds', JSON.stringify(creds));
+  document.getElementById('s-password').value = '';
+  showToast('Admin credentials saved!');
+}
+function saveAnalyticsSettings() {
+  const gaId = document.getElementById('s-ga-id').value.trim();
+  const url = document.getElementById('s-analytics-url').value.trim();
+  if (gaId) localStorage.setItem('bbc_ga_id', gaId);
+  if (url) localStorage.setItem('bbc_analytics_embed_url', url);
+  showToast('Analytics settings saved!');
+}
+function saveSocialSettings() {
+  ['yt','ig','wa','li'].forEach(k => {
+    const v = document.getElementById('s-' + k)?.value?.trim();
+    if (v) localStorage.setItem('bbc_social_' + k, v);
+  });
+  showToast('Social links saved!');
+}
+function saveDriveSettings() {
+  const ebooks = document.getElementById('s-ebooks').value.trim();
+  const reports = document.getElementById('s-reports').value.trim();
+  if (ebooks) localStorage.setItem('bbc_drive_ebooks', ebooks);
+  if (reports) localStorage.setItem('bbc_drive_reports', reports);
+  showToast('Drive links saved!');
+}
+function clearAllData() {
+  if (!confirm('This will clear ALL local data. This cannot be undone. Are you sure?')) return;
+  const keys = Object.keys(localStorage).filter(k => k.startsWith('bbc_'));
+  keys.forEach(k => localStorage.removeItem(k));
+  showToast('All data cleared. Reloading...', '#c62828');
+  setTimeout(() => location.reload(), 1500);
+}
+</script>
+</body>
+</html>
