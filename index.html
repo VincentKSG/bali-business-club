@@ -6,6 +6,8 @@
 <title>Bali Business Club — Member Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
@@ -24,7 +26,7 @@
   --card: #1a1a1a;
   --card2: #222222;
   --border: #2a2a2a;
-  --yellow: #F5C518;
+  --yellow: $F5C518;
   --yellow2: #e6b800;
   --blue: #1565C0;
   --blue2: #1976D2;
@@ -99,7 +101,8 @@ input, select, textarea { font-family: var(--font-body); }
   transition: all 0.2s; text-align: center;
 }
 .shortcut-card:hover { background: var(--card2); border-color: var(--yellow); transform: translateY(-2px); }
-.sc-icon { font-size: 32px; margin-bottom: 10px; }
+.sc-icon { width:56px;height:56px;background:rgba(245,197,24,0.1);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:22px;color:var(--yellow);transition:background 0.2s; }
+.shortcut-card:hover .sc-icon { background:rgba(245,197,24,0.2); }
 .sc-label { font-family: var(--font-head); font-size: 16px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
 .sc-sub { font-size: 12px; color: var(--grey); line-height: 1.4; }
 
@@ -227,7 +230,7 @@ input, select, textarea { font-family: var(--font-body); }
 .partners-grid { display: flex; flex-direction: column; gap: 20px; margin-bottom: 36px; }
 .partner-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: flex; gap: 20px; align-items: flex-start; }
 @media(max-width:600px) { .partner-card { flex-direction: column; } }
-.partner-logo { font-size: 44px; flex-shrink: 0; }
+.partner-logo { width:60px;height:60px;background:rgba(245,197,24,0.1);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--yellow);flex-shrink:0; }
 .partner-info { flex: 1; }
 .partner-name { font-family: var(--font-head); font-size: 22px; color: var(--white); font-weight: 700; margin-bottom: 2px; }
 .partner-tagline { font-size: 13px; color: var(--yellow); margin-bottom: 10px; font-weight: 500; }
@@ -254,7 +257,7 @@ input, select, textarea { font-family: var(--font-body); }
 
 /* ─── FAVORITES ────────────────────────────────────────── */
 .fav-empty { text-align: center; padding: 60px 20px; color: var(--grey); }
-.fav-empty .fav-empty-icon { font-size: 48px; margin-bottom: 14px; }
+.fav-empty .fav-empty-icon { font-size: 48px; margin-bottom: 14px; color: var(--grey); }
 .fav-empty p { font-size: 14px; }
 .fav-section { margin-bottom: 28px; }
 .fav-section-title { font-family: var(--font-head); font-size: 16px; color: var(--yellow); margin-bottom: 12px; font-weight: 600; }
@@ -327,14 +330,14 @@ input, select, textarea { font-family: var(--font-body); }
 
 <!-- NAV -->
 <nav id="nav">
-  <div class="nav-tab active" data-tab="home">🏠 Home</div>
-  <div class="nav-tab" data-tab="market">📊 Market Insights</div>
-  <div class="nav-tab" data-tab="news">📰 News</div>
-  <div class="nav-tab" data-tab="podcasts">😙️ Podcasts</div>
-  <div class="nav-tab" data-tab="resources">📚 Resources</div>
-  <div class="nav-tab" data-tab="partners">🤝 Partners</div>
-  <div class="nav-tab" data-tab="favorites">🔖 Favorites</div>
-  <div class="nav-tab" data-tab="connect">💬 Connect</div>
+  <div class="nav-tab active" data-tab="home"><i class="fa-solid fa-house"></i> Home</div>
+  <div class="nav-tab" data-tab="market"><i class="fa-solid fa-chart-column"></i> Market Insights</div>
+  <div class="nav-tab" data-tab="news"><i class="fa-solid fa-newspaper"></i> News</div>
+  <div class="nav-tab" data-tab="podcasts"><i class="fa-solid fa-microphone"></i> Podcasts</div>
+  <div class="nav-tab" data-tab="resources"><i class="fa-solid fa-book-open"></i> Resources</div>
+  <div class="nav-tab" data-tab="partners"><i class="fa-solid fa-handshake"></i> Partners</div>
+  <div class="nav-tab" data-tab="favorites"><i class="fa-solid fa-bookmark"></i> Favorites</div>
+  <div class="nav-tab" data-tab="connect"><i class="fa-solid fa-comments"></i> Connect</div>
 </nav>
 
 <!-- MAIN -->
@@ -343,48 +346,79 @@ input, select, textarea { font-family: var(--font-body); }
   <!-- ── HOME ── -->
   <div class="tab-panel active" id="tab-home">
     <div id="greeting">
-      <h1>Hello, <span id="user-name">Member</span> 👋</h1>
-      <p>Welcome to the Bali Business Club Member Dashboard. Explore insights, news, podcasts and more.</p>
+      <h1>Welcome, <span id="user-name">Member</span></h1>
+      <p>Your Bali business intelligence hub — market data, news, podcasts and exclusive partner benefits.</p>
     </div>
     <div class="section-title">Quick Access</div>
     <div class="shortcuts-grid">
       <div class="shortcut-card" onclick="switchTab('market')">
-  <div class="sc-icon">📊</div>
+  <div class="sc-icon"><i class="fa-solid fa-chart-column"></i></div>
   <div class="sc-label">Market Insights</div>
   <div class="sc-sub">REID-powered real estate data</div>
 </div>
 <div class="shortcut-card" onclick="switchTab('news')">
-  <div class="sc-icon">📰</div>
+  <div class="sc-icon"><i class="fa-solid fa-newspaper"></i></div>
   <div class="sc-label">News</div>
   <div class="sc-sub">Latest Bali business news</div>
 </div>
 <div class="shortcut-card" onclick="switchTab('podcasts')">
-  <div class="sc-icon">😙️</div>
+  <div class="sc-icon"><i class="fa-solid fa-microphone"></i></div>
   <div class="sc-label">Podcasts</div>
   <div class="sc-sub">All BBC YouTube episodes</div>
 </div>
 <div class="shortcut-card" onclick="switchTab('resources')">
-  <div class="sc-icon">📚</div>
+  <div class="sc-icon"><i class="fa-solid fa-book-open"></i></div>
   <div class="sc-label">Resources</div>
   <div class="sc-sub">Ebooks & market reports</div>
 </div>
 <div class="shortcut-card" onclick="switchTab('partners')">
-  <div class="sc-icon">🤝</div>
+  <div class="sc-icon"><i class="fa-solid fa-handshake"></i></div>
   <div class="sc-label">Partners</div>
   <div class="sc-sub">Exclusive member benefits</div>
 </div>
 <div class="shortcut-card" onclick="switchTab('favorites')">
-  <div class="sc-icon">🔖</div>
+  <div class="sc-icon"><i class="fa-solid fa-bookmark"></i></div>
   <div class="sc-label">Favorites</div>
   <div class="sc-sub">Your saved items</div>
 </div>
 <div class="shortcut-card" onclick="switchTab('connect')">
-  <div class="sc-icon">💬</div>
+  <div class="sc-icon"><i class="fa-solid fa-comments"></i></div>
   <div class="sc-label">Connect</div>
   <div class="sc-sub">Contact & socials</div>
 </div>
 
     </div>
+
+    <hr class="divider">
+    <div class="section-title" style="margin-bottom:6px;"><i class="fa-solid fa-chart-column"></i> Market Snapshot</div>
+    <div class="section-sub">Key Bali real estate indicators from REID data.</div>
+    <div class="kpi-grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr));margin-bottom:10px;">
+      <div class="kpi-card"><div class="kpi-value">$2,210</div><div class="kpi-label">Avg Price / sqm</div><div class="kpi-sub">Freehold land, Bali 2025</div></div>
+      <div class="kpi-card"><div class="kpi-value">$299K</div><div class="kpi-label">Median Listing</div><div class="kpi-sub">All property types</div></div>
+      <div class="kpi-card"><div class="kpi-value">7–14%</div><div class="kpi-label">Gross Yield</div><div class="kpi-sub">Short-term villa</div></div>
+      <div class="kpi-card"><div class="kpi-value">12,300+</div><div class="kpi-label">Active Listings</div><div class="kpi-sub">REID Q1 2025</div></div>
+      <div class="kpi-card"><div class="kpi-value">&#8593; 38%</div><div class="kpi-label">Foreign Deals</div><div class="kpi-sub">Leasehold 2024</div></div>
+    </div>
+    <div style="text-align:right;margin-bottom:36px;"><a href="#" onclick="switchTab('market');return false;" style="font-size:13px;color:var(--yellow);font-weight:600;">View Full Market Report <i class="fa-solid fa-arrow-right"></i></a></div>
+
+    <div class="section-title" style="margin-bottom:6px;"><i class="fa-solid fa-newspaper"></i> Latest News</div>
+    <div class="section-sub">Recent updates from Bali's real estate, business and legal scene.</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px;">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+        <div><div style="font-size:11px;color:var(--yellow);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Real Estate</div><div style="font-family:var(--font-head);font-size:15px;color:var(--white);font-weight:600;line-height:1.4;">Bali Land Prices Hit Record High in Canggu Corridor</div></div>
+        <div style="text-align:right;flex-shrink:0;"><div style="font-size:11px;color:var(--grey);margin-bottom:8px;">Mar 28, 2025</div><a href="#" onclick="switchTab('news');return false;" style="font-size:12px;color:var(--yellow);font-weight:600;white-space:nowrap;">Read <i class="fa-solid fa-arrow-right"></i></a></div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+        <div><div style="font-size:11px;color:var(--yellow);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Business &amp; Tax</div><div style="font-family:var(--font-head);font-size:15px;color:var(--white);font-weight:600;line-height:1.4;">Indonesia Simplifies PT PMA Registration to 5 Business Days</div></div>
+        <div style="text-align:right;flex-shrink:0;"><div style="font-size:11px;color:var(--grey);margin-bottom:8px;">Apr 2, 2025</div><a href="#" onclick="switchTab('news');return false;" style="font-size:12px;color:var(--yellow);font-weight:600;white-space:nowrap;">Read <i class="fa-solid fa-arrow-right"></i></a></div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+        <div><div style="font-size:11px;color:var(--yellow);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Visa &amp; Legal</div><div style="font-family:var(--font-head);font-size:15px;color:var(--white);font-weight:600;line-height:1.4;">Second Home Visa Extended: Now Valid for 10 Years</div></div>
+        <div style="text-align:right;flex-shrink:0;"><div style="font-size:11px;color:var(--grey);margin-bottom:8px;">Apr 5, 2025</div><a href="#" onclick="switchTab('news');return false;" style="font-size:12px;color:var(--yellow);font-weight:600;white-space:nowrap;">Read <i class="fa-solid fa-arrow-right"></i></a></div>
+      </div>
+    </div>
+    <div style="text-align:right;margin-bottom:8px;"><a href="#" onclick="switchTab('news');return false;" style="font-size:13px;color:var(--yellow);font-weight:600;">View All News <i class="fa-solid fa-arrow-right"></i></a></div>
+
   </div>
 
   <!-- ── MARKET INSIGHTS ── -->
@@ -502,7 +536,7 @@ input, select, textarea { font-family: var(--font-body); }
 
     <!-- BBC Takeaways -->
     <div class="takeaways-block">
-      <h3>🧠 BBC Takeaways</h3>
+      <h3><i class="fa-solid fa-brain"></i> BBC Takeaways</h3>
       <div class="takeaway-item"><span class="takeaway-num">1</span><p>Canggu continues to lead yield performance — strong demand from digital nomads and short-term rental operators is keeping occupancy above 80% year-round.</p></div>
 <div class="takeaway-item"><span class="takeaway-num">2</span><p>Leasehold structures remain the dominant entry point for foreign investors; 30+10-year titles with notarised PT PMA ownership are now market standard.</p></div>
 <div class="takeaway-item"><span class="takeaway-num">3</span><p>Bukit & Uluwatu are supply-constrained — clifftop land has essentially stopped being listed, pushing up resale premiums by ~20% YoY.</p></div>
@@ -529,19 +563,19 @@ input, select, textarea { font-family: var(--font-body); }
   <div class="tab-panel" id="tab-news">
     <div class="section-title">News</div>
     <div class="section-sub">Curated Bali business news across real estate, business & tax, and visa & legal. Updated manually by BBC admin.</div>
-    <div class="news-category"><div class="news-cat-header">🏠 Real Estate</div><div class="news-item" id="n1">
+    <div class="news-category"><div class="news-cat-header"><i class="fa-solid fa-house"></i> Real Estate</div><div class="news-item" id="n1">
   <div class="news-header" onclick="toggleNews('n1')">
     <div class="news-meta"><span class="news-date">Mar 28, 2025</span></div>
     <div class="news-title">Bali Land Prices Hit Record High in Canggu Corridor</div>
     <div class="news-teaser">Freehold land in the Canggu–Pererenan stretch surpassed IDR 45 million/sqm as demand from foreign-backed PT PMAs accelerates.</div>
     <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n1','Bali Land Prices Hit Record High in Canggu Corridor','news')" title="Save article">🔖 Save</button>
+      <button class="save-btn" onclick="saveItem(event,'n1','Bali Land Prices Hit Record High in Canggu Corridor','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
       <span class="expand-icon">▼</span>
     </div>
   </div>
   <div class="news-body" id="body-n1">
     <p>New transactional data from REID shows that freehold land in the Canggu–Pererenan corridor has surpassed IDR 45 million per sqm for prime plots, a 28% increase year-on-year. The surge is attributed to a wave of PT PMA formations by foreign-backed investors and continued interest from digital nomad hospitality operators. Agents report that well-located plots under 5 ares are receiving multiple offers within days of listing. Experts caution that over-leveraged flips are becoming riskier as construction costs have also risen 15% since 2023.</p>
-    <div class="news-source">📌 Source: REID Market Intelligence</div>
+    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: REID Market Intelligence</div>
   </div>
 </div>
 <div class="news-item" id="n2">
@@ -550,13 +584,13 @@ input, select, textarea { font-family: var(--font-body); }
     <div class="news-title">New Leasehold Regulations: What Foreign Buyers Must Know in 2025</div>
     <div class="news-teaser">Indonesia's Ministry of ATR/BPN has clarified leasehold title transfer rules, with key implications for foreign villa investors.</div>
     <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n2','New Leasehold Regulations: What Foreign Buyers Must Know in 2025','news')" title="Save article">🔖 Save</button>
+      <button class="save-btn" onclick="saveItem(event,'n2','New Leasehold Regulations: What Foreign Buyers Must Know in 2025','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
       <span class="expand-icon">▼</span>
     </div>
   </div>
   <div class="news-body" id="body-n2">
     <p>The Ministry of ATR/BPN released updated guidance in February 2025 clarifying the process for extending and transferring leasehold (HGB) titles held through PT PMA structures. Key takeaways: (1) Extensions beyond the 30-year initial term are now processed at the provincial level rather than national, reducing wait times; (2) PT PMA-held titles can be transferred to another PT PMA without triggering land acquisition tax (BPHTB) in most cases; (3) Notaries are now required to register all leasehold agreements with the national land registry within 30 days of signing. Investors should review existing title documents to ensure compliance before year-end.</p>
-    <div class="news-source">📌 Source: Ministry of ATR/BPN / Legal Legends Indonesia analysis</div>
+    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: Ministry of ATR/BPN / Legal Legends Indonesia analysis</div>
   </div>
 </div>
 <div class="news-item" id="n3">
@@ -565,29 +599,29 @@ input, select, textarea { font-family: var(--font-body); }
     <div class="news-title">Airbnb Bali Sees 40% Revenue Growth in H2 2024</div>
     <div class="news-teaser">Short-term rental revenues on Airbnb surged as Bali tourism fully recovered post-COVID, with Uluwatu leading ADR growth.</div>
     <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n3','Airbnb Bali Sees 40% Revenue Growth in H2 2024','news')" title="Save article">🔖 Save</button>
+      <button class="save-btn" onclick="saveItem(event,'n3','Airbnb Bali Sees 40% Revenue Growth in H2 2024','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
       <span class="expand-icon">▼</span>
     </div>
   </div>
   <div class="news-body" id="body-n3">
     <p>Airbnb's internal data shared at a Bali tourism forum shows a 40% YoY revenue increase for Bali hosts in H2 2024. Average Daily Rates in Uluwatu reached USD 450/night for 3-bed luxury villas, while Canggu maintained the highest volume of bookings. The platform now lists over 27,000 properties in Bali, up from 18,000 in 2022. Property managers note occupancy above 75% across the island for the 6-month period. The data reinforces Bali's position as one of the top 5 performing Airbnb markets globally.</p>
-    <div class="news-source">📌 Source: Airbnb Host Forum Bali 2025 / REID</div>
+    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: Airbnb Host Forum Bali 2025 / REID</div>
   </div>
 </div>
 </div>
-<div class="news-category"><div class="news-cat-header">💼 Business & Tax</div><div class="news-item" id="n4">
+<div class="news-category"><div class="news-cat-header"><i class="fa-solid fa-briefcase"></i> Business &amp; Tax</div><div class="news-item" id="n4">
   <div class="news-header" onclick="toggleNews('n4')">
     <div class="news-meta"><span class="news-date">Apr 2, 2025</span></div>
     <div class="news-title">Indonesia Simplifies PT PMA Registration to 5 Business Days</div>
     <div class="news-teaser">BKPM's OSS platform update means foreign company incorporation in Indonesia now takes as little as 5 working days end-to-end.</div>
     <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n4','Indonesia Simplifies PT PMA Registration to 5 Business Days','news')" title="Save article">🔖 Save</button>
+      <button class="save-btn" onclick="saveItem(event,'n4','Indonesia Simplifies PT PMA Registration to 5 Business Days','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
       <span class="expand-icon">▼</span>
     </div>
   </div>
   <div class="news-body" id="body-n4">
     <p>The Indonesian Investment Coordinating Board (BKPM) has announced that its Online Single Submission (OSS) system upgrade, rolled out in March 2025, has cut average PT PMA registration time from 3–6 weeks to 5 business days for standard business classifications. The key improvement is automated cross-checking with the Ministry of Law and Human Rights database, eliminating manual review delays. Business types eligible for the fast-track include trading, consulting, and property holding (KBLI 68100). Advisors note that while registration is faster, due diligence on shareholder documents and KBLI selection remains as important as ever.</p>
-    <div class="news-source">📌 Source: BKPM / OSS Portal announcement</div>
+    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: BKPM / OSS Portal announcement</div>
   </div>
 </div>
 <div class="news-item" id="n5">
@@ -596,13 +630,13 @@ input, select, textarea { font-family: var(--font-body); }
     <div class="news-title">Bali Introduces Tourist Levy: What It Means for Hospitality Businesses</div>
     <div class="news-teaser">Bali's IDR 150,000 tourist levy, now fully in effect, is being channeled into cultural preservation — and hospitality operators are adjusting.</div>
     <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n5','Bali Introduces Tourist Levy: What It Means for Hospitality Businesses','news')" title="Save article">🔖 Save</button>
+      <button class="save-btn" onclick="saveItem(event,'n5','Bali Introduces Tourist Levy: What It Means for Hospitality Businesses','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
       <span class="expand-icon">▼</span>
     </div>
   </div>
   <div class="news-body" id="body-n5">
     <p>Bali's foreign tourist levy of IDR 150,000 (approx. USD 9.50) per arrival, introduced in February 2024, has now been in operation for over a year. Collections in 2024 totalled over IDR 750 billion, with funds directed to cultural site preservation and waste management. Hospitality operators report that the levy has had minimal impact on tourist volumes, with most hotels and villas absorbing the cost or listing it as a transparent add-on. The Bali Regional Government is now discussing an increase to IDR 200,000 from 2026. Business owners should factor this into pricing models for forward bookings.</p>
-    <div class="news-source">📌 Source: Bali Provincial Government / Bali Hotels Association</div>
+    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: Bali Provincial Government / Bali Hotels Association</div>
   </div>
 </div>
 <div class="news-item" id="n6">
@@ -611,29 +645,29 @@ input, select, textarea { font-family: var(--font-body); }
     <div class="news-title">Indonesia's New Tax Treaty with Singapore: Key Changes for Expat Investors</div>
     <div class="news-teaser">The updated DTA between Indonesia and Singapore, effective January 2025, changes withholding tax rates on dividends and royalties.</div>
     <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n6','Indonesia\'s New Tax Treaty with Singapore: Key Changes for Expat Investors','news')" title="Save article">🔖 Save</button>
+      <button class="save-btn" onclick="saveItem(event,'n6','Indonesia\'s New Tax Treaty with Singapore: Key Changes for Expat Investors','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
       <span class="expand-icon">▼</span>
     </div>
   </div>
   <div class="news-body" id="body-n6">
     <p>Indonesia and Singapore's updated Double Taxation Agreement came into effect on 1 January 2025. For investors using Singapore holding structures: (1) Withholding tax on dividends paid from Indonesian PT PMAs to Singapore entities is reduced from 15% to 10% for holdings above 25%; (2) Royalty withholding drops from 15% to 8%; (3) Capital gains on real property companies remain taxable in Indonesia. Tax advisors recommend reviewing existing holding structures before the next dividend distribution. The treaty does not affect individual expats who are Indonesian tax residents — they remain subject to standard Indonesian income tax.</p>
-    <div class="news-source">📌 Source: Directorate General of Taxes Indonesia / PwC Indonesia</div>
+    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: Directorate General of Taxes Indonesia / PwC Indonesia</div>
   </div>
 </div>
 </div>
-<div class="news-category"><div class="news-cat-header">🛂 Visa & Legal</div><div class="news-item" id="n7">
+<div class="news-category"><div class="news-cat-header"><i class="fa-solid fa-passport"></i> Visa &amp; Legal</div><div class="news-item" id="n7">
   <div class="news-header" onclick="toggleNews('n7')">
     <div class="news-meta"><span class="news-date">Apr 5, 2025</span></div>
     <div class="news-title">Second Home Visa Extended: Now Valid for 10 Years with Multiple Entry</div>
     <div class="news-teaser">Indonesia's Second Home Visa has been upgraded — holders can now stay for up to 10 years with unrestricted multiple-entry privileges.</div>
     <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n7','Second Home Visa Extended: Now Valid for 10 Years with Multiple Entry','news')" title="Save article">🔖 Save</button>
+      <button class="save-btn" onclick="saveItem(event,'n7','Second Home Visa Extended: Now Valid for 10 Years with Multiple Entry','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
       <span class="expand-icon">▼</span>
     </div>
   </div>
   <div class="news-body" id="body-n7">
     <p>The Directorate General of Immigration announced in April 2025 that the Second Home Visa (C6T) has been upgraded from a 5-year to 10-year validity, with multiple-entry and stay rights. Holders are permitted to work remotely, own a property under Indonesian law, and sponsor family members. The minimum asset requirement remains USD 130,000 in verified Indonesian bank funds or property ownership. Applications are processed through the immigration portal or via licensed immigration agents. Legal advisors note this is now one of the most attractive long-term residency options for foreign property investors who do not wish to establish a PT PMA.</p>
-    <div class="news-source">📌 Source: Directorate General of Immigration Indonesia</div>
+    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: Directorate General of Immigration Indonesia</div>
   </div>
 </div>
 <div class="news-item" id="n8">
@@ -642,13 +676,13 @@ input, select, textarea { font-family: var(--font-body); }
     <div class="news-title">KITAS Renewal Backlog Cleared — Processing Back to 2-Week Standard</div>
     <div class="news-teaser">After a 3-month backlog that stretched KITAS renewals to 2+ months, the Bali Immigration Office confirms normal processing has resumed.</div>
     <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n8','KITAS Renewal Backlog Cleared — Processing Back to 2-Week Standard','news')" title="Save article">🔖 Save</button>
+      <button class="save-btn" onclick="saveItem(event,'n8','KITAS Renewal Backlog Cleared — Processing Back to 2-Week Standard','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
       <span class="expand-icon">▼</span>
     </div>
   </div>
   <div class="news-body" id="body-n8">
     <p>The Bali Immigration Office issued a statement confirming that the backlog of KITAS (Temporary Stay Permit) renewals, caused by a system migration in late 2024, has been fully resolved. Processing times have returned to the standard 10–14 working days for sponsored KITAS (KITAS Sponsor) and 14–21 working days for investor KITAS. Agents advise applicants to apply at least 45 days before expiry as a buffer. The immigration office also confirmed that the new digital KITAS card, introduced in Q4 2024, will be issued to all renewal applicants going forward.</p>
-    <div class="news-source">📌 Source: Bali Immigration Office, March 2025</div>
+    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: Bali Immigration Office, March 2025</div>
   </div>
 </div>
 <div class="news-item" id="n9">
@@ -657,13 +691,13 @@ input, select, textarea { font-family: var(--font-body); }
     <div class="news-title">Digital Nomad Visa: Indonesia's Popularity Grows Among Remote Workers</div>
     <div class="news-teaser">Indonesia's Remote Work Visa attracted over 4,000 applicants in 2024, cementing Bali as Southeast Asia's top digital nomad destination.</div>
     <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n9','Digital Nomad Visa: Indonesia\'s Popularity Grows Among Remote Workers','news')" title="Save article">🔖 Save</button>
+      <button class="save-btn" onclick="saveItem(event,'n9','Digital Nomad Visa: Indonesia\'s Popularity Grows Among Remote Workers','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
       <span class="expand-icon">▼</span>
     </div>
   </div>
   <div class="news-body" id="body-n9">
     <p>Indonesia's Remote Work Visa (E33G) processed over 4,000 applications in 2024, with Bali accounting for an estimated 85% of holders' chosen base. The visa permits a 6-month stay (extendable once) and requires proof of employment or freelance income above USD 2,000/month. Holders cannot earn Indonesian-sourced income. Despite its limitations, immigration lawyers report it remains the fastest and cheapest legal pathway for remote workers. A government review committee is considering extending the term to 12 months and raising the income threshold to USD 3,500 to align with regional competitors like Thailand and Malaysia.</p>
-    <div class="news-source">📌 Source: Directorate General of Immigration / Digital Nomad Visa tracker</div>
+    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: Directorate General of Immigration / Digital Nomad Visa tracker</div>
   </div>
 </div>
 </div>
@@ -674,8 +708,8 @@ input, select, textarea { font-family: var(--font-body); }
   <div class="tab-panel" id="tab-podcasts">
     <div class="section-title">Podcasts</div>
     <div class="section-sub">All episodes from the Bali Business Club YouTube channel. New episodes appear automatically.</div>
-    <a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" class="podcast-channel-btn">▶ View All on YouTube</a>
-    <div id="podcasts-loading">⏳ Loading episodes from YouTube...</div>
+    <a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" class="podcast-channel-btn"><i class="fa-brands fa-youtube"></i> View All on YouTube</a>
+    <div id="podcasts-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading episodes from YouTube...</div>
     <div class="podcast-grid" id="podcast-grid"></div>
   </div>
 
@@ -685,13 +719,13 @@ input, select, textarea { font-family: var(--font-body); }
     <div class="section-sub">Exclusive BBC ebooks and curated third-party market reports. Hosted on Google Drive for easy access.</div>
 
     <div class="resources-section">
-      <div class="section-title" style="font-size:18px;margin-bottom:10px;">📖 BBC Ebooks</div>
-      <a href="https://drive.google.com/drive/folders/1eBpxUHTMVwJMRMRLiKL2B8eR8W9x3iGr" target="_blank" class="resource-drive-link">📂 Open Google Drive Folder</a>
+      <div class="section-title" style="font-size:18px;margin-bottom:10px;"><i class="fa-solid fa-book-open"></i> BBC Ebooks</div>
+      <a href="https://drive.google.com/drive/folders/1eBpxUHTMVwJMRMRLiKL2B8eR8W9x3iGr" target="_blank" class="resource-drive-link"><i class="fa-solid fa-folder-open"></i> Open Google Drive Folder</a>
       <div class="resources-list">
-        <div class="resource-item"><span class="resource-icon">🏠</span><span class="resource-title">BBC Guide to Buying Property in Bali</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon">🏢</span><span class="resource-title">Setting Up a PT PMA in Indonesia</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon">📋</span><span class="resource-title">Bali Business Tax & Compliance Guide</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon">🛂</span><span class="resource-title">Visa & Residency Options for Expats in Bali</span><span class="resource-ext">PDF</span></div>
+        <div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-house"></i></span><span class="resource-title">BBC Guide to Buying Property in Bali</span><span class="resource-ext">PDF</span></div>
+<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-building"></i></span><span class="resource-title">Setting Up a PT PMA in Indonesia</span><span class="resource-ext">PDF</span></div>
+<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-clipboard-list"></i></span><span class="resource-title">Bali Business Tax & Compliance Guide</span><span class="resource-ext">PDF</span></div>
+<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-passport"></i></span><span class="resource-title">Visa & Residency Options for Expats in Bali</span><span class="resource-ext">PDF</span></div>
 
       </div>
     </div>
@@ -699,18 +733,18 @@ input, select, textarea { font-family: var(--font-body); }
     <hr class="divider">
 
     <div class="resources-section">
-      <div class="section-title" style="font-size:18px;margin-bottom:10px;">📊 Other Company Reports</div>
-      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-drive-link">📂 Open Google Drive Folder</a>
+      <div class="section-title" style="font-size:18px;margin-bottom:10px;"><i class="fa-solid fa-chart-bar"></i> Other Company Reports</div>
+      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-drive-link"><i class="fa-solid fa-folder-open"></i> Open Google Drive Folder</a>
       <div class="resources-list">
-        <div class="resource-item"><span class="resource-icon">📈</span><span class="resource-title">Colliers Bali Market Report 2024</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon">💎</span><span class="resource-title">Knight Frank Asia-Pacific Wealth Report 2024</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon">🏙️</span><span class="resource-title">CBRE Indonesia Real Estate Outlook 2025</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon">✈️</span><span class="resource-title">Bali Tourism Statistical Review 2024</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon">🌏</span><span class="resource-title">World Bank Indonesia Economic Monitor 2025</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon">🏨</span><span class="resource-title">JLL Hospitality & Hotel Investment Bali 2024</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon">⚖️</span><span class="resource-title">Deloitte Tax & Legal Guide Indonesia 2025</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon">📉</span><span class="resource-title">IMF Indonesia Article IV Consultation 2024</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon">🔭</span><span class="resource-title">Oxford Economics Bali Tourism Forecast 2025–2030</span><span class="resource-ext">PDF</span></div>
+        <div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-chart-line"></i></span><span class="resource-title">Colliers Bali Market Report 2024</span><span class="resource-ext">PDF</span></div>
+<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-gem"></i></span><span class="resource-title">Knight Frank Asia-Pacific Wealth Report 2024</span><span class="resource-ext">PDF</span></div>
+<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-city"></i></span><span class="resource-title">CBRE Indonesia Real Estate Outlook 2025</span><span class="resource-ext">PDF</span></div>
+<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-plane"></i></span><span class="resource-title">Bali Tourism Statistical Review 2024</span><span class="resource-ext">PDF</span></div>
+<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-globe"></i></span><span class="resource-title">World Bank Indonesia Economic Monitor 2025</span><span class="resource-ext">PDF</span></div>
+<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-hotel"></i></span><span class="resource-title">JLL Hospitality & Hotel Investment Bali 2024</span><span class="resource-ext">PDF</span></div>
+<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-scale-balanced"></i></span><span class="resource-title">Deloitte Tax & Legal Guide Indonesia 2025</span><span class="resource-ext">PDF</span></div>
+<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-arrow-trend-down"></i></span><span class="resource-title">IMF Indonesia Article IV Consultation 2024</span><span class="resource-ext">PDF</span></div>
+<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-binoculars"></i></span><span class="resource-title">Oxford Economics Bali Tourism Forecast 2025–2030</span><span class="resource-ext">PDF</span></div>
 
       </div>
     </div>
@@ -722,34 +756,34 @@ input, select, textarea { font-family: var(--font-body); }
     <div class="section-sub">Exclusive offers and discounts for BBC members from our trusted partners.</div>
     <div class="partners-grid">
       <div class="partner-card">
-  <div class="partner-logo">🎙️</div>
+  <div class="partner-logo"><i class="fa-solid fa-microphone"></i></div>
   <div class="partner-info">
     <div class="partner-name">Voxpop Studio</div>
     <div class="partner-tagline">Bali's Premier Podcast & Content Studio</div>
     <div class="partner-desc">Professional podcast recording, video production, and content creation in the heart of Bali. State-of-the-art equipment, expert engineers, and stunning spaces.</div>
-    <div class="partner-offer">🎁 10% off all bookings for BBC members</div>
+    <div class="partner-offer"><i class="fa-solid fa-gift"></i> 10% off all bookings for BBC members</div>
     <div class="partner-code">Use code: <strong>BBCMEMBER</strong></div>
     <a href="https://voxpopbali.com" target="_blank" class="partner-btn" style="background:#E8A020;">Book at voxpopbali.com</a>
   </div>
 </div>
 <div class="partner-card">
-  <div class="partner-logo">⚖️</div>
+  <div class="partner-logo"><i class="fa-solid fa-scale-balanced"></i></div>
   <div class="partner-info">
     <div class="partner-name">Legal Legends Indonesia</div>
     <div class="partner-tagline">Expert Legal Solutions for Expats & Businesses</div>
     <div class="partner-desc">Specialising in visa & KITAS applications, PT PMA incorporation, property due diligence, and compliance for foreign nationals in Indonesia.</div>
-    <div class="partner-offer">🎁 5% discount on visa/KITAS, PT PMA services</div>
+    <div class="partner-offer"><i class="fa-solid fa-gift"></i> 5% discount on visa/KITAS, PT PMA services</div>
     
     <a href="https://legallegendsindonesia.com/contact-us" target="_blank" class="partner-btn" style="background:#1565C0;">legallegendsindonesia.com</a>
   </div>
 </div>
 <div class="partner-card">
-  <div class="partner-logo">📊</div>
+  <div class="partner-logo"><i class="fa-solid fa-chart-column"></i></div>
   <div class="partner-info">
     <div class="partner-name">Bali Accounting Legends</div>
     <div class="partner-tagline">Accounting, Tax & Financial Advisory in Bali</div>
     <div class="partner-desc">Comprehensive accounting, bookkeeping, tax compliance and financial advisory services for individuals and businesses operating in Bali and across Indonesia.</div>
-    <div class="partner-offer">🎁 5% off consulting services for BBC members</div>
+    <div class="partner-offer"><i class="fa-solid fa-gift"></i> 5% off consulting services for BBC members</div>
     
     <a href="https://wa.me/6281239091087" target="_blank" class="partner-btn" style="background:#2E7D32;">WhatsApp to connect</a>
   </div>
@@ -760,7 +794,7 @@ input, select, textarea { font-family: var(--font-body); }
     <hr class="divider">
 
     <div class="become-partner">
-      <h3>🤝 Become a Partner</h3>
+      <h3><i class="fa-solid fa-handshake"></i> Become a Partner</h3>
       <p>Interested in reaching the Bali Business Club community? Fill in the form and we'll be in touch.</p>
       <form onsubmit="submitPartnerForm(event)">
         <div class="form-row">
@@ -793,27 +827,27 @@ input, select, textarea { font-family: var(--font-body); }
       <h2>Connect with Bali Business Club</h2>
       <p>The Bali Business Club brings together entrepreneurs, investors, and professionals building businesses and wealth in Bali and Southeast Asia. Join the conversation, listen to the podcast, and grow your network.</p>
       <div class="social-links">
-        <a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" class="social-btn yt">▶ YouTube</a>
-        <a href="https://www.instagram.com/bali.business.club/" target="_blank" class="social-btn ig">📸 Instagram</a>
-        <a href="https://wa.link/zg5xw8" target="_blank" class="social-btn wa">💬 WhatsApp</a>
-        <a href="https://www.linkedin.com/company/bali-business-club/" target="_blank" class="social-btn li">in LinkedIn</a>
+        <a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" class="social-btn yt"><i class="fa-brands fa-youtube"></i> YouTube</a>
+        <a href="https://www.instagram.com/bali.business.club/" target="_blank" class="social-btn ig"><i class="fa-brands fa-instagram"></i> Instagram</a>
+        <a href="https://wa.link/zg5xw8" target="_blank" class="social-btn wa"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+        <a href="https://www.linkedin.com/company/bali-business-club/" target="_blank" class="social-btn li"><i class="fa-brands fa-linkedin-in"></i> LinkedIn</a>
       </div>
     </div>
 
-    <div class="section-title" style="margin-bottom:14px;">📸 Instagram</div>
+    <div class="section-title" style="margin-bottom:14px;"><i class="fa-brands fa-instagram"></i> Instagram</div>
     <div class="insta-carousel">
-      <div class="insta-card"><img src="https://picsum.photos/seed/bbc1/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Latest episode dropping soon 🎙️</div></div>
-<div class="insta-card"><img src="https://picsum.photos/seed/bbc2/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Networking at BBC Bali HQ 🤝</div></div>
-<div class="insta-card"><img src="https://picsum.photos/seed/bbc3/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Market insights — watch the full breakdown 📊</div></div>
-<div class="insta-card"><img src="https://picsum.photos/seed/bbc4/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">BBC member spotlight 🌟</div></div>
-<div class="insta-card"><img src="https://picsum.photos/seed/bbc5/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Beautiful Bali ☀️</div></div>
-<div class="insta-card"><img src="https://picsum.photos/seed/bbc6/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Our partners making moves 🚀</div></div>
+      <div class="insta-card"><img src="https://picsum.photos/seed/bbc1/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Latest episode dropping soon</div></div>
+<div class="insta-card"><img src="https://picsum.photos/seed/bbc2/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Networking at BBC Bali HQ</div></div>
+<div class="insta-card"><img src="https://picsum.photos/seed/bbc3/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Market insights — watch the full breakdown</div></div>
+<div class="insta-card"><img src="https://picsum.photos/seed/bbc4/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">BBC member spotlight</div></div>
+<div class="insta-card"><img src="https://picsum.photos/seed/bbc5/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Beautiful Bali</div></div>
+<div class="insta-card"><img src="https://picsum.photos/seed/bbc6/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Our partners making moves</div></div>
 
     </div>
     <p style="font-size:12px;color:var(--grey);margin-top:-4px;margin-bottom:28px;">Preview only — <a href="https://www.instagram.com/bali.business.club/" target="_blank">view all on Instagram</a></p>
 
     <div class="recommend-form">
-      <h3>🎙️ Recommend a Podcast Topic</h3>
+      <h3><i class="fa-solid fa-microphone"></i> Recommend a Podcast Topic</h3>
       <p>Got a topic, guest, or question you'd love us to cover? Let us know below.</p>
       <form onsubmit="submitRecommendation(event)">
         <div class="form-row">
@@ -829,9 +863,9 @@ input, select, textarea { font-family: var(--font-body); }
     </div>
 
     <div class="wa-block">
-      <h3>💬 Chat with Us on WhatsApp</h3>
+      <h3><i class="fa-brands fa-whatsapp"></i> Chat with Us on WhatsApp</h3>
       <p>Have a question, want to collaborate, or just want to say hello? Reach us directly on WhatsApp.</p>
-      <a href="https://wa.link/zg5xw8" target="_blank" class="wa-btn">💬 Open WhatsApp Chat</a>
+      <a href="https://wa.link/zg5xw8" target="_blank" class="wa-btn"><i class="fa-brands fa-whatsapp"></i> Open WhatsApp Chat</a>
     </div>
   </div>
 
@@ -877,6 +911,21 @@ function switchTab(tab) {
 document.querySelectorAll('.nav-tab').forEach(tab => {
   tab.addEventListener('click', () => switchTab(tab.dataset.tab));
 });
+// Robust event delegation
+document.getElementById('nav').addEventListener('click', function(e) {
+  var t = e.target.closest('.nav-tab');
+  if (t && t.dataset.tab) switchTab(t.dataset.tab);
+});
+// Additional delegation for robustness
+document.getElementById('nav').addEventListener('click', function(e) {
+  var t = e.target.closest('.nav-tab');
+  if (t && t.dataset.tab) switchTab(t.dataset.tab);
+});
+// Additional delegation for robustness
+document.getElementById('nav').addEventListener('click', function(e) {
+  var t = e.target.closest('.nav-tab');
+  if (t && t.dataset.tab) switchTab(t.dataset.tab);
+});
 
 // ── PROFILE ───────────────────────────────────────────────
 function loadProfile() {
@@ -906,7 +955,7 @@ function openModal() {
   document.getElementById('profile-modal').classList.add('open');
 }
 function closeModal() {
- document.getElementById('profile-modal').classList.remove('open');
+  document.getElementById('profile-modal').classList.remove('open');
 }
 document.getElementById('profile-modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
@@ -932,7 +981,7 @@ function saveItem(e, id, title, type) {
     saved.push({id, title, type, date: new Date().toLocaleDateString()});
     localStorage.setItem('bbc_saved', JSON.stringify(saved));
     e.target.classList.add('saved');
-    e.target.textContent = '✅ Saved';
+    e.target.innerHTML = '<i class="fa-solid fa-check"></i> Saved';
     showToast('Saved to Favorites!');
   } else {
     showToast('Already in Favorites');
@@ -943,7 +992,7 @@ function restoreSavedStates() {
   const saved = JSON.parse(localStorage.getItem('bbc_saved') || '[]');
   saved.forEach(s => {
     const btn = document.querySelector(`[onclick*="saveItem"][onclick*="'${s.id}'"]`);
-    if (btn) { btn.classList.add('saved'); btn.textContent = '✅ Saved'; }
+    if (btn) { btn.classList.add('saved'); btn.innerHTML = '<i class="fa-solid fa-check"></i> Saved'; }
   });
 }
 restoreSavedStates();
@@ -953,14 +1002,14 @@ function renderFavorites() {
   const saved = JSON.parse(localStorage.getItem('bbc_saved') || '[]');
   const el = document.getElementById('fav-content');
   if (!saved.length) {
-    el.innerHTML = '<div class="fav-empty"><div class="fav-empty-icon">🔖%</div><p>No saved items yet.<br>Use the Save button on news articles to add them here.</p></div>';
+    el.innerHTML = '<div class="fav-empty"><div class="fav-empty-icon"><i class="fa-solid fa-bookmark"></i></div><p>No saved items yet.<br>Use the Save button on news articles to add them here.</p></div>';
     return;
   }
   const byType = {};
   saved.forEach(s => (byType[s.type] = byType[s.type] || []).push(s));
   let html = '';
   for (const [type, items] of Object.entries(byType)) {
-    html += `<div class="fav-section"><div class="fav-section-title">${type === 'news' ? '📰 Saved News' : '🔖 Saved Items'}</div>`;
+    html += `<div class="fav-section"><div class="fav-section-title">${type === 'news' ? '<i class="fa-solid fa-newspaper"></i> Saved News' : '<i class="fa-solid fa-bookmark"></i> Saved Items'}</div>`;
     items.forEach(s => {
       html += `<div class="fav-item"><span class="fav-item-title">${s.title}</span><span class="remove-fav" onclick="removeFav('${s.id}')">✕</span></div>`;
     });
@@ -1006,7 +1055,7 @@ async function loadPodcasts() {
       </div>`;
     }).join('');
   } catch(err) {
-    loading.innerHTML = '<p style="color:var(--grey)">Could not load episodes automatically.<br><a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" style="color:var(--yellow)">View all on YouTube �'</a></p>';
+    loading.innerHTML = '<p style="color:var(--grey)">Could not load episodes automatically.<br><a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" style="color:var(--yellow)"><i class="fa-brands fa-youtube"></i> View all on YouTube</a></p>';
   }
 }
 
