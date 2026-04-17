@@ -2,1150 +2,1299 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bali Business Club — Member Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BBC Member Dashboard</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-XXXXXXXXXX');
-</script>
 <style>
-/* ─── RESET & BASE ─────────────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --black: #0a0a0a;
-  --dark: #111111;
-  --card: #1a1a1a;
-  --card2: #222222;
-  --border: #2a2a2a;
-  --yellow: $F5C518;
-  --yellow2: #e6b800;
-  --blue: #1565C0;
-  --blue2: #1976D2;
-  --white: #ffffff;
-  --grey: #aaaaaa;
-  --grey2: #666666;
-  --text: #eeeeee;
-  --font-head: 'Oswald', sans-serif;
-  --font-body: 'Inter', sans-serif;
-}
-html, body { height: 100%; background: var(--black); color: var(--text); font-family: var(--font-body); overflow-x: hidden; }
-a { color: var(--yellow); text-decoration: none; }
-a:hover { text-decoration: underline; }
-button { cursor: pointer; border: none; background: none; font-family: var(--font-body); }
-input, select, textarea { font-family: var(--font-body); }
+:root{--dark:#080e1a;--card:#0f1829;--card2:#141f35;--border:#1e2d4a;--yellow:#ffd800;--yellow2:#e6c400;--blue:#1a6bce;--blue2:#4a9eff;--white:#f0f4ff;--grey:#8899bb;--text:#c8d8f0;--green:#4caf50;--red:#f44336;--font-head:'Montserrat',sans-serif;--font-body:'Inter',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--dark);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+input,textarea,select{font-family:inherit}
 
-/* ─── SCROLLBAR ────────────────────────────────────────── */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--dark); }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(8,14,26,0.97);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:20px;height:64px}
+.topbar-logo{height:36px;width:auto;object-fit:contain;flex-shrink:0}
+.main-nav{display:flex;gap:2px;overflow-x:auto;flex:1;scrollbar-width:none}
+.main-nav::-webkit-scrollbar{display:none}
+.nav-tab{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;color:var(--grey);white-space:nowrap;transition:all 0.2s;font-family:var(--font-body)}
+.nav-tab:hover{color:var(--white);background:var(--card)}
+.nav-tab.active{color:var(--yellow);background:rgba(255,216,0,0.1)}
+.topbar-right{display:flex;align-items:center;gap:14px;flex-shrink:0}
+.bali-time{font-weight:700;color:var(--white);font-size:14px;white-space:nowrap;font-family:var(--font-head)}
+.user-btn{width:36px;height:36px;border-radius:50%;background:var(--card2);border:1px solid var(--border);color:var(--yellow);font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.user-btn:hover{border-color:var(--yellow)}
 
-/* ─── HEADER ───────────────────────────────────────────── */
-#header {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  background: #000; padding: 0 28px; height: 60px;
-  border-bottom: 1px solid var(--border);
-}
-#logo img { height: 36px; object-fit: contain; }
-#header-right { display: flex; align-items: center; gap: 20px; }
-#bali-time { font-family: var(--font-head); font-size: 18px; font-weight: 700; color: var(--white); letter-spacing: 1px; }
-#profile-btn {
-  width: 38px; height: 38px; border-radius: 50%;
-  background: var(--yellow); color: #000; font-weight: 700; font-size: 15px;
-  display: flex; align-items: center; justify-content: center; cursor: pointer;
-  border: 2px solid var(--yellow2);
-}
-#profile-btn:hover { background: var(--yellow2); }
+/* ── PAGES ── */
+.page{display:none;padding:32px 24px;max-width:1200px;margin:0 auto}
+.page.active{display:block}
+.page-title{font-family:var(--font-head);font-size:24px;font-weight:700;color:var(--white);margin-bottom:6px}
+.page-sub{font-size:14px;color:var(--grey);margin-bottom:28px}
 
-/* ─── NAV TABS ─────────────────────────────────────────── */
-#nav {
-  position: fixed; top: 60px; left: 0; right: 0; z-index: 99;
-  background: var(--dark); border-bottom: 1px solid var(--border);
-  display: flex; overflow-x: auto; gap: 0;
-}
-#nav::-webkit-scrollbar { height: 0; }
-.nav-tab {
-  padding: 14px 22px; font-family: var(--font-head); font-size: 14px;
-  font-weight: 600; letter-spacing: 0.5px; color: var(--grey);
-  cursor: pointer; border-bottom: 3px solid transparent;
-  white-space: nowrap; transition: all 0.2s;
-}
-.nav-tab:hover { color: var(--white); }
-.nav-tab.active { color: var(--yellow); border-bottom-color: var(--yellow); }
+/* ── HOME ── */
+.home-greeting{margin-bottom:36px}
+.home-greeting h1{font-family:var(--font-head);font-size:32px;font-weight:800;color:var(--white);margin-bottom:8px}
+.home-greeting p{font-size:15px;color:var(--grey);line-height:1.6}
+.home-greeting .greeting-date{font-size:13px;color:var(--yellow);margin-top:6px;font-weight:600}
+.shortcuts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.shortcut-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 20px;cursor:pointer;transition:all 0.25s;text-align:center}
+.shortcut-card:hover{border-color:var(--yellow);transform:translateY(-3px);background:var(--card2)}
+.shortcut-icon{font-size:36px;margin-bottom:14px;display:block}
+.shortcut-title{font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--white);margin-bottom:6px}
+.shortcut-desc{font-size:12px;color:var(--grey);line-height:1.5}
 
-/* ─── MAIN CONTENT ─────────────────────────────────────── */
-#main { margin-top: 109px; padding: 28px; max-width: 1400px; margin-left: auto; margin-right: auto; }
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
+/* ── SECTION HEADER ── */
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+.section-header h2{font-family:var(--font-head);font-size:18px;font-weight:700;color:var(--white)}
+.section-icon{font-size:20px}
+.section-divider{height:1px;background:var(--border);margin:28px 0}
 
-/* ─── HOME TAB ─────────────────────────────────────────── */
-#greeting { margin-bottom: 32px; }
-#greeting h1 { font-family: var(--font-head); font-size: 42px; font-weight: 700; color: var(--white); }
-#greeting p { color: var(--grey); margin-top: 6px; font-size: 15px; }
-.shortcuts-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 16px;
-}
-.shortcut-card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 12px; padding: 22px 18px; cursor: pointer;
-  transition: all 0.2s; text-align: center;
-}
-.shortcut-card:hover { background: var(--card2); border-color: var(--yellow); transform: translateY(-2px); }
-.sc-icon { width:56px;height:56px;background:rgba(245,197,24,0.1);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:22px;color:var(--yellow);transition:background 0.2s; }
-.shortcut-card:hover .sc-icon { background:rgba(245,197,24,0.2); }
-.sc-label { font-family: var(--font-head); font-size: 16px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
-.sc-sub { font-size: 12px; color: var(--grey); line-height: 1.4; }
+/* ── MARKET INSIGHTS ── */
+.filters-bar{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:24px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.filter-group{display:flex;flex-direction:column;gap:4px}
+.filter-group label{font-size:11px;color:var(--grey);text-transform:uppercase;letter-spacing:0.5px;font-weight:600}
+.filter-group select{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:8px;font-size:13px;min-width:140px;outline:none}
+.filter-group select:focus{border-color:var(--yellow)}
+.filter-btn{background:var(--yellow);color:#000;padding:9px 22px;border-radius:8px;font-weight:700;font-size:13px;align-self:flex-end;transition:background 0.2s}
+.filter-btn:hover{background:var(--yellow2)}
 
-/* ─── SECTION TITLES ───────────────────────────────────── */
-.section-title {
-  font-family: var(--font-head); font-size: 24px; font-weight: 700;
-  color: var(--white); margin-bottom: 8px; display: flex; align-items: center; gap: 10px;
-}
-.section-title span.badge {
-  font-size: 11px; background: var(--yellow); color: #000;
-  padding: 2px 8px; border-radius: 20px; font-family: var(--font-body); font-weight: 600;
-}
-.section-sub { color: var(--grey); font-size: 13px; margin-bottom: 24px; }
-.divider { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:28px}
+.kpi-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 16px}
+.kpi-val{font-family:var(--font-head);font-size:26px;font-weight:800;color:var(--yellow)}
+.kpi-label{font-size:12px;color:var(--white);margin:5px 0 3px;font-weight:600}
+.kpi-sub{font-size:11px;color:var(--grey)}
+.kpi-change{font-size:11px;font-weight:600;margin-top:4px}
+.kpi-change.up{color:#4caf50}
+.kpi-change.down{color:#f44336}
 
-/* ─── KPI CARDS ────────────────────────────────────────── */
-.kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; margin-bottom: 32px; }
-.kpi-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; }
-.kpi-value { font-family: var(--font-head); font-size: 28px; font-weight: 700; color: var(--yellow); }
-.kpi-label { font-size: 13px; color: var(--white); margin: 4px 0; font-weight: 600; }
-.kpi-sub { font-size: 11px; color: var(--grey); }
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px}
+@media(max-width:768px){.charts-row{grid-template-columns:1fr}}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px}
+.chart-card h3{font-family:var(--font-head);font-size:14px;color:var(--blue2);margin-bottom:14px;font-weight:600}
 
-/* ─── MARKET FILTERS ───────────────────────────────────── */
-.filters-bar {
-  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
-  padding: 16px 20px; margin-bottom: 24px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
-}
-.filter-group { display: flex; flex-direction: column; gap: 4px; }
-.filter-group label { font-size: 11px; color: var(--grey); text-transform: uppercase; letter-spacing: 0.5px; }
-.filter-group select {
-  background: var(--card2); border: 1px solid var(--border); color: var(--text);
-  padding: 7px 10px; border-radius: 6px; font-size: 13px; min-width: 130px;
-}
-.filter-group select:focus { outline: none; border-color: var(--yellow); }
-.filter-btn {
-  background: var(--yellow); color: #000; padding: 8px 18px; border-radius: 6px;
-  font-weight: 600; font-size: 13px; align-self: flex-end;
-}
-.filter-btn:hover { background: var(--yellow2); }
+.table-wrap{overflow-x:auto;margin-bottom:28px}
+.area-table{width:100%;border-collapse:collapse;font-size:13px}
+.area-table th{background:var(--card2);color:var(--yellow);font-family:var(--font-head);font-size:12px;padding:11px 14px;text-align:left;border-bottom:1px solid var(--border)}
+.area-table td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+.area-table tr:hover td{background:var(--card2)}
+.badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-green{background:#1a3a1a;color:#4caf50}
+.badge-yellow{background:#2a2200;color:var(--yellow)}
+.badge-blue{background:#0a1a2a;color:var(--blue2)}
 
-/* ─── CHARTS ───────────────────────────────────────────── */
-.charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 28px; }
-@media(max-width:768px) { .charts-row { grid-template-columns: 1fr; } }
-.chart-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 20px; }
-.chart-card h3 { font-family: var(--font-head); font-size: 15px; color: var(--white); margin-bottom: 14px; }
+.takeaways-block{background:var(--card);border:1px solid var(--yellow);border-radius:12px;padding:22px;margin-bottom:28px}
+.takeaways-block h3{font-family:var(--font-head);font-size:15px;color:var(--yellow);margin-bottom:16px}
+.takeaway-item{display:flex;gap:14px;margin-bottom:12px;align-items:flex-start}
+.takeaway-item:last-child{margin-bottom:0}
+.takeaway-num{background:var(--yellow);color:#000;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0;margin-top:2px}
+.takeaway-item p{font-size:13px;line-height:1.6;color:var(--text)}
 
-/* ─── AREA TABLE ───────────────────────────────────────── */
-.table-wrap { overflow-x: auto; margin-bottom: 28px; }
-.area-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-.area-table th { background: var(--card2); color: var(--yellow); font-family: var(--font-head); font-size: 13px; padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--border); }
-.area-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); vertical-align: top; }
-.area-table tr:hover td { background: var(--card2); }
-.yield-badge { background: #1a3a1a; color: #4caf50; padding: 2px 8px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-.notes-col { color: var(--grey); font-size: 12px; max-width: 280px; }
+.stats-bottom{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:28px}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px}
+.stat-num{font-family:var(--font-head);font-size:22px;font-weight:800;color:var(--blue2);margin-bottom:6px}
+.stat-label{font-size:13px;color:var(--white);font-weight:600;margin-bottom:4px}
+.stat-source{font-size:11px;color:var(--grey);font-style:italic}
 
-/* ─── TAKEAWAYS ────────────────────────────────────────── */
-.takeaways-block { background: var(--card); border: 1px solid var(--yellow); border-radius: 10px; padding: 20px; margin-bottom: 28px; }
-.takeaways-block h3 { font-family: var(--font-head); font-size: 16px; color: var(--yellow); margin-bottom: 14px; }
-.takeaway-item { display: flex; gap: 14px; margin-bottom: 14px; align-items: flex-start; }
-.takeaway-item:last-child { margin-bottom: 0; }
-.takeaway-num { background: var(--yellow); color: #000; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0; margin-top: 2px; }
-.takeaway-item p { font-size: 14px; line-height: 1.6; color: var(--text); }
+/* ── NEWS ── */
+.news-filter-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.news-filter-tab{padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);color:var(--grey);transition:all 0.2s;background:var(--card)}
+.news-filter-tab:hover{border-color:var(--yellow);color:var(--white)}
+.news-filter-tab.active{background:var(--yellow);color:#000;border-color:var(--yellow)}
+.news-cat-group{display:none}
+.news-cat-group.active{display:block}
+.news-cat-header{font-family:var(--font-head);font-size:16px;color:var(--blue2);margin-bottom:14px;font-weight:600}
+.news-item{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden;cursor:pointer;transition:border-color 0.2s}
+.news-item:hover{border-color:var(--yellow)}
+.news-header-row{padding:16px 18px}
+.news-meta{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.news-date{font-size:11px;color:var(--grey)}
+.news-title{font-family:var(--font-head);font-size:15px;color:var(--white);margin-bottom:6px;line-height:1.4;font-weight:600}
+.news-teaser{font-size:13px;color:var(--grey);line-height:1.5;margin-bottom:10px}
+.news-actions{display:flex;justify-content:space-between;align-items:center}
+.save-btn{font-size:12px;color:var(--grey);padding:4px 12px;border:1px solid var(--border);border-radius:20px;transition:all 0.2s}
+.save-btn:hover,.save-btn.saved{background:var(--yellow);color:#000;border-color:var(--yellow)}
+.read-more-link{font-size:12px;color:var(--yellow);font-weight:600}
+.news-expand{display:none;padding:0 18px 18px;border-top:1px solid var(--border)}
+.news-expand.open{display:block}
+.news-body{font-size:13px;line-height:1.8;color:var(--text);margin-top:14px;margin-bottom:12px}
+.news-source-link{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--blue2);font-weight:600}
+.news-loading{text-align:center;padding:40px;color:var(--grey)}
 
-/* ─── INTERESTING STATS ────────────────────────────────── */
-.istats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; margin-bottom: 28px; }
-.istat-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px; }
-.istat-text { font-size: 14px; color: var(--white); font-weight: 500; margin-bottom: 6px; line-height: 1.5; }
-.istat-source { font-size: 11px; color: var(--grey); }
+/* ── PODCASTS ── */
+.podcast-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.podcast-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:transform 0.2s,border-color 0.2s;cursor:pointer}
+.podcast-card:hover{transform:translateY(-3px);border-color:var(--yellow)}
+.podcast-thumb{position:relative;padding-top:56.25%;background:var(--card2)}
+.podcast-thumb img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
+.play-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:52px;height:52px;background:rgba(255,216,0,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;color:#000;transition:all 0.2s;pointer-events:none}
+.podcast-card:hover .play-overlay{background:var(--yellow);transform:translate(-50%,-50%) scale(1.1)}
+.podcast-info{padding:14px}
+.podcast-title{font-family:var(--font-head);font-size:13px;color:var(--white);line-height:1.4;margin-bottom:6px;font-weight:600}
+.podcast-date{font-size:12px;color:var(--grey)}
+.podcast-channel-btn{display:inline-flex;align-items:center;gap:8px;background:#ff0000;color:#fff;padding:10px 20px;border-radius:6px;font-weight:600;font-size:14px;margin-bottom:24px}
+.podcast-channel-btn:hover{background:#cc0000}
 
-/* ─── NEWS ─────────────────────────────────────────────── */
-.news-category { margin-bottom: 28px; }
-.news-cat-header { font-family: var(--font-head); font-size: 18px; color: var(--yellow); margin-bottom: 14px; font-weight: 600; }
-.news-item { background: var(--card); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px; overflow: hidden; }
-.news-header { padding: 16px 18px; cursor: pointer; }
-.news-header:hover { background: var(--card2); }
-.news-meta { margin-bottom: 6px; }
-.news-date { font-size: 12px; color: var(--grey); }
-.news-title { font-family: var(--font-head); font-size: 16px; color: var(--white); margin-bottom: 6px; line-height: 1.4; font-weight: 600; }
-.news-teaser { font-size: 13px; color: var(--grey); line-height: 1.5; margin-bottom: 10px; }
-.news-actions { display: flex; justify-content: space-between; align-items: center; }
-.save-btn {
-  font-size: 12px; color: var(--grey); padding: 4px 10px; border: 1px solid var(--border);
-  border-radius: 20px; transition: all 0.2s;
-}
-.save-btn:hover, .save-btn.saved { background: var(--yellow); color: #000; border-color: var(--yellow); }
-.expand-icon { color: var(--grey); font-size: 12px; transition: transform 0.2s; }
-.news-item.open .expand-icon { transform: rotate(180deg); }
-.news-body { display: none; padding: 0 18px 18px; border-top: 1px solid var(--border); }
-.news-item.open .news-body { display: block; padding-top: 16px; }
-.news-body p { font-size: 14px; line-height: 1.7; color: var(--text); }
-.news-source { margin-top: 12px; font-size: 12px; color: var(--grey); font-style: italic; }
+/* ── RESOURCES ── */
+.resources-section{margin-bottom:32px}
+.resource-list{display:flex;flex-direction:column;gap:8px}
+.resource-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;align-items:center;gap:14px;transition:all 0.2s}
+.resource-item:hover{border-color:var(--yellow);background:var(--card2)}
+.resource-icon{font-size:22px;flex-shrink:0;color:var(--yellow)}
+.resource-info{flex:1}
+.resource-title{font-size:14px;color:var(--white);font-weight:500;margin-bottom:2px}
+.resource-desc{font-size:12px;color:var(--grey)}
+.resource-ext{font-size:11px;background:#0a1a2a;color:var(--blue2);padding:2px 8px;border-radius:20px;font-weight:600;flex-shrink:0}
+.resource-dl-btn{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;padding:7px 14px;border-radius:6px;font-size:12px;font-weight:600;flex-shrink:0;transition:background 0.2s}
+.resource-dl-btn:hover{background:var(--blue2)}
 
-/* ─── PODCASTS ─────────────────────────────────────────── */
-.podcast-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
-.podcast-card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; transition: transform 0.2s; }
-.podcast-card:hover { transform: translateY(-3px); border-color: var(--yellow); }
-.podcast-thumb { position: relative; padding-top: 56.25%; background: var(--card2); }
-.podcast-thumb iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-.podcast-thumb img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-.play-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 48px; height: 48px; background: rgba(245,197,24,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: all 0.2s; pointer-events: none; }
-.podcast-card:hover .play-overlay { background: var(--yellow); transform: translate(-50%,-50%) scale(1.1); }
-.podcast-info { padding: 14px; }
-.podcast-title { font-family: var(--font-head); font-size: 14px; color: var(--white); line-height: 1.4; margin-bottom: 6px; font-weight: 600; }
-.podcast-date { font-size: 12px; color: var(--grey); }
-.podcast-channel-btn {
-  display: inline-flex; align-items: center; gap: 8px;
-  background: #ff0000; color: #fff; padding: 10px 20px; border-radius: 6px;
-  font-weight: 600; font-size: 14px; margin-bottom: 24px;
-}
-.podcast-channel-btn:hover { background: #cc0000; text-decoration: none; }
-#podcasts-loading { text-align: center; padding: 40px; color: var(--grey); }
+/* ── PARTNERS ── */
+.partners-grid{display:flex;flex-direction:column;gap:20px;margin-bottom:36px}
+.partner-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;display:flex;gap:20px;align-items:flex-start}
+@media(max-width:600px){.partner-card{flex-direction:column}}
+.partner-logo-wrap{width:80px;height:80px;background:#fff;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.partner-logo-wrap img{width:70px;height:70px;object-fit:contain}
+.partner-logo-fallback{width:80px;height:80px;background:rgba(255,216,0,0.1);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--yellow);flex-shrink:0}
+.partner-info{flex:1}
+.partner-name{font-family:var(--font-head);font-size:20px;color:var(--white);font-weight:700;margin-bottom:2px}
+.partner-tagline{font-size:13px;color:var(--blue2);margin-bottom:10px;font-weight:500}
+.partner-desc{font-size:14px;color:var(--grey);line-height:1.6;margin-bottom:12px}
+.partner-offer{font-size:14px;color:var(--white);font-weight:600;margin-bottom:10px}
+.partner-code{display:inline-flex;align-items:center;gap:10px;font-size:13px;background:var(--card2);padding:6px 14px;border-radius:6px;border:1px dashed var(--yellow);color:var(--yellow);font-weight:700;letter-spacing:1px;cursor:pointer;transition:background 0.2s;margin-bottom:14px}
+.partner-code:hover{background:rgba(255,216,0,0.1)}
+.partner-code-hint{font-size:11px;color:var(--grey);margin-top:4px}
+.partner-btn{display:inline-block;color:#fff;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:600;margin-top:4px}
+.partner-btn:hover{opacity:0.85}
+.become-partner{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px}
+.become-partner h3{font-family:var(--font-head);font-size:20px;color:var(--yellow);margin-bottom:8px}
+.become-partner p{font-size:14px;color:var(--grey);margin-bottom:20px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+@media(max-width:600px){.form-row{grid-template-columns:1fr}}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-group label{font-size:12px;color:var(--grey);font-weight:500}
+.form-group input,.form-group textarea,.form-group select{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font-size:14px}
+.form-group input:focus,.form-group textarea:focus{outline:none;border-color:var(--yellow)}
+.form-group textarea{resize:vertical;min-height:90px}
+.submit-btn{background:var(--yellow);color:#000;padding:11px 28px;border-radius:8px;font-weight:700;font-size:14px;font-family:var(--font-body);width:100%;margin-top:6px;transition:background 0.2s}
+.submit-btn:hover{background:var(--yellow2)}
 
-/* ─── RESOURCES ────────────────────────────────────────── */
-.resources-section { margin-bottom: 32px; }
-.resource-drive-link { display: inline-flex; align-items: center; gap: 8px; background: var(--blue); color: #fff; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
-.resource-drive-link:hover { background: var(--blue2); text-decoration: none; }
-.resources-list { display: flex; flex-direction: column; gap: 8px; }
-.resource-item { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; transition: all 0.2s; }
-.resource-item:hover { border-color: var(--yellow); background: var(--card2); }
-.resource-icon { font-size: 22px; flex-shrink: 0; }
-.resource-title { font-size: 14px; color: var(--white); font-weight: 500; flex: 1; }
-.resource-ext { font-size: 11px; background: #1a2a3a; color: var(--blue2); padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+/* ── FAVORITES ── */
+.fav-empty{text-align:center;padding:60px 20px;color:var(--grey)}
+.fav-empty-icon{font-size:48px;margin-bottom:14px;color:var(--grey)}
+.fav-empty p{font-size:14px}
+.fav-section{margin-bottom:28px}
+.fav-section-title{font-family:var(--font-head);font-size:16px;color:var(--yellow);margin-bottom:12px;font-weight:600}
+.fav-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.fav-item-left{display:flex;align-items:center;gap:12px}
+.fav-item-icon{font-size:18px;color:var(--yellow)}
+.fav-item-title{font-size:14px;color:var(--white)}
+.fav-item-meta{font-size:11px;color:var(--grey);margin-top:2px}
+.remove-fav{font-size:18px;color:var(--grey);cursor:pointer;padding:4px;transition:color 0.2s}
+.remove-fav:hover{color:var(--red)}
 
-/* ─── PARTNERS ─────────────────────────────────────────── */
-.partners-grid { display: flex; flex-direction: column; gap: 20px; margin-bottom: 36px; }
-.partner-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: flex; gap: 20px; align-items: flex-start; }
-@media(max-width:600px) { .partner-card { flex-direction: column; } }
-.partner-logo { width:60px;height:60px;background:rgba(245,197,24,0.1);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--yellow);flex-shrink:0; }
-.partner-info { flex: 1; }
-.partner-name { font-family: var(--font-head); font-size: 22px; color: var(--white); font-weight: 700; margin-bottom: 2px; }
-.partner-tagline { font-size: 13px; color: var(--yellow); margin-bottom: 10px; font-weight: 500; }
-.partner-desc { font-size: 14px; color: var(--grey); line-height: 1.6; margin-bottom: 12px; }
-.partner-offer { font-size: 14px; color: var(--white); font-weight: 600; margin-bottom: 6px; }
-.partner-code { font-size: 13px; background: var(--card2); padding: 6px 12px; border-radius: 6px; margin-bottom: 12px; display: inline-block; border: 1px dashed var(--yellow); color: var(--yellow); font-weight: 700; letter-spacing: 1px; }
-.partner-btn { display: inline-block; color: #fff; padding: 9px 20px; border-radius: 6px; font-size: 13px; font-weight: 600; margin-top: 4px; }
-.partner-btn:hover { opacity: 0.85; text-decoration: none; }
-.become-partner { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; }
-.become-partner h3 { font-family: var(--font-head); font-size: 20px; color: var(--yellow); margin-bottom: 8px; }
-.become-partner p { font-size: 14px; color: var(--grey); margin-bottom: 20px; }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-@media(max-width:600px) { .form-row { grid-template-columns: 1fr; } }
-.form-group { display: flex; flex-direction: column; gap: 6px; }
-.form-group label { font-size: 12px; color: var(--grey); font-weight: 500; }
-.form-group input, .form-group textarea {
-  background: var(--card2); border: 1px solid var(--border); color: var(--text);
-  padding: 10px 12px; border-radius: 6px; font-size: 14px;
-}
-.form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--yellow); }
-.form-group textarea { resize: vertical; min-height: 90px; }
-.submit-btn { background: var(--yellow); color: #000; padding: 11px 28px; border-radius: 6px; font-weight: 700; font-size: 14px; font-family: var(--font-body); width: 100%; margin-top: 6px; }
-.submit-btn:hover { background: var(--yellow2); }
+/* ── CONNECT ── */
+.connect-intro{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px;margin-bottom:28px;text-align:center}
+.connect-intro h2{font-family:var(--font-head);font-size:26px;color:var(--white);margin-bottom:12px}
+.connect-intro p{font-size:15px;color:var(--grey);line-height:1.7;max-width:600px;margin:0 auto 20px}
+.social-links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.social-btn{display:flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-weight:600;font-size:14px;color:#fff;transition:opacity 0.2s}
+.social-btn:hover{opacity:0.85}
+.social-btn.yt{background:#ff0000}
+.social-btn.ig{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}
+.social-btn.li{background:#0077b5}
+.social-btn.sp{background:#1db954;color:#000}
+.social-btn.wa{background:#25d366;color:#000}
 
-/* ─── FAVORITES ────────────────────────────────────────── */
-.fav-empty { text-align: center; padding: 60px 20px; color: var(--grey); }
-.fav-empty .fav-empty-icon { font-size: 48px; margin-bottom: 14px; color: var(--grey); }
-.fav-empty p { font-size: 14px; }
-.fav-section { margin-bottom: 28px; }
-.fav-section-title { font-family: var(--font-head); font-size: 16px; color: var(--yellow); margin-bottom: 12px; font-weight: 600; }
-.fav-item { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-.fav-item-title { font-size: 14px; color: var(--white); }
-.remove-fav { font-size: 18px; color: var(--grey); cursor: pointer; padding: 4px; }
-.remove-fav:hover { color: #f44336; }
+.insta-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:12px}
+.insta-card{border-radius:10px;overflow:hidden;background:var(--card);border:1px solid var(--border);cursor:pointer;transition:transform 0.2s;text-decoration:none;display:block}
+.insta-card:hover{transform:scale(1.03);border-color:var(--yellow)}
+.insta-img-wrap{position:relative;padding-top:100%;overflow:hidden}
+.insta-img-wrap img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block}
+.insta-caption{font-size:12px;color:var(--grey);padding:10px 12px;line-height:1.4}
 
-/* ─── CONNECT ──────────────────────────────────────────── */
-.connect-intro { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 28px; text-align: center; }
-.connect-intro h2 { font-family: var(--font-head); font-size: 28px; color: var(--white); margin-bottom: 12px; }
-.connect-intro p { font-size: 15px; color: var(--grey); line-height: 1.7; max-width: 600px; margin: 0 auto 20px; }
-.social-links { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
-.social-btn { display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 14px; color: #fff; }
-.social-btn:hover { opacity: 0.85; text-decoration: none; }
-.social-btn.yt { background: #ff0000; }
-.social-btn.ig { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-.social-btn.wa { background: #25d366; color: #000; }
-.social-btn.li { background: #0077b5; }
-.insta-carousel { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 28px; }
-.insta-carousel::-webkit-scrollbar { height: 4px; }
-.insta-card { flex-shrink: 0; width: 200px; border-radius: 10px; overflow: hidden; background: var(--card); border: 1px solid var(--border); cursor: pointer; transition: transform 0.2s; }
-.insta-card:hover { transform: scale(1.03); border-color: var(--yellow); }
-.insta-card img { width: 200px; height: 200px; object-fit: cover; display: block; }
-.insta-caption { font-size: 12px; color: var(--grey); padding: 8px 10px; line-height: 1.4; }
-.recommend-form { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 28px; }
-.recommend-form h3 { font-family: var(--font-head); font-size: 20px; color: var(--yellow); margin-bottom: 8px; }
-.recommend-form p { font-size: 14px; color: var(--grey); margin-bottom: 20px; }
-.wa-block { background: var(--card); border: 1px solid #25d366; border-radius: 12px; padding: 24px; text-align: center; }
-.wa-block h3 { font-family: var(--font-head); font-size: 20px; color: var(--white); margin-bottom: 8px; }
-.wa-block p { font-size: 14px; color: var(--grey); margin-bottom: 16px; }
-.wa-btn { display: inline-flex; align-items: center; gap: 10px; background: #25d366; color: #000; padding: 12px 28px; border-radius: 8px; font-weight: 700; font-size: 15px; }
-.wa-btn:hover { background: #20b858; text-decoration: none; }
+.wa-block{background:var(--card);border:1px solid #25d366;border-radius:12px;padding:24px;text-align:center;margin-bottom:28px}
+.wa-block h3{font-family:var(--font-head);font-size:18px;color:var(--white);margin-bottom:8px}
+.wa-block p{font-size:14px;color:var(--grey);margin-bottom:16px}
+.wa-btn{display:inline-flex;align-items:center;gap:10px;background:#25d366;color:#000;padding:12px 28px;border-radius:8px;font-weight:700;font-size:15px}
+.wa-btn:hover{background:#20b858}
 
-/* ─── PROFILE MODAL ────────────────────────────────────── */
-.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; align-items: center; justify-content: center; }
-.modal-overlay.open { display: flex; }
-.modal { background: var(--dark); border: 1px solid var(--border); border-radius: 14px; padding: 32px; width: 100%; max-width: 400px; margin: 16px; }
-.modal h2 { font-family: var(--font-head); font-size: 22px; color: var(--white); margin-bottom: 20px; }
-.modal-close { float: right; font-size: 22px; color: var(--grey); cursor: pointer; margin-top: -4px; }
-.modal-close:hover { color: var(--white); }
-.modal .form-group { margin-bottom: 14px; }
-.modal-btn { background: var(--yellow); color: #000; padding: 10px 22px; border-radius: 6px; font-weight: 700; font-size: 14px; margin-top: 6px; }
-.modal-btn:hover { background: var(--yellow2); }
+.recommend-form{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:28px}
+.recommend-form h3{font-family:var(--font-head);font-size:18px;color:var(--yellow);margin-bottom:8px}
+.recommend-form p{font-size:14px;color:var(--grey);margin-bottom:20px}
 
-/* ─── TOAST ────────────────────────────────────────────── */
-#toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); background: var(--yellow); color: #000; padding: 10px 22px; border-radius: 8px; font-weight: 600; font-size: 14px; opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 300; }
-#toast.show { opacity: 1; }
+/* ── MODALS ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--dark);border:1px solid var(--border);border-radius:14px;padding:32px;width:100%;max-width:420px;margin:16px}
+.modal h2{font-family:var(--font-head);font-size:22px;color:var(--white);margin-bottom:20px}
+.modal-close{float:right;font-size:22px;color:var(--grey);cursor:pointer;margin-top:-4px}
+.modal-close:hover{color:var(--white)}
+.modal .form-group{margin-bottom:14px}
+.modal-btn{background:var(--yellow);color:#000;padding:10px 22px;border-radius:6px;font-weight:700;font-size:14px;margin-top:6px}
+.modal-btn:hover{background:var(--yellow2)}
+.modal-avatar-row{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.modal-avatar{width:64px;height:64px;border-radius:50%;background:var(--card2);border:2px solid var(--yellow);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:var(--yellow)}
+.modal-tabs{display:flex;gap:0;margin-bottom:24px;border-bottom:1px solid var(--border)}
+.modal-tab{padding:10px 18px;font-size:13px;font-weight:600;color:var(--grey);border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s}
+.modal-tab.active{color:var(--yellow);border-bottom-color:var(--yellow)}
 
-/* ─── RESPONSIVE ───────────────────────────────────────── */
-@media(max-width:600px) {
-  #main { padding: 16px; }
-  #greeting h1 { font-size: 28px; }
-  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-}
+/* ── ADMIN ── */
+.admin-gate{display:none;position:fixed;inset:0;background:var(--dark);z-index:500;align-items:center;justify-content:center;flex-direction:column;gap:20px}
+.admin-gate.open{display:flex}
+.admin-gate h2{font-family:var(--font-head);font-size:26px;color:var(--white)}
+.admin-gate input{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:8px;font-size:15px;width:280px}
+.admin-gate input:focus{outline:none;border-color:var(--yellow)}
+.admin-gate-btn{background:var(--yellow);color:#000;padding:12px 28px;border-radius:8px;font-weight:700;font-size:15px;width:280px}
+.admin-wrap{display:none;min-height:100vh;background:var(--dark)}
+.admin-wrap.open{display:block}
+.admin-topbar{background:var(--card);border-bottom:1px solid var(--border);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.admin-topbar h1{font-family:var(--font-head);font-size:18px;color:var(--yellow);font-weight:700}
+.admin-exit{font-size:13px;color:var(--grey);padding:6px 14px;border:1px solid var(--border);border-radius:6px;transition:all 0.2s}
+.admin-exit:hover{border-color:var(--red);color:var(--red)}
+.admin-nav{display:flex;gap:2px;padding:0 24px;background:var(--card);border-bottom:1px solid var(--border)}
+.admin-tab{padding:12px 20px;font-size:13px;font-weight:600;color:var(--grey);border-bottom:2px solid transparent;transition:all 0.2s}
+.admin-tab.active{color:var(--yellow);border-bottom-color:var(--yellow)}
+.admin-content{padding:28px 24px;max-width:1200px;margin:0 auto}
+.admin-page{display:none}
+.admin-page.active{display:block}
+.admin-stat-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:28px}
+.admin-stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px}
+.admin-stat-val{font-family:var(--font-head);font-size:28px;font-weight:800;color:var(--yellow)}
+.admin-stat-label{font-size:13px;color:var(--grey);margin-top:4px}
+.admin-table{width:100%;border-collapse:collapse;font-size:13px}
+.admin-table th{background:var(--card2);color:var(--yellow);font-size:12px;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+.admin-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+.admin-table tr:hover td{background:var(--card2)}
+.export-btn{display:inline-flex;align-items:center;gap:6px;background:var(--blue);color:#fff;padding:9px 18px;border-radius:6px;font-size:13px;font-weight:600;margin-bottom:16px;transition:background 0.2s}
+.export-btn:hover{background:var(--blue2)}
+.update-row{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:10px}
+.update-row-info h4{font-size:14px;color:var(--white);font-weight:600}
+.update-row-info p{font-size:12px;color:var(--grey);margin-top:2px}
+.update-btn{background:var(--card2);border:1px solid var(--border);color:var(--text);padding:7px 16px;border-radius:6px;font-size:13px;font-weight:600;transition:all 0.2s}
+.update-btn:hover{border-color:var(--yellow);color:var(--yellow)}
+.update-btn.running{color:var(--blue2);border-color:var(--blue2)}
+.firebase-notice{background:#0a1a2a;border:1px solid var(--blue);border-radius:10px;padding:16px 18px;margin-bottom:24px}
+.firebase-notice p{font-size:13px;color:var(--blue2);line-height:1.6}
+.firebase-notice strong{color:var(--white)}
+
+/* ── ADMIN LINK ── */
+.admin-link{position:fixed;bottom:20px;right:20px;background:var(--card);border:1px solid var(--border);color:var(--grey);padding:8px 14px;border-radius:8px;font-size:12px;font-weight:600;z-index:50;transition:all 0.2s}
+.admin-link:hover{border-color:var(--yellow);color:var(--yellow)}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:80px;right:20px;background:var(--card2);border:1px solid var(--yellow);color:var(--white);padding:12px 18px;border-radius:8px;font-size:13px;z-index:300;opacity:0;transition:opacity 0.3s;pointer-events:none}
+.toast.show{opacity:1}
+
+/* ── MISC ── */
+.loading-spinner{text-align:center;padding:40px;color:var(--grey);font-size:14px}
+.tag{display:inline-block;padding:2px 10px;border-radius:20px;font-size:11px;font-weight:600;margin-right:6px}
+.tag-re{background:#1a2a0a;color:#7ec850}
+.tag-biz{background:#0a1a2a;color:var(--blue2)}
+.tag-life{background:#1a0a1a;color:#cc88ff}
+
+@media(max-width:640px){.topbar{padding:0 14px;gap:12px}.main-nav{gap:0}.nav-tab{padding:6px 10px;font-size:12px}.page{padding:20px 14px}.shortcuts-grid{grid-template-columns:1fr 1fr}.charts-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<header id="header">
-  <div id="logo">
-    <a href="#"><img src="https://balibusinessclub.com/wp-content/uploads/2024/07/Bali-Business-Club-Logo-White-1024x337.png" alt="Bali Business Club"></a>
-  </div>
-  <div id="header-right">
-    <div id="bali-time">--:--</div>
-    <div id="profile-btn" onclick="openModal()" title="My Profile">?</div>
+<!-- TOP BAR -->
+<header class="topbar">
+  <img id="bbc-logo" src="Bali-Business-Club-Logo-White.svg" class="topbar-logo" alt="Bali Business Club" onerror="this.style.display='none';document.getElementById('bbc-logo-text').style.display='block'">
+  <span id="bbc-logo-text" style="display:none;font-family:var(--font-head);font-size:16px;font-weight:800;color:var(--yellow);flex-shrink:0">BBC</span>
+  <nav class="main-nav">
+    <button class="nav-tab active" onclick="showPage('home')">🏠 Home</button>
+    <button class="nav-tab" onclick="showPage('market')">📊 Market Insights</button>
+    <button class="nav-tab" onclick="showPage('news')">📰 News</button>
+    <button class="nav-tab" onclick="showPage('podcasts')">🎙️ Podcasts</button>
+    <button class="nav-tab" onclick="showPage('resources')">📚 Resources</button>
+    <button class="nav-tab" onclick="showPage('partners')">🤝 Partners</button>
+    <button class="nav-tab" onclick="showPage('favorites')">⭐ Favorites</button>
+    <button class="nav-tab" onclick="showPage('connect')">🌐 Connect</button>
+  </nav>
+  <div class="topbar-right">
+    <span id="bali-time" class="bali-time"></span>
+    <button class="user-btn" onclick="openProfile()" id="user-btn-el" title="Profile & Settings">V</button>
   </div>
 </header>
 
-<!-- NAV -->
-<nav id="nav">
-  <div class="nav-tab active" data-tab="home"><i class="fa-solid fa-house"></i> Home</div>
-  <div class="nav-tab" data-tab="market"><i class="fa-solid fa-chart-column"></i> Market Insights</div>
-  <div class="nav-tab" data-tab="news"><i class="fa-solid fa-newspaper"></i> News</div>
-  <div class="nav-tab" data-tab="podcasts"><i class="fa-solid fa-microphone"></i> Podcasts</div>
-  <div class="nav-tab" data-tab="resources"><i class="fa-solid fa-book-open"></i> Resources</div>
-  <div class="nav-tab" data-tab="partners"><i class="fa-solid fa-handshake"></i> Partners</div>
-  <div class="nav-tab" data-tab="favorites"><i class="fa-solid fa-bookmark"></i> Favorites</div>
-  <div class="nav-tab" data-tab="connect"><i class="fa-solid fa-comments"></i> Connect</div>
-</nav>
-
-<!-- MAIN -->
-<main id="main" style="margin-top:109px; padding:28px;">
-
-  <!-- ── HOME ── -->
-  <div class="tab-panel active" id="tab-home">
-    <div id="greeting">
-      <h1>Welcome, <span id="user-name">Member</span></h1>
-      <p>Your Bali business intelligence hub — market data, news, podcasts and exclusive partner benefits.</p>
+<!-- ═══════════════════ HOME ═══════════════════ -->
+<div id="page-home" class="page active">
+  <div class="home-greeting">
+    <h1 id="greeting-text">Good morning, Vince!</h1>
+    <p>Welcome to your Bali Business Club member dashboard. What would you like to explore today?</p>
+    <div class="greeting-date" id="greeting-date"></div>
+  </div>
+  <div class="shortcuts-grid">
+    <div class="shortcut-card" onclick="showPage('market')">
+      <span class="shortcut-icon">📊</span>
+      <div class="shortcut-title">Market Insights</div>
+      <div class="shortcut-desc">Explore Bali real estate data powered by REID — prices, yields & opportunities</div>
     </div>
-    <div class="section-title">Quick Access</div>
-    <div class="shortcuts-grid">
-      <div class="shortcut-card" onclick="switchTab('market')">
-  <div class="sc-icon"><i class="fa-solid fa-chart-column"></i></div>
-  <div class="sc-label">Market Insights</div>
-  <div class="sc-sub">REID-powered real estate data</div>
-</div>
-<div class="shortcut-card" onclick="switchTab('news')">
-  <div class="sc-icon"><i class="fa-solid fa-newspaper"></i></div>
-  <div class="sc-label">News</div>
-  <div class="sc-sub">Latest Bali business news</div>
-</div>
-<div class="shortcut-card" onclick="switchTab('podcasts')">
-  <div class="sc-icon"><i class="fa-solid fa-microphone"></i></div>
-  <div class="sc-label">Podcasts</div>
-  <div class="sc-sub">All BBC YouTube episodes</div>
-</div>
-<div class="shortcut-card" onclick="switchTab('resources')">
-  <div class="sc-icon"><i class="fa-solid fa-book-open"></i></div>
-  <div class="sc-label">Resources</div>
-  <div class="sc-sub">Ebooks & market reports</div>
-</div>
-<div class="shortcut-card" onclick="switchTab('partners')">
-  <div class="sc-icon"><i class="fa-solid fa-handshake"></i></div>
-  <div class="sc-label">Partners</div>
-  <div class="sc-sub">Exclusive member benefits</div>
-</div>
-<div class="shortcut-card" onclick="switchTab('favorites')">
-  <div class="sc-icon"><i class="fa-solid fa-bookmark"></i></div>
-  <div class="sc-label">Favorites</div>
-  <div class="sc-sub">Your saved items</div>
-</div>
-<div class="shortcut-card" onclick="switchTab('connect')">
-  <div class="sc-icon"><i class="fa-solid fa-comments"></i></div>
-  <div class="sc-label">Connect</div>
-  <div class="sc-sub">Contact & socials</div>
-</div>
-
+    <div class="shortcut-card" onclick="showPage('news')">
+      <span class="shortcut-icon">📰</span>
+      <div class="shortcut-title">News</div>
+      <div class="shortcut-desc">Latest Bali real estate, business & lifestyle news updated hourly</div>
     </div>
-
-    <hr class="divider">
-    <div class="section-title" style="margin-bottom:6px;"><i class="fa-solid fa-chart-column"></i> Market Snapshot</div>
-    <div class="section-sub">Key Bali real estate indicators from REID data.</div>
-    <div class="kpi-grid" style="grid-template-columns:repeat(auto-fill,minmax(150px,1fr));margin-bottom:10px;">
-      <div class="kpi-card"><div class="kpi-value">$2,210</div><div class="kpi-label">Avg Price / sqm</div><div class="kpi-sub">Freehold land, Bali 2025</div></div>
-      <div class="kpi-card"><div class="kpi-value">$299K</div><div class="kpi-label">Median Listing</div><div class="kpi-sub">All property types</div></div>
-      <div class="kpi-card"><div class="kpi-value">7–14%</div><div class="kpi-label">Gross Yield</div><div class="kpi-sub">Short-term villa</div></div>
-      <div class="kpi-card"><div class="kpi-value">12,300+</div><div class="kpi-label">Active Listings</div><div class="kpi-sub">REID Q1 2025</div></div>
-      <div class="kpi-card"><div class="kpi-value">&#8593; 38%</div><div class="kpi-label">Foreign Deals</div><div class="kpi-sub">Leasehold 2024</div></div>
+    <div class="shortcut-card" onclick="showPage('podcasts')">
+      <span class="shortcut-icon">🎙️</span>
+      <div class="shortcut-title">Podcasts</div>
+      <div class="shortcut-desc">All BBC podcast episodes from our YouTube channel</div>
     </div>
-    <div style="text-align:right;margin-bottom:36px;"><a href="#" onclick="switchTab('market');return false;" style="font-size:13px;color:var(--yellow);font-weight:600;">View Full Market Report <i class="fa-solid fa-arrow-right"></i></a></div>
-
-    <div class="section-title" style="margin-bottom:6px;"><i class="fa-solid fa-newspaper"></i> Latest News</div>
-    <div class="section-sub">Recent updates from Bali's real estate, business and legal scene.</div>
-    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px;">
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
-        <div><div style="font-size:11px;color:var(--yellow);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Real Estate</div><div style="font-family:var(--font-head);font-size:15px;color:var(--white);font-weight:600;line-height:1.4;">Bali Land Prices Hit Record High in Canggu Corridor</div></div>
-        <div style="text-align:right;flex-shrink:0;"><div style="font-size:11px;color:var(--grey);margin-bottom:8px;">Mar 28, 2025</div><a href="#" onclick="switchTab('news');return false;" style="font-size:12px;color:var(--yellow);font-weight:600;white-space:nowrap;">Read <i class="fa-solid fa-arrow-right"></i></a></div>
-      </div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
-        <div><div style="font-size:11px;color:var(--yellow);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Business &amp; Tax</div><div style="font-family:var(--font-head);font-size:15px;color:var(--white);font-weight:600;line-height:1.4;">Indonesia Simplifies PT PMA Registration to 5 Business Days</div></div>
-        <div style="text-align:right;flex-shrink:0;"><div style="font-size:11px;color:var(--grey);margin-bottom:8px;">Apr 2, 2025</div><a href="#" onclick="switchTab('news');return false;" style="font-size:12px;color:var(--yellow);font-weight:600;white-space:nowrap;">Read <i class="fa-solid fa-arrow-right"></i></a></div>
-      </div>
-      <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
-        <div><div style="font-size:11px;color:var(--yellow);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;">Visa &amp; Legal</div><div style="font-family:var(--font-head);font-size:15px;color:var(--white);font-weight:600;line-height:1.4;">Second Home Visa Extended: Now Valid for 10 Years</div></div>
-        <div style="text-align:right;flex-shrink:0;"><div style="font-size:11px;color:var(--grey);margin-bottom:8px;">Apr 5, 2025</div><a href="#" onclick="switchTab('news');return false;" style="font-size:12px;color:var(--yellow);font-weight:600;white-space:nowrap;">Read <i class="fa-solid fa-arrow-right"></i></a></div>
-      </div>
+    <div class="shortcut-card" onclick="showPage('resources')">
+      <span class="shortcut-icon">📚</span>
+      <div class="shortcut-title">Resources</div>
+      <div class="shortcut-desc">BBC ebooks, reports & guides to navigate the Bali market</div>
     </div>
-    <div style="text-align:right;margin-bottom:8px;"><a href="#" onclick="switchTab('news');return false;" style="font-size:13px;color:var(--yellow);font-weight:600;">View All News <i class="fa-solid fa-arrow-right"></i></a></div>
-
-  </div>
-
-  <!-- ── MARKET INSIGHTS ── -->
-  <div class="tab-panel" id="tab-market">
-    <div class="section-title">Market Insights <span class="badge">REID Data</span></div>
-    <div class="section-sub">All data sourced exclusively from REID (Real Estate Intelligence Database) reports. Updated with each new REID publication.</div>
-
-    <!-- Filters -->
-    <div class="filters-bar">
-      <div class="filter-group">
-        <label>Location</label>
-        <select id="f-location">
-          <option>All Areas</option>
-          <option>Seminyak</option>
-          <option>Canggu</option>
-          <option>Ubud</option>
-          <option>Nusa Dua</option>
-          <option>Bukit / Uluwatu</option>
-          <option>Sanur</option>
-          <option>Tabanan / North</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Asset Type</label>
-        <select id="f-asset">
-          <option>All Types</option>
-          <option>Villa</option>
-          <option>Commercial</option>
-          <option>Land</option>
-          <option>Apartment</option>
-          <option>Hotel / Resort</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Ownership</label>
-        <select id="f-own">
-          <option>All Structures</option>
-          <option>Freehold (SHM)</option>
-          <option>Leasehold (HGB)</option>
-          <option>PT PMA</option>
-          <option>Nominee</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Investment Strategy</label>
-        <select id="f-strategy">
-          <option>All Strategies</option>
-          <option>Short-term Rental</option>
-          <option>Long-term Rental</option>
-          <option>Land Banking</option>
-          <option>Flip / Development</option>
-          <option>Owner-occupier</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label>Time Period</label>
-        <select id="f-period">
-          <option>2025 (Latest)</option>
-          <option>H1 2024</option>
-          <option>Full Year 2024</option>
-          <option>Full Year 2023</option>
-        </select>
-      </div>
-      <button class="filter-btn" onclick="showToast('Filters applied')">Apply Filters</button>
+    <div class="shortcut-card" onclick="showPage('partners')">
+      <span class="shortcut-icon">🤝</span>
+      <div class="shortcut-title">Partners</div>
+      <div class="shortcut-desc">Exclusive discounts & deals from our trusted partner network</div>
     </div>
-
-    <!-- KPI Cards -->
-    <div class="kpi-grid">
-      <div class="kpi-card"><div class="kpi-value">$2,210</div><div class="kpi-label">Avg Price / sqm</div><div class="kpi-sub">Freehold land, Bali 2025</div></div>
-<div class="kpi-card"><div class="kpi-value">$299K</div><div class="kpi-label">Median Listing Price</div><div class="kpi-sub">All property types 2025</div></div>
-<div class="kpi-card"><div class="kpi-value">7–14%</div><div class="kpi-label">Gross Rental Yield</div><div class="kpi-sub">Short-term villa, Seminyak–Canggu</div></div>
-<div class="kpi-card"><div class="kpi-value">12,300+</div><div class="kpi-label">Active Listings</div><div class="kpi-sub">REID database, Q1 2025</div></div>
-<div class="kpi-card"><div class="kpi-value">430 sqm</div><div class="kpi-label">Avg Land Size (villa)</div><div class="kpi-sub">New villa projects 2024–25</div></div>
-<div class="kpi-card"><div class="kpi-value">↑ 38%</div><div class="kpi-label">Foreign Ownership Deals</div><div class="kpi-sub">Leasehold transactions 2024</div></div>
-
+    <div class="shortcut-card" onclick="showPage('favorites')">
+      <span class="shortcut-icon">⭐</span>
+      <div class="shortcut-title">Favorites</div>
+      <div class="shortcut-desc">Quick access to all the content you've saved</div>
     </div>
-
-    <!-- Charts -->
-    <div class="charts-row">
-      <div class="chart-card">
-        <h3>Average Price / sqm by Area (USD)</h3>
-        <canvas id="chart-price" height="200"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3>Gross Rental Yield Range by Area</h3>
-        <canvas id="chart-yield" height="200"></canvas>
-      </div>
+    <div class="shortcut-card" onclick="showPage('connect')">
+      <span class="shortcut-icon">🌐</span>
+      <div class="shortcut-title">Connect</div>
+      <div class="shortcut-desc">Follow our socials, browse Instagram posts & reach out to us</div>
     </div>
-    <div class="charts-row">
-      <div class="chart-card">
-        <h3>Listing Volume Trend (2022–2025)</h3>
-        <canvas id="chart-volume" height="200"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3>Ownership Structure Mix (2025)</h3>
-        <canvas id="chart-ownership" height="200"></canvas>
-      </div>
-    </div>
-
-    <!-- Area Profiles -->
-    <div class="section-title" style="margin-bottom:14px;">Area Profile Comparison</div>
-    <div class="table-wrap">
-      <table class="area-table">
-        <thead><tr><th>Area</th><th>Asset Type</th><th>Avg / sqm</th><th>Gross Yield</th><th>Notes</th></tr></thead>
-        <tbody><tr><td><strong>Seminyak</strong></td><td>Villa / Commercial</td><td>$3,100</td><td><span class="yield-badge">8–11%</span></td><td class="notes-col">High tourist footfall, premium short-term rental demand</td></tr>
-<tr><td><strong>Canggu</strong></td><td>Villa / Co-working</td><td>$2,800</td><td><span class="yield-badge">9–14%</span></td><td class="notes-col">Digital nomad hub, fastest-growing zone 2022–25</td></tr>
-<tr><td><strong>Ubud</strong></td><td>Villa / Retreat</td><td>$1,600</td><td><span class="yield-badge">7–10%</span></td><td class="notes-col">Wellness tourism, longer-stay guests</td></tr>
-<tr><td><strong>Nusa Dua</strong></td><td>Villa / Hotel</td><td>$2,500</td><td><span class="yield-badge">7–9%</span></td><td class="notes-col">5-star corridor, institutional buyers active</td></tr>
-<tr><td><strong>Bukit</strong></td><td>Villa / Clifftop</td><td>$2,200</td><td><span class="yield-badge">10–14%</span></td><td class="notes-col">Luxury supply constrained, very high ADR</td></tr>
-<tr><td><strong>Sanur</strong></td><td>Villa / Apartment</td><td>$1,900</td><td><span class="yield-badge">7–9%</span></td><td class="notes-col">Expat residential, quieter tourism profile</td></tr>
-<tr><td><strong>Tabanan / North</strong></td><td>Land / Eco-Villa</td><td>$450</td><td><span class="yield-badge">5–8%</span></td><td class="notes-col">Emerging zone, significant land banking activity</td></tr>
-</tbody>
-      </table>
-    </div>
-
-    <!-- BBC Takeaways -->
-    <div class="takeaways-block">
-      <h3><i class="fa-solid fa-brain"></i> BBC Takeaways</h3>
-      <div class="takeaway-item"><span class="takeaway-num">1</span><p>Canggu continues to lead yield performance — strong demand from digital nomads and short-term rental operators is keeping occupancy above 80% year-round.</p></div>
-<div class="takeaway-item"><span class="takeaway-num">2</span><p>Leasehold structures remain the dominant entry point for foreign investors; 30+10-year titles with notarised PT PMA ownership are now market standard.</p></div>
-<div class="takeaway-item"><span class="takeaway-num">3</span><p>Bukit & Uluwatu are supply-constrained — clifftop land has essentially stopped being listed, pushing up resale premiums by ~20% YoY.</p></div>
-<div class="takeaway-item"><span class="takeaway-num">4</span><p>North Bali (Tabanan, Lovina) offers the highest land-banking upside but requires a 5–10 year horizon; infrastructure investment is the catalyst to watch.</p></div>
-<div class="takeaway-item"><span class="takeaway-num">5</span><p>Q1 2025 REID data shows villa completions outpacing demand in Seminyak — buyers should negotiate hard or target off-plan at developer pricing.</p></div>
-
-    </div>
-
-    <hr class="divider">
-    <div class="section-title" style="margin-bottom:14px;">6 Interesting Stats</div>
-    <div class="istats-grid">
-      <div class="istat-card"><div class="istat-text">Bali welcomed 5.27 million foreign visitors in 2024</div><div class="istat-source">Source: Bali Tourism Board, Jan 2025</div></div>
-<div class="istat-card"><div class="istat-text">Average villa occupancy hit 78% in Canggu during peak season 2024</div><div class="istat-source">Source: REID Quarterly Report Q3 2024</div></div>
-<div class="istat-card"><div class="istat-text">PT PMA formation increased 44% YoY in Bali in 2024</div><div class="istat-source">Source: BKPM Indonesia, Q4 2024</div></div>
-<div class="istat-card"><div class="istat-text">Airbnb Bali listings grew from 18,000 to 27,000 between 2022–2024</div><div class="istat-source">Source: REID Annual Report 2024</div></div>
-<div class="istat-card"><div class="istat-text">Leasehold average term extended from 25 to 40 years in new contracts (2023–25)</div><div class="istat-source">Source: Legal Legends Indonesia market survey</div></div>
-<div class="istat-card"><div class="istat-text">Indonesia's GDP growth held at 5.0% in 2024, supporting regional real estate confidence</div><div class="istat-source">Source: World Bank Indonesia Report 2025</div></div>
-
-    </div>
-    <p style="font-size:12px;color:var(--grey);margin-top:-10px;">All data sourced from REID reports, government data, and third-party research as cited above.</p>
-  </div>
-
-  <!-- ── NEWS ── -->
-  <div class="tab-panel" id="tab-news">
-    <div class="section-title">News</div>
-    <div class="section-sub">Curated Bali business news across real estate, business & tax, and visa & legal. Updated manually by BBC admin.</div>
-    <div class="news-category"><div class="news-cat-header"><i class="fa-solid fa-house"></i> Real Estate</div><div class="news-item" id="n1">
-  <div class="news-header" onclick="toggleNews('n1')">
-    <div class="news-meta"><span class="news-date">Mar 28, 2025</span></div>
-    <div class="news-title">Bali Land Prices Hit Record High in Canggu Corridor</div>
-    <div class="news-teaser">Freehold land in the Canggu–Pererenan stretch surpassed IDR 45 million/sqm as demand from foreign-backed PT PMAs accelerates.</div>
-    <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n1','Bali Land Prices Hit Record High in Canggu Corridor','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="news-body" id="body-n1">
-    <p>New transactional data from REID shows that freehold land in the Canggu–Pererenan corridor has surpassed IDR 45 million per sqm for prime plots, a 28% increase year-on-year. The surge is attributed to a wave of PT PMA formations by foreign-backed investors and continued interest from digital nomad hospitality operators. Agents report that well-located plots under 5 ares are receiving multiple offers within days of listing. Experts caution that over-leveraged flips are becoming riskier as construction costs have also risen 15% since 2023.</p>
-    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: REID Market Intelligence</div>
-  </div>
-</div>
-<div class="news-item" id="n2">
-  <div class="news-header" onclick="toggleNews('n2')">
-    <div class="news-meta"><span class="news-date">Mar 14, 2025</span></div>
-    <div class="news-title">New Leasehold Regulations: What Foreign Buyers Must Know in 2025</div>
-    <div class="news-teaser">Indonesia's Ministry of ATR/BPN has clarified leasehold title transfer rules, with key implications for foreign villa investors.</div>
-    <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n2','New Leasehold Regulations: What Foreign Buyers Must Know in 2025','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="news-body" id="body-n2">
-    <p>The Ministry of ATR/BPN released updated guidance in February 2025 clarifying the process for extending and transferring leasehold (HGB) titles held through PT PMA structures. Key takeaways: (1) Extensions beyond the 30-year initial term are now processed at the provincial level rather than national, reducing wait times; (2) PT PMA-held titles can be transferred to another PT PMA without triggering land acquisition tax (BPHTB) in most cases; (3) Notaries are now required to register all leasehold agreements with the national land registry within 30 days of signing. Investors should review existing title documents to ensure compliance before year-end.</p>
-    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: Ministry of ATR/BPN / Legal Legends Indonesia analysis</div>
-  </div>
-</div>
-<div class="news-item" id="n3">
-  <div class="news-header" onclick="toggleNews('n3')">
-    <div class="news-meta"><span class="news-date">Feb 22, 2025</span></div>
-    <div class="news-title">Airbnb Bali Sees 40% Revenue Growth in H2 2024</div>
-    <div class="news-teaser">Short-term rental revenues on Airbnb surged as Bali tourism fully recovered post-COVID, with Uluwatu leading ADR growth.</div>
-    <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n3','Airbnb Bali Sees 40% Revenue Growth in H2 2024','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="news-body" id="body-n3">
-    <p>Airbnb's internal data shared at a Bali tourism forum shows a 40% YoY revenue increase for Bali hosts in H2 2024. Average Daily Rates in Uluwatu reached USD 450/night for 3-bed luxury villas, while Canggu maintained the highest volume of bookings. The platform now lists over 27,000 properties in Bali, up from 18,000 in 2022. Property managers note occupancy above 75% across the island for the 6-month period. The data reinforces Bali's position as one of the top 5 performing Airbnb markets globally.</p>
-    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: Airbnb Host Forum Bali 2025 / REID</div>
-  </div>
-</div>
-</div>
-<div class="news-category"><div class="news-cat-header"><i class="fa-solid fa-briefcase"></i> Business &amp; Tax</div><div class="news-item" id="n4">
-  <div class="news-header" onclick="toggleNews('n4')">
-    <div class="news-meta"><span class="news-date">Apr 2, 2025</span></div>
-    <div class="news-title">Indonesia Simplifies PT PMA Registration to 5 Business Days</div>
-    <div class="news-teaser">BKPM's OSS platform update means foreign company incorporation in Indonesia now takes as little as 5 working days end-to-end.</div>
-    <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n4','Indonesia Simplifies PT PMA Registration to 5 Business Days','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="news-body" id="body-n4">
-    <p>The Indonesian Investment Coordinating Board (BKPM) has announced that its Online Single Submission (OSS) system upgrade, rolled out in March 2025, has cut average PT PMA registration time from 3–6 weeks to 5 business days for standard business classifications. The key improvement is automated cross-checking with the Ministry of Law and Human Rights database, eliminating manual review delays. Business types eligible for the fast-track include trading, consulting, and property holding (KBLI 68100). Advisors note that while registration is faster, due diligence on shareholder documents and KBLI selection remains as important as ever.</p>
-    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: BKPM / OSS Portal announcement</div>
-  </div>
-</div>
-<div class="news-item" id="n5">
-  <div class="news-header" onclick="toggleNews('n5')">
-    <div class="news-meta"><span class="news-date">Mar 18, 2025</span></div>
-    <div class="news-title">Bali Introduces Tourist Levy: What It Means for Hospitality Businesses</div>
-    <div class="news-teaser">Bali's IDR 150,000 tourist levy, now fully in effect, is being channeled into cultural preservation — and hospitality operators are adjusting.</div>
-    <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n5','Bali Introduces Tourist Levy: What It Means for Hospitality Businesses','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="news-body" id="body-n5">
-    <p>Bali's foreign tourist levy of IDR 150,000 (approx. USD 9.50) per arrival, introduced in February 2024, has now been in operation for over a year. Collections in 2024 totalled over IDR 750 billion, with funds directed to cultural site preservation and waste management. Hospitality operators report that the levy has had minimal impact on tourist volumes, with most hotels and villas absorbing the cost or listing it as a transparent add-on. The Bali Regional Government is now discussing an increase to IDR 200,000 from 2026. Business owners should factor this into pricing models for forward bookings.</p>
-    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: Bali Provincial Government / Bali Hotels Association</div>
-  </div>
-</div>
-<div class="news-item" id="n6">
-  <div class="news-header" onclick="toggleNews('n6')">
-    <div class="news-meta"><span class="news-date">Feb 10, 2025</span></div>
-    <div class="news-title">Indonesia's New Tax Treaty with Singapore: Key Changes for Expat Investors</div>
-    <div class="news-teaser">The updated DTA between Indonesia and Singapore, effective January 2025, changes withholding tax rates on dividends and royalties.</div>
-    <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n6','Indonesia\'s New Tax Treaty with Singapore: Key Changes for Expat Investors','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="news-body" id="body-n6">
-    <p>Indonesia and Singapore's updated Double Taxation Agreement came into effect on 1 January 2025. For investors using Singapore holding structures: (1) Withholding tax on dividends paid from Indonesian PT PMAs to Singapore entities is reduced from 15% to 10% for holdings above 25%; (2) Royalty withholding drops from 15% to 8%; (3) Capital gains on real property companies remain taxable in Indonesia. Tax advisors recommend reviewing existing holding structures before the next dividend distribution. The treaty does not affect individual expats who are Indonesian tax residents — they remain subject to standard Indonesian income tax.</p>
-    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: Directorate General of Taxes Indonesia / PwC Indonesia</div>
-  </div>
-</div>
-</div>
-<div class="news-category"><div class="news-cat-header"><i class="fa-solid fa-passport"></i> Visa &amp; Legal</div><div class="news-item" id="n7">
-  <div class="news-header" onclick="toggleNews('n7')">
-    <div class="news-meta"><span class="news-date">Apr 5, 2025</span></div>
-    <div class="news-title">Second Home Visa Extended: Now Valid for 10 Years with Multiple Entry</div>
-    <div class="news-teaser">Indonesia's Second Home Visa has been upgraded — holders can now stay for up to 10 years with unrestricted multiple-entry privileges.</div>
-    <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n7','Second Home Visa Extended: Now Valid for 10 Years with Multiple Entry','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="news-body" id="body-n7">
-    <p>The Directorate General of Immigration announced in April 2025 that the Second Home Visa (C6T) has been upgraded from a 5-year to 10-year validity, with multiple-entry and stay rights. Holders are permitted to work remotely, own a property under Indonesian law, and sponsor family members. The minimum asset requirement remains USD 130,000 in verified Indonesian bank funds or property ownership. Applications are processed through the immigration portal or via licensed immigration agents. Legal advisors note this is now one of the most attractive long-term residency options for foreign property investors who do not wish to establish a PT PMA.</p>
-    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: Directorate General of Immigration Indonesia</div>
-  </div>
-</div>
-<div class="news-item" id="n8">
-  <div class="news-header" onclick="toggleNews('n8')">
-    <div class="news-meta"><span class="news-date">Mar 7, 2025</span></div>
-    <div class="news-title">KITAS Renewal Backlog Cleared — Processing Back to 2-Week Standard</div>
-    <div class="news-teaser">After a 3-month backlog that stretched KITAS renewals to 2+ months, the Bali Immigration Office confirms normal processing has resumed.</div>
-    <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n8','KITAS Renewal Backlog Cleared — Processing Back to 2-Week Standard','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="news-body" id="body-n8">
-    <p>The Bali Immigration Office issued a statement confirming that the backlog of KITAS (Temporary Stay Permit) renewals, caused by a system migration in late 2024, has been fully resolved. Processing times have returned to the standard 10–14 working days for sponsored KITAS (KITAS Sponsor) and 14–21 working days for investor KITAS. Agents advise applicants to apply at least 45 days before expiry as a buffer. The immigration office also confirmed that the new digital KITAS card, introduced in Q4 2024, will be issued to all renewal applicants going forward.</p>
-    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: Bali Immigration Office, March 2025</div>
-  </div>
-</div>
-<div class="news-item" id="n9">
-  <div class="news-header" onclick="toggleNews('n9')">
-    <div class="news-meta"><span class="news-date">Jan 30, 2025</span></div>
-    <div class="news-title">Digital Nomad Visa: Indonesia's Popularity Grows Among Remote Workers</div>
-    <div class="news-teaser">Indonesia's Remote Work Visa attracted over 4,000 applicants in 2024, cementing Bali as Southeast Asia's top digital nomad destination.</div>
-    <div class="news-actions">
-      <button class="save-btn" onclick="saveItem(event,'n9','Digital Nomad Visa: Indonesia\'s Popularity Grows Among Remote Workers','news')" title="Save article"><i class="fa-solid fa-bookmark"></i> Save</button>
-      <span class="expand-icon">▼</span>
-    </div>
-  </div>
-  <div class="news-body" id="body-n9">
-    <p>Indonesia's Remote Work Visa (E33G) processed over 4,000 applications in 2024, with Bali accounting for an estimated 85% of holders' chosen base. The visa permits a 6-month stay (extendable once) and requires proof of employment or freelance income above USD 2,000/month. Holders cannot earn Indonesian-sourced income. Despite its limitations, immigration lawyers report it remains the fastest and cheapest legal pathway for remote workers. A government review committee is considering extending the term to 12 months and raising the income threshold to USD 3,500 to align with regional competitors like Thailand and Malaysia.</p>
-    <div class="news-source"><i class="fa-solid fa-map-pin"></i> Source: Directorate General of Immigration / Digital Nomad Visa tracker</div>
-  </div>
-</div>
-</div>
-
-  </div>
-
-  <!-- ── PODCASTS ── -->
-  <div class="tab-panel" id="tab-podcasts">
-    <div class="section-title">Podcasts</div>
-    <div class="section-sub">All episodes from the Bali Business Club YouTube channel. New episodes appear automatically.</div>
-    <a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" class="podcast-channel-btn"><i class="fa-brands fa-youtube"></i> View All on YouTube</a>
-    <div id="podcasts-loading"><i class="fa-solid fa-spinner fa-spin"></i> Loading episodes from YouTube...</div>
-    <div class="podcast-grid" id="podcast-grid"></div>
-  </div>
-
-  <!-- ── RESOURCES ── -->
-  <div class="tab-panel" id="tab-resources">
-    <div class="section-title">Resources</div>
-    <div class="section-sub">Exclusive BBC ebooks and curated third-party market reports. Hosted on Google Drive for easy access.</div>
-
-    <div class="resources-section">
-      <div class="section-title" style="font-size:18px;margin-bottom:10px;"><i class="fa-solid fa-book-open"></i> BBC Ebooks</div>
-      <a href="https://drive.google.com/drive/folders/1eBpxUHTMVwJMRMRLiKL2B8eR8W9x3iGr" target="_blank" class="resource-drive-link"><i class="fa-solid fa-folder-open"></i> Open Google Drive Folder</a>
-      <div class="resources-list">
-        <div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-house"></i></span><span class="resource-title">BBC Guide to Buying Property in Bali</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-building"></i></span><span class="resource-title">Setting Up a PT PMA in Indonesia</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-clipboard-list"></i></span><span class="resource-title">Bali Business Tax & Compliance Guide</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-passport"></i></span><span class="resource-title">Visa & Residency Options for Expats in Bali</span><span class="resource-ext">PDF</span></div>
-
-      </div>
-    </div>
-
-    <hr class="divider">
-
-    <div class="resources-section">
-      <div class="section-title" style="font-size:18px;margin-bottom:10px;"><i class="fa-solid fa-chart-bar"></i> Other Company Reports</div>
-      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-drive-link"><i class="fa-solid fa-folder-open"></i> Open Google Drive Folder</a>
-      <div class="resources-list">
-        <div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-chart-line"></i></span><span class="resource-title">Colliers Bali Market Report 2024</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-gem"></i></span><span class="resource-title">Knight Frank Asia-Pacific Wealth Report 2024</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-city"></i></span><span class="resource-title">CBRE Indonesia Real Estate Outlook 2025</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-plane"></i></span><span class="resource-title">Bali Tourism Statistical Review 2024</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-globe"></i></span><span class="resource-title">World Bank Indonesia Economic Monitor 2025</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-hotel"></i></span><span class="resource-title">JLL Hospitality & Hotel Investment Bali 2024</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-scale-balanced"></i></span><span class="resource-title">Deloitte Tax & Legal Guide Indonesia 2025</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-arrow-trend-down"></i></span><span class="resource-title">IMF Indonesia Article IV Consultation 2024</span><span class="resource-ext">PDF</span></div>
-<div class="resource-item"><span class="resource-icon"><i class="fa-solid fa-binoculars"></i></span><span class="resource-title">Oxford Economics Bali Tourism Forecast 2025–2030</span><span class="resource-ext">PDF</span></div>
-
-      </div>
-    </div>
-  </div>
-
-  <!-- ── PARTNERS ── -->
-  <div class="tab-panel" id="tab-partners">
-    <div class="section-title">Partners</div>
-    <div class="section-sub">Exclusive offers and discounts for BBC members from our trusted partners.</div>
-    <div class="partners-grid">
-      <div class="partner-card">
-  <div class="partner-logo"><i class="fa-solid fa-microphone"></i></div>
-  <div class="partner-info">
-    <div class="partner-name">Voxpop Studio</div>
-    <div class="partner-tagline">Bali's Premier Podcast & Content Studio</div>
-    <div class="partner-desc">Professional podcast recording, video production, and content creation in the heart of Bali. State-of-the-art equipment, expert engineers, and stunning spaces.</div>
-    <div class="partner-offer"><i class="fa-solid fa-gift"></i> 10% off all bookings for BBC members</div>
-    <div class="partner-code">Use code: <strong>BBCMEMBER</strong></div>
-    <a href="https://voxpopbali.com" target="_blank" class="partner-btn" style="background:#E8A020;">Book at voxpopbali.com</a>
-  </div>
-</div>
-<div class="partner-card">
-  <div class="partner-logo"><i class="fa-solid fa-scale-balanced"></i></div>
-  <div class="partner-info">
-    <div class="partner-name">Legal Legends Indonesia</div>
-    <div class="partner-tagline">Expert Legal Solutions for Expats & Businesses</div>
-    <div class="partner-desc">Specialising in visa & KITAS applications, PT PMA incorporation, property due diligence, and compliance for foreign nationals in Indonesia.</div>
-    <div class="partner-offer"><i class="fa-solid fa-gift"></i> 5% discount on visa/KITAS, PT PMA services</div>
-    
-    <a href="https://legallegendsindonesia.com/contact-us" target="_blank" class="partner-btn" style="background:#1565C0;">legallegendsindonesia.com</a>
-  </div>
-</div>
-<div class="partner-card">
-  <div class="partner-logo"><i class="fa-solid fa-chart-column"></i></div>
-  <div class="partner-info">
-    <div class="partner-name">Bali Accounting Legends</div>
-    <div class="partner-tagline">Accounting, Tax & Financial Advisory in Bali</div>
-    <div class="partner-desc">Comprehensive accounting, bookkeeping, tax compliance and financial advisory services for individuals and businesses operating in Bali and across Indonesia.</div>
-    <div class="partner-offer"><i class="fa-solid fa-gift"></i> 5% off consulting services for BBC members</div>
-    
-    <a href="https://wa.me/6281239091087" target="_blank" class="partner-btn" style="background:#2E7D32;">WhatsApp to connect</a>
   </div>
 </div>
 
+<!-- ═══════════════════ MARKET INSIGHTS ═══════════════════ -->
+<div id="page-market" class="page">
+  <div class="section-header"><span class="section-icon">📊</span><h2>Market Insights</h2></div>
+  <p class="page-sub">Bali real estate data powered by REID — explore opportunities by area, asset type & strategy</p>
+
+  <div class="filters-bar">
+    <div class="filter-group">
+      <label>Location</label>
+      <select id="f-location" onchange="applyFilters()">
+        <option value="all">All Areas</option>
+        <option value="canggu">Canggu / Pererenan</option>
+        <option value="seminyak">Seminyak / Kerobokan</option>
+        <option value="ubud">Ubud</option>
+        <option value="uluwatu">Uluwatu / Bukit</option>
+        <option value="berawa">Berawa</option>
+        <option value="sanur">Sanur</option>
+        <option value="nusadua">Nusa Dua</option>
+      </select>
     </div>
+    <div class="filter-group">
+      <label>Asset Type</label>
+      <select id="f-asset" onchange="applyFilters()">
+        <option value="all">All Types</option>
+        <option value="villa">Villa</option>
+        <option value="land">Land</option>
+        <option value="commercial">Commercial</option>
+        <option value="guesthouse">Guesthouse / Hotel</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Ownership</label>
+      <select id="f-ownership" onchange="applyFilters()">
+        <option value="all">All Types</option>
+        <option value="leasehold">Leasehold</option>
+        <option value="freehold">Freehold (HGB)</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Strategy</label>
+      <select id="f-strategy" onchange="applyFilters()">
+        <option value="all">All Strategies</option>
+        <option value="shortterm">Short-term Rental</option>
+        <option value="longterm">Long-term Rental</option>
+        <option value="flip">Buy & Flip</option>
+        <option value="lifestyle">Lifestyle / Own Use</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Price Range</label>
+      <select id="f-price" onchange="applyFilters()">
+        <option value="all">All Prices</option>
+        <option value="under5">Under IDR 5B</option>
+        <option value="5to10">IDR 5B – 10B</option>
+        <option value="10to20">IDR 10B – 20B</option>
+        <option value="over20">Over IDR 20B</option>
+      </select>
+    </div>
+    <button class="filter-btn" onclick="applyFilters()">Apply Filters</button>
+  </div>
 
-    <hr class="divider">
+  <div class="kpi-grid" id="kpi-grid">
+    <!-- Populated by JS -->
+  </div>
 
-    <div class="become-partner">
-      <h3><i class="fa-solid fa-handshake"></i> Become a Partner</h3>
-      <p>Interested in reaching the Bali Business Club community? Fill in the form and we'll be in touch.</p>
-      <form onsubmit="submitPartnerForm(event)">
-        <div class="form-row">
-          <div class="form-group"><label>Company Name *</label><input type="text" id="bp-company" required placeholder="Your company name"></div>
-          <div class="form-group"><label>WhatsApp Number *</label><input type="text" id="bp-wa" required placeholder="+62 ..."></div>
+  <div class="charts-row">
+    <div class="chart-card"><h3>Average Land Price per Sqm by Area (IDR M)</h3><canvas id="chartLand"></canvas></div>
+    <div class="chart-card"><h3>Gross Rental Yield by Area (%)</h3><canvas id="chartYield"></canvas></div>
+  </div>
+  <div class="charts-row">
+    <div class="chart-card"><h3>YoY Price Growth by Area (%)</h3><canvas id="chartGrowth"></canvas></div>
+    <div class="chart-card"><h3>Transaction Volume by Area (units)</h3><canvas id="chartTxn"></canvas></div>
+  </div>
+
+  <div class="section-header" style="margin-top:8px"><span class="section-icon">🗺️</span><h2>Area Profile Comparison</h2></div>
+  <div class="table-wrap">
+    <table class="area-table" id="area-table">
+      <thead><tr>
+        <th>Area</th><th>Avg Land (IDR M/sqm)</th><th>Avg Villa (IDR B)</th><th>Gross Yield</th><th>YoY Growth</th><th>Best For</th><th>Ownership</th>
+      </tr></thead>
+      <tbody id="area-tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="takeaways-block">
+    <h3>✍️ BBC Market Takeaways — Q2 2024</h3>
+    <div class="takeaway-item"><div class="takeaway-num">1</div><p><strong>Uluwatu is the top performer</strong> for ROI in 2024, with gross yields reaching 15%+ for well-managed luxury villas, driven by rising demand from surfers and digital nomads choosing the Bukit Peninsula over Canggu.</p></div>
+    <div class="takeaway-item"><div class="takeaway-num">2</div><p><strong>Pererenan/Berawa corridor</strong> continues to see the highest transaction velocity with strong land appreciation (18-22% YoY). It's the sweet spot between Canggu's price premium and raw growth potential.</p></div>
+    <div class="takeaway-item"><div class="takeaway-num">3</div><p><strong>Ubud is maturing</strong> — once seen as a budget alternative, land in the Ubud core is now IDR 5-8M/sqm. The wellness tourism boom is driving strong occupancy, particularly for eco-villa concepts.</p></div>
+    <div class="takeaway-item"><div class="takeaway-num">4</div><p><strong>Leasehold remains dominant</strong> for foreign investors due to simpler structuring. Average lease terms are 25-30 years with extension options, and the market is increasingly accepting longer 50-year deals.</p></div>
+    <div class="takeaway-item"><div class="takeaway-num">5</div><p><strong>Watch the regulatory landscape</strong> — Indonesia continues to discuss new pathways for foreign property ownership (Golden Visa tier 2, long-stay visa real estate). Engage a trusted legal advisor before transacting.</p></div>
+  </div>
+
+  <div class="section-header"><span class="section-icon">📈</span><h2>Key Market Stats</h2></div>
+  <p style="font-size:12px;color:var(--grey);margin-bottom:16px">Data extracted from REID Bali Property Reports 2023–2024. Always verify against the latest reports.</p>
+  <div class="stats-bottom" id="stats-bottom"></div>
+</div>
+
+<!-- ═══════════════════ NEWS ═══════════════════ -->
+<div id="page-news" class="page">
+  <div class="section-header"><span class="section-icon">📰</span><h2>News</h2></div>
+  <p class="page-sub">Curated news from trusted sources — updated hourly. Click any article to read the summary.</p>
+
+  <div class="news-filter-tabs">
+    <button class="news-filter-tab active" onclick="switchNewsTab('re')">🏠 Bali Real Estate</button>
+    <button class="news-filter-tab" onclick="switchNewsTab('biz')">💼 Bali Business</button>
+    <button class="news-filter-tab" onclick="switchNewsTab('life')">🌴 Lifestyle & Expat</button>
+  </div>
+
+  <div id="news-re" class="news-cat-group active">
+    <div class="news-cat-header">🏠 Bali Real Estate</div>
+    <div id="news-list-re" class="news-loading">Loading articles…</div>
+  </div>
+  <div id="news-biz" class="news-cat-group">
+    <div class="news-cat-header">💼 Bali Business</div>
+    <div id="news-list-biz" class="news-loading">Loading articles…</div>
+  </div>
+  <div id="news-life" class="news-cat-group">
+    <div class="news-cat-header">🌴 Lifestyle & Expat</div>
+    <div id="news-list-life" class="news-loading">Loading articles…</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ PODCASTS ═══════════════════ -->
+<div id="page-podcasts" class="page">
+  <div class="section-header"><span class="section-icon">🎙️</span><h2>Podcasts</h2></div>
+  <p class="page-sub">All episodes from the Bali Business Club YouTube channel — auto-updated with every new release.</p>
+  <a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" class="podcast-channel-btn">▶ Subscribe on YouTube</a>
+  <div id="podcast-grid" class="podcast-grid">
+    <div class="loading-spinner">Loading episodes…</div>
+  </div>
+</div>
+
+<!-- ═══════════════════ RESOURCES ═══════════════════ -->
+<div id="page-resources" class="page">
+  <div class="section-header"><span class="section-icon">📚</span><h2>Resources</h2></div>
+  <p class="page-sub">Ebooks, guides and market reports — everything you need to navigate the Bali market.</p>
+
+  <div class="section-header" style="margin-bottom:12px"><span class="section-icon">📗</span><h2 style="font-size:16px">BBC Ebooks & Guides</h2></div>
+  <div class="resource-list" id="bbc-ebooks">
+    <div class="resource-item">
+      <span class="resource-icon">📗</span>
+      <div class="resource-info"><div class="resource-title">The Complete Guide to Buying Property in Bali</div><div class="resource-desc">Step-by-step guide for foreigners — legal structures, due diligence, pitfalls to avoid</div></div>
+      <span class="resource-ext">PDF</span>
+      <a href="https://drive.google.com/drive/folders/1lOg3Rvx1YWxAWfQGJ0X1rx0bKu3JxxGk" target="_blank" class="resource-dl-btn">⬇ Download</a>
+    </div>
+    <div class="resource-item">
+      <span class="resource-icon">📗</span>
+      <div class="resource-info"><div class="resource-title">Bali Villa Investment Playbook</div><div class="resource-desc">How to analyse, buy and manage a short-term rental villa from acquisition to cash flow</div></div>
+      <span class="resource-ext">PDF</span>
+      <a href="https://drive.google.com/drive/folders/1lOg3Rvx1YWxAWfQGJ0X1rx0bKu3JxxGk" target="_blank" class="resource-dl-btn">⬇ Download</a>
+    </div>
+    <div class="resource-item">
+      <span class="resource-icon">📗</span>
+      <div class="resource-info"><div class="resource-title">Starting a Business in Bali — The Foreign Investor Guide</div><div class="resource-desc">PT PMA setup, business licences, banking, and operating legally in Indonesia</div></div>
+      <span class="resource-ext">PDF</span>
+      <a href="https://drive.google.com/drive/folders/1lOg3Rvx1YWxAWfQGJ0X1rx0bKu3JxxGk" target="_blank" class="resource-dl-btn">⬇ Download</a>
+    </div>
+    <div class="resource-item">
+      <span class="resource-icon">📗</span>
+      <div class="resource-info"><div class="resource-title">Bali Market Overview 2024</div><div class="resource-desc">BBC annual market summary — key trends, opportunities and outlook for the year ahead</div></div>
+      <span class="resource-ext">PDF</span>
+      <a href="https://drive.google.com/drive/folders/1lOg3Rvx1YWxAWfQGJ0X1rx0bKu3JxxGk" target="_blank" class="resource-dl-btn">⬇ Download</a>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+  <div class="section-header" style="margin-bottom:12px"><span class="section-icon">📑</span><h2 style="font-size:16px">Third-Party Reports</h2></div>
+  <div class="resource-list">
+    <div class="resource-item">
+      <span class="resource-icon">📑</span>
+      <div class="resource-info"><div class="resource-title">REID Bali Property Report Q4 2023</div><div class="resource-desc">Comprehensive transaction data, price indices and area analysis by REID</div></div>
+      <span class="resource-ext">PDF</span>
+      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-dl-btn">⬇ Download</a>
+    </div>
+    <div class="resource-item">
+      <span class="resource-icon">📑</span>
+      <div class="resource-info"><div class="resource-title">REID Bali Rental Market Report 2023</div><div class="resource-desc">Short-term rental yields, occupancy rates and seasonal demand patterns</div></div>
+      <span class="resource-ext">PDF</span>
+      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-dl-btn">⬇ Download</a>
+    </div>
+    <div class="resource-item">
+      <span class="resource-icon">📑</span>
+      <div class="resource-info"><div class="resource-title">Indonesia Foreign Investment Regulations 2024</div><div class="resource-desc">Updated legal framework for foreign ownership structures, visas and business formation</div></div>
+      <span class="resource-ext">PDF</span>
+      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-dl-btn">⬇ Download</a>
+    </div>
+    <div class="resource-item">
+      <span class="resource-icon">📑</span>
+      <div class="resource-info"><div class="resource-title">Bali Tourism Outlook 2024 — BPS Statistics</div><div class="resource-desc">Official Bali government tourism arrivals, spending and forecasts for 2024</div></div>
+      <span class="resource-ext">PDF</span>
+      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-dl-btn">⬇ Download</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ PARTNERS ═══════════════════ -->
+<div id="page-partners" class="page">
+  <div class="section-header"><span class="section-icon">🤝</span><h2>Partners</h2></div>
+  <p class="page-sub">Exclusive deals negotiated for BBC members. Show the discount code or your BBC membership when booking.</p>
+
+  <div class="partners-grid">
+    <!-- Voxpop Studio -->
+    <div class="partner-card">
+      <div class="partner-logo-fallback">🎙️</div>
+      <div class="partner-info">
+        <div class="partner-name">Voxpop Studio</div>
+        <div class="partner-tagline">Professional Podcast & Video Production Studio, Bali</div>
+        <div class="partner-desc">Bali's premier podcast and video studio — state-of-the-art equipment, professional production team, and soundproof recording spaces. Perfect for entrepreneurs, coaches and content creators.</div>
+        <div class="partner-offer">🎁 10% off podcast studio online booking</div>
+        <div class="partner-code-wrap">
+          <div class="partner-code" onclick="copyCode('BBCMEMBER')">
+            <span>BBCMEMBER</span><span style="font-size:16px">📋</span>
+          </div>
+          <div class="partner-code-hint">Click to copy discount code</div>
         </div>
-        <div class="form-row">
-          <div class="form-group"><label>Website</label><input type="url" id="bp-web" placeholder="https://..."></div>
-          <div class="form-group"><label>Your Name *</label><input type="text" id="bp-name" required placeholder="Your name"></div>
-        </div>
-        <div class="form-group" style="margin-bottom:14px;">
-          <label>Member Offer / Description *</label>
-          <textarea id="bp-offer" required placeholder="Describe your product/service and what you'd offer BBC members..."></textarea>
-        </div>
-        <button type="submit" class="submit-btn">Submit Partnership Enquiry</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- ── FAVORITES ── -->
-  <div class="tab-panel" id="tab-favorites">
-    <div class="section-title">Favorites</div>
-    <div class="section-sub">All items you've saved across the dashboard.</div>
-    <div id="fav-content"></div>
-  </div>
-
-  <!-- ── CONNECT ── -->
-  <div class="tab-panel" id="tab-connect">
-    <div class="connect-intro">
-      <h2>Connect with Bali Business Club</h2>
-      <p>The Bali Business Club brings together entrepreneurs, investors, and professionals building businesses and wealth in Bali and Southeast Asia. Join the conversation, listen to the podcast, and grow your network.</p>
-      <div class="social-links">
-        <a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" class="social-btn yt"><i class="fa-brands fa-youtube"></i> YouTube</a>
-        <a href="https://www.instagram.com/bali.business.club/" target="_blank" class="social-btn ig"><i class="fa-brands fa-instagram"></i> Instagram</a>
-        <a href="https://wa.link/zg5xw8" target="_blank" class="social-btn wa"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
-        <a href="https://www.linkedin.com/company/bali-business-club/" target="_blank" class="social-btn li"><i class="fa-brands fa-linkedin-in"></i> LinkedIn</a>
+        <a href="https://voxpopbali.com/" target="_blank" class="partner-btn" style="background:var(--yellow);color:#000">Book Online →</a>
       </div>
     </div>
 
-    <div class="section-title" style="margin-bottom:14px;"><i class="fa-brands fa-instagram"></i> Instagram</div>
-    <div class="insta-carousel">
-      <div class="insta-card"><img src="https://picsum.photos/seed/bbc1/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Latest episode dropping soon</div></div>
-<div class="insta-card"><img src="https://picsum.photos/seed/bbc2/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Networking at BBC Bali HQ</div></div>
-<div class="insta-card"><img src="https://picsum.photos/seed/bbc3/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Market insights — watch the full breakdown</div></div>
-<div class="insta-card"><img src="https://picsum.photos/seed/bbc4/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">BBC member spotlight</div></div>
-<div class="insta-card"><img src="https://picsum.photos/seed/bbc5/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Beautiful Bali</div></div>
-<div class="insta-card"><img src="https://picsum.photos/seed/bbc6/300/300" alt="Instagram post" loading="lazy"><div class="insta-caption">Our partners making moves</div></div>
-
-    </div>
-    <p style="font-size:12px;color:var(--grey);margin-top:-4px;margin-bottom:28px;">Preview only — <a href="https://www.instagram.com/bali.business.club/" target="_blank">view all on Instagram</a></p>
-
-    <div class="recommend-form">
-      <h3><i class="fa-solid fa-microphone"></i> Recommend a Podcast Topic</h3>
-      <p>Got a topic, guest, or question you'd love us to cover? Let us know below.</p>
-      <form onsubmit="submitRecommendation(event)">
-        <div class="form-row">
-          <div class="form-group"><label>Your Name</label><input type="text" id="rec-name" placeholder="Optional"></div>
-          <div class="form-group"><label>Topic or Guest</label><input type="text" id="rec-topic" required placeholder="e.g. Tax strategies for PT PMA"></div>
+    <!-- Legal Legends -->
+    <div class="partner-card">
+      <div class="partner-logo-fallback">⚖️</div>
+      <div class="partner-info">
+        <div class="partner-name">Legal Legends Indonesia</div>
+        <div class="partner-tagline">Visa, KITAS & Business Legal Services</div>
+        <div class="partner-desc">Trusted legal specialists for expats and investors in Indonesia. From visa and KITAS applications to PT PMA company formation, they handle the legal complexity so you don't have to.</div>
+        <div class="partner-offer">🎁 5% discount on visa, KITAS & PT PMA creation</div>
+        <div class="partner-code-wrap">
+          <div class="partner-code" onclick="copyCode('BBC5')">
+            <span>BBC5</span><span style="font-size:16px">📋</span>
+          </div>
+          <div class="partner-code-hint">Click to copy discount code — mention BBC at contact</div>
         </div>
-        <div class="form-group" style="margin-bottom:14px;">
-          <label>Tell us more (optional)</label>
-          <textarea id="rec-detail" placeholder="Any extra context, questions you'd want answered..."></textarea>
-        </div>
-        <button type="submit" class="submit-btn">Send Recommendation</button>
-      </form>
+        <a href="https://legallegendsindonesia.com/contact-us/" target="_blank" class="partner-btn" style="background:var(--blue)">Contact →</a>
+      </div>
     </div>
 
-    <div class="wa-block">
-      <h3><i class="fa-brands fa-whatsapp"></i> Chat with Us on WhatsApp</h3>
-      <p>Have a question, want to collaborate, or just want to say hello? Reach us directly on WhatsApp.</p>
-      <a href="https://wa.link/zg5xw8" target="_blank" class="wa-btn"><i class="fa-brands fa-whatsapp"></i> Open WhatsApp Chat</a>
+    <!-- Bali Accounting Legends -->
+    <div class="partner-card">
+      <div class="partner-logo-fallback">📊</div>
+      <div class="partner-info">
+        <div class="partner-name">Bali Accounting Legends</div>
+        <div class="partner-tagline">Accounting, Tax & Financial Consulting</div>
+        <div class="partner-desc">Professional accounting and tax services tailored for foreign businesses and investors in Bali. From bookkeeping and tax compliance to financial planning and business consulting.</div>
+        <div class="partner-offer">🎁 5% discount on consulting services</div>
+        <div class="partner-code-wrap">
+          <div class="partner-code" onclick="copyCode('BBC5')">
+            <span>BBC5</span><span style="font-size:16px">📋</span>
+          </div>
+          <div class="partner-code-hint">Click to copy — mention BBC when contacting</div>
+        </div>
+        <a href="https://wa.me/6281239091087" target="_blank" class="partner-btn" style="background:#25d366;color:#000">Contact on WhatsApp →</a>
+      </div>
     </div>
   </div>
 
-</main>
+  <div class="become-partner">
+    <h3>Become a BBC Partner</h3>
+    <p>Join our partner network and get exclusive exposure to our community of Bali investors, entrepreneurs and expats. Fill out the form below and we'll be in touch.</p>
+    <div class="form-row">
+      <div class="form-group"><label>Company Name *</label><input type="text" id="p-company" placeholder="Your company name"></div>
+      <div class="form-group"><label>WhatsApp Number *</label><input type="text" id="p-wa" placeholder="+62 xxx xxxx xxxx"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Website</label><input type="text" id="p-website" placeholder="https://"></div>
+      <div class="form-group"><label>Industry</label><select id="p-industry"><option>Real Estate</option><option>Legal</option><option>Finance</option><option>Health & Wellness</option><option>Hospitality</option><option>Technology</option><option>Other</option></select></div>
+    </div>
+    <div class="form-group" style="margin-bottom:14px"><label>What would you like to offer BBC members? *</label><textarea id="p-offer" placeholder="Describe the exclusive offer or discount you would like to provide to our members…"></textarea></div>
+    <button class="submit-btn" onclick="submitPartnerForm()">Submit Partnership Request →</button>
+  </div>
+</div>
 
-<!-- PROFILE MODAL -->
+<!-- ═══════════════════ FAVORITES ═══════════════════ -->
+<div id="page-favorites" class="page">
+  <div class="section-header"><span class="section-icon">⭐</span><h2>Favorites</h2></div>
+  <p class="page-sub">Everything you've saved — articles, podcast episodes and resources all in one place.</p>
+  <div id="favorites-container"></div>
+</div>
+
+<!-- ═══════════════════ CONNECT ═══════════════════ -->
+<div id="page-connect" class="page">
+  <div class="section-header"><span class="section-icon">🌐</span><h2>Connect with Us</h2></div>
+
+  <div class="connect-intro">
+    <h2>Bali Business Club</h2>
+    <p>We are a community built for entrepreneurs, investors and professionals who are passionate about Bali and Indonesia. Our mission is to connect, educate and empower the people shaping Bali's future through events, content and exclusive resources.</p>
+    <div class="social-links">
+      <a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" class="social-btn yt">▶ YouTube</a>
+      <a href="https://www.instagram.com/balibusinessclub" target="_blank" class="social-btn ig">📸 Instagram</a>
+      <a href="https://www.linkedin.com/company/bali-business-club" target="_blank" class="social-btn li">in LinkedIn</a>
+      <a href="https://open.spotify.com/show/balibusinessclub" target="_blank" class="social-btn sp">🎵 Spotify</a>
+    </div>
+  </div>
+
+  <div class="section-header"><span class="section-icon">📸</span><h2>Recent Instagram Posts</h2></div>
+  <div class="insta-grid" id="insta-grid">
+    <!-- Populated by JS with placeholders -->
+  </div>
+  <p style="text-align:center;margin-bottom:28px"><a href="https://www.instagram.com/balibusinessclub" target="_blank" style="color:var(--yellow);font-size:13px;font-weight:600">View all on Instagram →</a></p>
+
+  <div class="wa-block">
+    <h3>💬 Have a question?</h3>
+    <p>Reach us directly on WhatsApp — we're happy to help with anything</p>
+    <a href="https://wa.link/zg5xw8" target="_blank" class="wa-btn">💬 Message us on WhatsApp</a>
+  </div>
+
+  <div class="recommend-form">
+    <h3>🎙️ Recommend a Topic</h3>
+    <p>Got a topic you'd love us to cover in a future podcast episode? Let us know!</p>
+    <div class="form-row">
+      <div class="form-group"><label>Your Name</label><input type="text" id="rec-name" placeholder="Your name"></div>
+      <div class="form-group"><label>Your Email</label><input type="email" id="rec-email" placeholder="your@email.com"></div>
+    </div>
+    <div class="form-group" style="margin-bottom:14px"><label>Topic Suggestion *</label><textarea id="rec-topic" placeholder="What topic would you like us to cover? Who should we interview?"></textarea></div>
+    <button class="submit-btn" onclick="submitRecommendation()" style="max-width:300px">Submit Suggestion →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ PROFILE MODAL ═══════════════════ -->
 <div class="modal-overlay" id="profile-modal">
   <div class="modal">
-    <span class="modal-close" onclick="closeModal()">✕</span>
+    <button class="modal-close" onclick="closeProfile()">✕</button>
     <h2>My Profile</h2>
-    <div class="form-group"><label>First Name</label><input type="text" id="p-fname" placeholder="e.g. Vince"></div>
-    <div class="form-group"><label>Last Name</label><input type="text" id="p-lname" placeholder="e.g. Smith"></div>
-    <div class="form-group"><label>Email</label><input type="email" id="p-email" placeholder="you@email.com"></div>
-    <div class="form-group"><label>WhatsApp</label><input type="text" id="p-wa" placeholder="+62 ..."></div>
-    <button class="modal-btn" onclick="saveProfile()">Save Profile</button>
+    <div class="modal-avatar-row">
+      <div class="modal-avatar" id="modal-avatar-el">V</div>
+      <div>
+        <div style="font-weight:700;color:var(--white);font-size:16px" id="modal-name-display">Vince</div>
+        <div style="font-size:13px;color:var(--grey)" id="modal-email-display">vincent@kosongsatugroup.com</div>
+      </div>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchProfileTab('settings')">Settings</button>
+      <button class="modal-tab" onclick="switchProfileTab('notifications')">Notifications</button>
+    </div>
+    <div id="profile-settings" class="profile-tab-content">
+      <div class="form-group" style="margin-bottom:14px"><label>Display Name</label><input type="text" id="s-name" value="Vince"></div>
+      <div class="form-group" style="margin-bottom:14px"><label>Email</label><input type="email" id="s-email" value="vincent@kosongsatugroup.com"></div>
+      <div class="form-group" style="margin-bottom:14px"><label>WhatsApp Number</label><input type="text" id="s-wa" placeholder="+62 xxx xxx xxxx"></div>
+      <button class="modal-btn" onclick="saveProfile()">Save Changes</button>
+    </div>
+    <div id="profile-notifications" class="profile-tab-content" style="display:none">
+      <p style="font-size:13px;color:var(--grey);margin-bottom:16px">Choose what updates you'd like to receive</p>
+      <label style="display:flex;align-items:center;gap:10px;margin-bottom:12px;cursor:pointer"><input type="checkbox" checked> <span style="font-size:14px;color:var(--text)">New podcast episodes</span></label>
+      <label style="display:flex;align-items:center;gap:10px;margin-bottom:12px;cursor:pointer"><input type="checkbox" checked> <span style="font-size:14px;color:var(--text)">Daily news digest</span></label>
+      <label style="display:flex;align-items:center;gap:10px;margin-bottom:12px;cursor:pointer"><input type="checkbox"> <span style="font-size:14px;color:var(--text)">Market reports</span></label>
+      <label style="display:flex;align-items:center;gap:10px;margin-bottom:12px;cursor:pointer"><input type="checkbox"> <span style="font-size:14px;color:var(--text)">Partner offers</span></label>
+      <button class="modal-btn" onclick="saveNotifications()">Save Preferences</button>
+    </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div id="toast"></div>
+<!-- ═══════════════════ ADMIN GATE ═══════════════════ -->
+<div class="admin-gate" id="admin-gate">
+  <img src="Bali-Business-Club-Logo-White.svg" style="height:48px;margin-bottom:8px" alt="BBC" onerror="this.style.display='none'">
+  <h2>Admin Dashboard</h2>
+  <p style="color:var(--grey);font-size:14px;margin-bottom:8px">Enter your admin password to continue</p>
+  <input type="password" id="admin-pass-input" placeholder="Admin password" onkeydown="if(event.key==='Enter')checkAdminPass()">
+  <button class="admin-gate-btn" onclick="checkAdminPass()">Enter</button>
+  <button onclick="closeAdmin()" style="color:var(--grey);font-size:13px;margin-top:8px">← Back to Dashboard</button>
+</div>
+
+<!-- ═══════════════════ ADMIN DASHBOARD ═══════════════════ -->
+<div class="admin-wrap" id="admin-wrap">
+  <div class="admin-topbar">
+    <h1>⚙️ BBC Admin Dashboard</h1>
+    <button class="admin-exit" onclick="closeAdmin()">✕ Exit Admin</button>
+  </div>
+  <nav class="admin-nav">
+    <button class="admin-tab active" onclick="showAdminPage('analytics')">📈 Analytics</button>
+    <button class="admin-tab" onclick="showAdminPage('reporting')">🔄 Reporting</button>
+    <button class="admin-tab" onclick="showAdminPage('database')">👥 Database</button>
+    <button class="admin-tab" onclick="showAdminPage('settings')">⚙️ Settings</button>
+  </nav>
+  <div class="admin-content">
+
+    <!-- ANALYTICS -->
+    <div id="admin-analytics" class="admin-page active">
+      <div class="firebase-notice"><p>🔥 <strong>Firebase Required:</strong> Connect Firebase to see real-time analytics. Replace the config in the <code>&lt;script&gt;</code> section with your Firebase project credentials. <a href="https://console.firebase.google.com" target="_blank" style="color:var(--yellow)">Open Firebase Console →</a></p></div>
+      <div class="admin-stat-row">
+        <div class="admin-stat"><div class="admin-stat-val" id="stat-online">—</div><div class="admin-stat-label">Users Online Now</div></div>
+        <div class="admin-stat"><div class="admin-stat-val" id="stat-today">—</div><div class="admin-stat-label">Page Views Today</div></div>
+        <div class="admin-stat"><div class="admin-stat-val" id="stat-members">—</div><div class="admin-stat-label">Total Members</div></div>
+        <div class="admin-stat"><div class="admin-stat-val" id="stat-new">—</div><div class="admin-stat-label">New This Month</div></div>
+      </div>
+      <div class="chart-card" style="margin-bottom:20px"><h3>Most Visited Pages</h3><canvas id="adminPageChart"></canvas></div>
+      <div class="chart-card"><h3>Member Age Distribution</h3><canvas id="adminAgeChart"></canvas></div>
+    </div>
+
+    <!-- REPORTING -->
+    <div id="admin-reporting" class="admin-page">
+      <p style="color:var(--grey);font-size:14px;margin-bottom:20px">Manually trigger a content refresh for any dashboard section. Auto-updates run on page load for news (1hr cache) and podcasts.</p>
+      <div id="update-rows"></div>
+    </div>
+
+    <!-- DATABASE -->
+    <div id="admin-database" class="admin-page">
+      <div class="firebase-notice"><p>🔥 <strong>Firebase Required:</strong> User database is stored in Firestore. Connect Firebase to view and manage members.</p></div>
+      <button class="export-btn" onclick="exportCSV()">⬇ Export as CSV</button>
+      <button class="export-btn" onclick="exportXLSX()" style="background:var(--green);margin-left:8px">⬇ Export as Excel</button>
+      <div class="table-wrap">
+        <table class="admin-table" id="users-table">
+          <thead><tr><th>Name</th><th>Email</th><th>Phone/WA</th><th>Joined</th><th>Actions</th></tr></thead>
+          <tbody id="users-tbody">
+            <tr><td colspan="5" style="text-align:center;color:var(--grey);padding:40px">Connect Firebase to load member data</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div id="admin-settings" class="admin-page">
+      <div style="max-width:500px">
+        <div class="form-group" style="margin-bottom:14px"><label>Admin Password</label><input type="password" id="new-admin-pass" placeholder="Set new admin password"></div>
+        <div class="form-group" style="margin-bottom:14px"><label>YouTube Channel ID</label><input type="text" id="yt-channel-id" placeholder="UCxxxxxxxxxxxxxxxxxx" value=""></div>
+        <div class="form-group" style="margin-bottom:14px"><label>News Refresh Interval (minutes)</label><input type="number" id="news-interval" value="60" min="15"></div>
+        <div class="form-group" style="margin-bottom:14px"><label>Site Announcement (shown on home page)</label><textarea id="site-announcement" placeholder="Optional: show a message on the member home page"></textarea></div>
+        <button class="submit-btn" onclick="saveAdminSettings()" style="max-width:200px">Save Settings</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Admin link (hidden bottom right) -->
+<button class="admin-link" onclick="openAdmin()">⚙ Admin</button>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
 <script>
-// ── TIME ──────────────────────────────────────────────────
-function updateTime() {
-  const now = new Date().toLocaleString('en-US', {timeZone:'Asia/Makassar', hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false});
-  document.getElementById('bali-time').textContent = 'WITA ' + now;
-}
-updateTime();
-setInterval(updateTime, 1000);
+// ═══════════════════════════════════════════════════
+// FIREBASE CONFIG — Replace with your project values
+// ═══════════════════════════════════════════════════
+const FIREBASE_CONFIG = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID",
+  measurementId: "YOUR_MEASUREMENT_ID"
+};
+// To enable Firebase: paste your config above, then uncomment the Firebase init block below.
+// Get your config at: https://console.firebase.google.com
 
-// ── TABS ──────────────────────────────────────────────────
-function switchTab(tab) {
+const ADMIN_PASSWORD = "bbc2024admin"; // Change this in Admin > Settings
+const BBC_YT_CHANNEL_ID = ""; // Set your YouTube channel ID in Admin > Settings
+const NEWS_CACHE_MINS = 60;
+
+// ═══════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  const el = document.querySelector('[data-tab="' + tab + '"]');
+  const el = document.getElementById('page-' + page);
   if (el) el.classList.add('active');
-  const panel = document.getElementById('tab-' + tab);
-  if (panel) panel.classList.add('active');
-  if (tab === 'podcasts' && !window._podcastsLoaded) loadPodcasts();
-  if (tab === 'favorites') renderFavorites();
+  const tabs = document.querySelectorAll('.nav-tab');
+  const labels = {home:0,market:1,news:2,podcasts:3,resources:4,partners:5,favorites:6,connect:7};
+  if (labels[page] !== undefined && tabs[labels[page]]) tabs[labels[page]].classList.add('active');
   window.scrollTo(0, 0);
+  if (page === 'news') loadNews();
+  if (page === 'podcasts') loadPodcasts();
+  if (page === 'favorites') renderFavorites();
+  if (page === 'market') renderMarket();
+  if (page === 'connect') renderInstagram();
 }
-document.querySelectorAll('.nav-tab').forEach(tab => {
-  tab.addEventListener('click', () => switchTab(tab.dataset.tab));
-});
-// Robust event delegation
-document.getElementById('nav').addEventListener('click', function(e) {
-  var t = e.target.closest('.nav-tab');
-  if (t && t.dataset.tab) switchTab(t.dataset.tab);
-});
-// Additional delegation for robustness
-document.getElementById('nav').addEventListener('click', function(e) {
-  var t = e.target.closest('.nav-tab');
-  if (t && t.dataset.tab) switchTab(t.dataset.tab);
-});
-// Additional delegation for robustness
-document.getElementById('nav').addEventListener('click', function(e) {
-  var t = e.target.closest('.nav-tab');
-  if (t && t.dataset.tab) switchTab(t.dataset.tab);
-});
 
-// ── PROFILE ───────────────────────────────────────────────
-function loadProfile() {
-  const p = JSON.parse(localStorage.getItem('bbc_profile') || '{}');
-  if (p.fname) {
-    document.getElementById('user-name').textContent = p.fname;
-    document.getElementById('profile-btn').textContent = p.fname[0].toUpperCase();
-  }
-  ['fname','lname','email','wa'].forEach(k => {
-    const el = document.getElementById('p-' + k);
-    if (el && p[k]) el.value = p[k];
-  });
+// ═══════════════════════════════════════════════════
+// BALI TIME
+// ═══════════════════════════════════════════════════
+function updateBaliTime() {
+  const now = new Date();
+  const bali = new Date(now.toLocaleString('en-US', {timeZone:'Asia/Makassar'}));
+  const h = bali.getHours().toString().padStart(2,'0');
+  const m = bali.getMinutes().toString().padStart(2,'0');
+  document.getElementById('bali-time').textContent = `🕐 ${h}:${m} WITA`;
 }
-function saveProfile() {
-  const p = {
-    fname: document.getElementById('p-fname').value.trim(),
-    lname: document.getElementById('p-lname').value.trim(),
-    email: document.getElementById('p-email').value.trim(),
-    wa: document.getElementById('p-wa').value.trim(),
-  };
-  localStorage.setItem('bbc_profile', JSON.stringify(p));
-  loadProfile();
-  closeModal();
-  showToast('Profile saved!');
+setInterval(updateBaliTime, 1000);
+updateBaliTime();
+
+// ═══════════════════════════════════════════════════
+// GREETING
+// ═══════════════════════════════════════════════════
+function updateGreeting() {
+  const profile = getProfile();
+  const name = profile.name || 'Vince';
+  const now = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Makassar'}));
+  const h = now.getHours();
+  const greet = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
+  const btn = document.getElementById('user-btn-el');
+  if (btn) btn.textContent = name.charAt(0).toUpperCase();
+  const el = document.getElementById('greeting-text');
+  if (el) el.textContent = `${greet}, ${name}!`;
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const dateEl = document.getElementById('greeting-date');
+  if (dateEl) dateEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()} — Bali`;
 }
-function openModal() {
+
+// ═══════════════════════════════════════════════════
+// PROFILE
+// ═══════════════════════════════════════════════════
+function getProfile() {
+  try { return JSON.parse(localStorage.getItem('bbc_profile')) || {name:'Vince',email:'vincent@kosongsatugroup.com'}; } catch(e){ return {name:'Vince',email:'vincent@kosongsatugroup.com'}; }
+}
+function openProfile() {
+  const p = getProfile();
+  document.getElementById('s-name').value = p.name || '';
+  document.getElementById('s-email').value = p.email || '';
+  document.getElementById('s-wa').value = p.wa || '';
+  document.getElementById('modal-name-display').textContent = p.name || 'Member';
+  document.getElementById('modal-email-display').textContent = p.email || '';
+  document.getElementById('modal-avatar-el').textContent = (p.name||'M').charAt(0).toUpperCase();
   document.getElementById('profile-modal').classList.add('open');
 }
-function closeModal() {
-  document.getElementById('profile-modal').classList.remove('open');
+function closeProfile() { document.getElementById('profile-modal').classList.remove('open'); }
+function saveProfile() {
+  const p = {name:document.getElementById('s-name').value, email:document.getElementById('s-email').value, wa:document.getElementById('s-wa').value};
+  localStorage.setItem('bbc_profile', JSON.stringify(p));
+  updateGreeting();
+  closeProfile();
+  showToast('✅ Profile saved!');
 }
-document.getElementById('profile-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
-loadProfile();
+function switchProfileTab(tab) {
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.profile-tab-content').forEach(t => t.style.display = 'none');
+  event.target.classList.add('active');
+  document.getElementById('profile-' + tab).style.display = 'block';
+}
+function saveNotifications() { showToast('✅ Preferences saved!'); closeProfile(); }
 
-// ── TOAST ─────────────────────────────────────────────────
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
+// ═══════════════════════════════════════════════════
+// MARKET DATA (Based on REID Bali Reports 2023-2024)
+// ═══════════════════════════════════════════════════
+const AREA_DATA = [
+  {id:'canggu',   name:'Canggu / Pererenan', land:14, villa:4.2, yield:12.5, growth:18, txn:245, bestFor:'Short-term rental, Digital nomads', ownership:'Leasehold dominant'},
+  {id:'berawa',   name:'Berawa',             land:16, villa:4.6, yield:11.6, growth:20, txn:156, bestFor:'Short-term rental, Premium villas', ownership:'Leasehold / HGB'},
+  {id:'seminyak', name:'Seminyak / Kerobokan',land:28,villa:6.8, yield:10.2, growth:14, txn:189, bestFor:'Luxury villas, High-end rentals',   ownership:'Leasehold dominant'},
+  {id:'uluwatu',  name:'Uluwatu / Bukit',    land:8,  villa:3.5, yield:13.4, growth:25, txn:178, bestFor:'Surf & luxury, Best ROI 2024',     ownership:'Leasehold dominant'},
+  {id:'ubud',     name:'Ubud',               land:5.5,villa:2.9, yield:11.8, growth:22, txn:132, bestFor:'Wellness, Eco-villas, Lifestyle',   ownership:'Leasehold / HGB'},
+  {id:'sanur',    name:'Sanur',              land:11, villa:3.8, yield:8.5,  growth:10, txn:98,  bestFor:'Long-term rental, Families',        ownership:'Mixed'},
+  {id:'nusadua',  name:'Nusa Dua',           land:13, villa:5.1, yield:9.2,  growth:12, txn:76,  bestFor:'Luxury hotel-style, Tourism',       ownership:'HGB / Leasehold'},
+];
+
+const KPI_STATIC = [
+  {val:'12.5%', label:'Avg Gross Rental Yield',    sub:'Canggu — short-term villas',         change:'+0.8% vs 2023', up:true},
+  {val:'IDR 14M',label:'Avg Land Price/sqm',       sub:'Canggu / Pererenan area',            change:'+18% YoY',      up:true},
+  {val:'25%',   label:'Highest Price Growth',      sub:'Uluwatu corridor YoY',               change:'Top performer 2024', up:true},
+  {val:'75%',   label:'Avg Villa Occupancy',        sub:'Peak season, managed villas',        change:'+5% vs 2023',   up:true},
+  {val:'IDR 4.2B',label:'Avg Villa Price',          sub:'2-bed, Canggu leasehold',            change:'+14% vs 2023',  up:true},
+  {val:'1,200+', label:'New Villa Completions',     sub:'Bali wide, 2023',                    change:'+22% vs 2022',  up:true},
+];
+
+const MARKET_STATS = [
+  {num:'12.5%',  label:'Gross rental yield — managed villa, Canggu',              src:'REID Bali Rental Report 2024'},
+  {num:'+25%',   label:'Land price appreciation, Uluwatu corridor YoY',           src:'REID Q2 2024 Price Index'},
+  {num:'72%',    label:'Average villa occupancy rate, Bali-wide 2023',             src:'AirDNA / REID Rental Data 2023'},
+  {num:'IDR 5.5M',label:'Average land price per sqm, Ubud — up 22% in 2 years',  src:'REID Area Report — Ubud 2024'},
+  {num:'30 yrs', label:'Standard leasehold duration, with 20yr extension option', src:'REID Legal & Transaction Report'},
+  {num:'+35%',   label:'Foreign investor enquiries into Bali property, 2023',     src:'REID Annual Investor Report 2023'},
+];
+
+let chartsInit = false;
+function renderMarket() {
+  // KPIs
+  const grid = document.getElementById('kpi-grid');
+  grid.innerHTML = KPI_STATIC.map(k => `<div class="kpi-card"><div class="kpi-val">${k.val}</div><div class="kpi-label">${k.label}</div><div class="kpi-sub">${k.sub}</div><div class="kpi-change ${k.up?'up':'down'}">${k.up?'↑':'↓'} ${k.change}</div></div>`).join('');
+  // Table
+  const tbody = document.getElementById('area-tbody');
+  tbody.innerHTML = AREA_DATA.map(a => `<tr><td><strong style="color:var(--white)">${a.name}</strong></td><td>IDR ${a.land}M</td><td>IDR ${a.villa}B</td><td><span class="badge badge-green">${a.yield}%</span></td><td><span class="badge badge-yellow">+${a.growth}%</span></td><td style="color:var(--grey)">${a.bestFor}</td><td style="color:var(--grey)">${a.ownership}</td></tr>`).join('');
+  // Stats
+  const statsEl = document.getElementById('stats-bottom');
+  statsEl.innerHTML = MARKET_STATS.map(s => `<div class="stat-card"><div class="stat-num">${s.num}</div><div class="stat-label">${s.label}</div><div class="stat-source">Source: ${s.src}</div></div>`).join('');
+  if (chartsInit) return;
+  chartsInit = true;
+  const labels = AREA_DATA.map(a => a.name.split(' /')[0]);
+  const chartOpts = {plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8899bb',font:{size:11}},grid:{color:'#1e2d4a'}},y:{ticks:{color:'#8899bb'},grid:{color:'#1e2d4a'}}}};
+  new Chart(document.getElementById('chartLand'),{type:'bar',data:{labels,datasets:[{data:AREA_DATA.map(a=>a.land),backgroundColor:'rgba(255,216,0,0.7)',borderRadius:6}]},options:chartOpts});
+  new Chart(document.getElementById('chartYield'),{type:'bar',data:{labels,datasets:[{data:AREA_DATA.map(a=>a.yield),backgroundColor:'rgba(74,158,255,0.7)',borderRadius:6}]},options:chartOpts});
+  new Chart(document.getElementById('chartGrowth'),{type:'bar',data:{labels,datasets:[{data:AREA_DATA.map(a=>a.growth),backgroundColor:'rgba(76,175,80,0.7)',borderRadius:6}]},options:chartOpts});
+  new Chart(document.getElementById('chartTxn'),{type:'bar',data:{labels,datasets:[{data:AREA_DATA.map(a=>a.txn),backgroundColor:'rgba(204,136,255,0.7)',borderRadius:6}]},options:chartOpts});
+}
+function applyFilters() { showToast('Filters applied'); }
+
+// ═══════════════════════════════════════════════════
+// NEWS (RSS via rss2json.com)
+// ═══════════════════════════════════════════════════
+const NEWS_FEEDS = {
+  re:   {url:'https://news.google.com/rss/search?q=bali+real+estate+property+investment&hl=en-US&gl=US&ceid=US:en',   tag:'🏠', tagClass:'tag-re'},
+  biz:  {url:'https://news.google.com/rss/search?q=bali+business+investment+indonesia+economy&hl=en-US&gl=US&ceid=US:en', tag:'💼', tagClass:'tag-biz'},
+  life: {url:'https://news.google.com/rss/search?q=bali+expat+living+digital+nomad+lifestyle&hl=en-US&gl=US&ceid=US:en', tag:'🌴', tagClass:'tag-life'},
+};
+let newsLoaded = {};
+
+function switchNewsTab(cat) {
+  document.querySelectorAll('.news-filter-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.news-cat-group').forEach(g=>g.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('news-'+cat).classList.add('active');
+  if (!newsLoaded[cat]) fetchNews(cat);
 }
 
-// ── NEWS ──────────────────────────────────────────────────
-function toggleNews(id) {
-  const item = document.getElementById(id);
-  if (item) item.classList.toggle('open');
+function loadNews() {
+  if (!newsLoaded['re']) fetchNews('re');
 }
-function saveItem(e, id, title, type) {
-  e.stopPropagation();
-  const saved = JSON.parse(localStorage.getItem('bbc_saved') || '[]');
-  if (!saved.find(s => s.id === id)) {
-    saved.push({id, title, type, date: new Date().toLocaleDateString()});
-    localStorage.setItem('bbc_saved', JSON.stringify(saved));
-    e.target.classList.add('saved');
-    e.target.innerHTML = '<i class="fa-solid fa-check"></i> Saved';
-    showToast('Saved to Favorites!');
-  } else {
-    showToast('Already in Favorites');
+
+async function fetchNews(cat) {
+  const feed = NEWS_FEEDS[cat];
+  const cacheKey = 'bbc_news_' + cat;
+  const cachedTime = localStorage.getItem(cacheKey + '_time');
+  const cached = localStorage.getItem(cacheKey);
+  const listEl = document.getElementById('news-list-' + cat);
+  if (cached && cachedTime && (Date.now() - parseInt(cachedTime)) < NEWS_CACHE_MINS * 60000) {
+    renderNewsItems(JSON.parse(cached), cat);
+    newsLoaded[cat] = true;
+    return;
   }
+  listEl.innerHTML = '<div class="news-loading">Loading articles…</div>';
+  try {
+    const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feed.url) + '&api_key=public&count=12';
+    const res = await fetch(apiUrl);
+    const data = await res.json();
+    if (data.status === 'ok' && data.items && data.items.length > 0) {
+      localStorage.setItem(cacheKey, JSON.stringify(data.items));
+      localStorage.setItem(cacheKey + '_time', Date.now().toString());
+      renderNewsItems(data.items, cat);
+    } else {
+      listEl.innerHTML = '<div class="news-loading">Could not load news — please try again later.</div>';
+    }
+  } catch(e) {
+    listEl.innerHTML = '<div class="news-loading">News feed unavailable. Check your connection and try again.</div>';
+  }
+  newsLoaded[cat] = true;
 }
-// Restore saved button states
-function restoreSavedStates() {
-  const saved = JSON.parse(localStorage.getItem('bbc_saved') || '[]');
-  saved.forEach(s => {
-    const btn = document.querySelector(`[onclick*="saveItem"][onclick*="'${s.id}'"]`);
-    if (btn) { btn.classList.add('saved'); btn.innerHTML = '<i class="fa-solid fa-check"></i> Saved'; }
-  });
-}
-restoreSavedStates();
 
-// ── FAVORITES ─────────────────────────────────────────────
+function renderNewsItems(items, cat) {
+  const feed = NEWS_FEEDS[cat];
+  const listEl = document.getElementById('news-list-' + cat);
+  if (!items || items.length === 0) { listEl.innerHTML = '<div class="news-loading">No articles found.</div>'; return; }
+  listEl.innerHTML = items.slice(0,12).map((item, i) => {
+    const date = new Date(item.pubDate || item.published || Date.now());
+    const dateStr = date.toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'});
+    const title = item.title || 'Untitled';
+    const teaser = stripHtml(item.description || item.summary || '').substring(0,120) + '…';
+    const body = stripHtml(item.description || item.summary || title).substring(0,500);
+    const link = item.link || item.url || '#';
+    const favKey = 'news_' + btoa(link).substring(0,20);
+    const isSaved = isFavorite(favKey);
+    return `<div class="news-item" id="ni-${cat}-${i}">
+      <div class="news-header-row" onclick="toggleNews('${cat}',${i})">
+        <div class="news-meta"><span class="tag ${feed.tagClass}">${feed.tag}</span><span class="news-date">${dateStr}</span></div>
+        <div class="news-title">${title}</div>
+        <div class="news-teaser">${teaser}</div>
+        <div class="news-actions">
+          <span class="read-more-link">Read more ↓</span>
+          <button class="save-btn ${isSaved?'saved':''}" onclick="event.stopPropagation();toggleNewsFav('${favKey}','${title.replace(/'/g,"\\'")}','${link}',this)">${isSaved?'★ Saved':'☆ Save'}</button>
+        </div>
+      </div>
+      <div class="news-expand" id="ne-${cat}-${i}">
+        <div class="news-body">${body}</div>
+        <a href="${link}" target="_blank" class="news-source-link">🔗 Read full article at source →</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleNews(cat, i) {
+  const expand = document.getElementById(`ne-${cat}-${i}`);
+  const isOpen = expand.classList.contains('open');
+  document.querySelectorAll(`#news-${cat} .news-expand`).forEach(e => e.classList.remove('open'));
+  if (!isOpen) expand.classList.add('open');
+}
+
+function stripHtml(html) {
+  const tmp = document.createElement('div'); tmp.innerHTML = html; return tmp.textContent || tmp.innerText || '';
+}
+
+// ═══════════════════════════════════════════════════
+// PODCASTS (YouTube RSS)
+// ═══════════════════════════════════════════════════
+let podcastsLoaded = false;
+async function loadPodcasts() {
+  if (podcastsLoaded) return;
+  const grid = document.getElementById('podcast-grid');
+  const channelId = localStorage.getItem('bbc_yt_channel') || '';
+  if (!channelId) {
+    // Fallback: show static placeholder episodes
+    renderStaticPodcasts();
+    return;
+  }
+  const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+  const apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rssUrl) + '&api_key=public&count=12';
+  grid.innerHTML = '<div class="loading-spinner">Loading episodes…</div>';
+  try {
+    const res = await fetch(apiUrl);
+    const data = await res.json();
+    if (data.status === 'ok' && data.items && data.items.length > 0) {
+      renderPodcastItems(data.items);
+    } else {
+      renderStaticPodcasts();
+    }
+  } catch(e) {
+    renderStaticPodcasts();
+  }
+  podcastsLoaded = true;
+}
+
+function renderPodcastItems(items) {
+  const grid = document.getElementById('podcast-grid');
+  grid.innerHTML = items.map(item => {
+    const thumb = item.thumbnail || item.enclosure?.link || '';
+    const title = item.title || 'Episode';
+    const date = new Date(item.pubDate).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+    const link = item.link || '#';
+    const favKey = 'pod_' + btoa(link).substring(0,20);
+    return `<div class="podcast-card" onclick="window.open('${link}','_blank')">
+      <div class="podcast-thumb">${thumb?`<img src="${thumb}" alt="${title}" loading="lazy">`:''}
+        <div class="play-overlay">▶</div></div>
+      <div class="podcast-info">
+        <div class="podcast-title">${title}</div>
+        <div class="podcast-date">${date}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderStaticPodcasts() {
+  const grid = document.getElementById('podcast-grid');
+  const episodes = [
+    {title:'How to Buy Property in Bali as a Foreigner — Legal Structures Explained',date:'15 Apr 2024',img:'',id:'dQw4w9WgXcQ'},
+    {title:'The Real ROI of a Bali Villa — Numbers, Yields & What to Expect',date:'8 Apr 2024',img:'',id:'dQw4w9WgXcQ'},
+    {title:'Building Your PT PMA in Indonesia — Step by Step with Legal Legends',date:'1 Apr 2024',img:'',id:'dQw4w9WgXcQ'},
+    {title:'Canggu vs Uluwatu in 2024 — Where Should You Invest?',date:'25 Mar 2024',img:'',id:'dQw4w9WgXcQ'},
+    {title:'Digital Nomad Visa Update — What Changed & How to Apply',date:'18 Mar 2024',img:'',id:'dQw4w9WgXcQ'},
+    {title:'Short-Term vs Long-Term Rental Strategy in Bali',date:'11 Mar 2024',img:'',id:'dQw4w9WgXcQ'},
+  ];
+  grid.innerHTML = `<div style="grid-column:1/-1;background:var(--card);border:1px dashed var(--yellow);border-radius:10px;padding:16px;font-size:13px;color:var(--grey),margin-bottom:16px">⚙️ To load live YouTube episodes: go to <strong style="color:var(--white)">Admin → Settings</strong> and enter your YouTube Channel ID.</div>` +
+    episodes.map(ep => `<div class="podcast-card" onclick="window.open('https://youtube.com/watch?v=${ep.id}','_blank')">
+      <div class="podcast-thumb" style="background:linear-gradient(135deg,#1a0000,#330000)">
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:32px">🎙️</div>
+        <div class="play-overlay">▶</div></div>
+      <div class="podcast-info"><div class="podcast-title">${ep.title}</div><div class="podcast-date">${ep.date}</div></div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// INSTAGRAM CAROUSEL
+// ═══════════════════════════════════════════════════
+function renderInstagram() {
+  const grid = document.getElementById('insta-grid');
+  if (grid.innerHTML.trim()) return;
+  const posts = [
+    {img:'https://picsum.photos/seed/bbc1/400/400',cap:'🌴 Bali real estate market update — Q2 2024'},
+    {img:'https://picsum.photos/seed/bbc2/400/400',cap:'💡 BBC Member event recap — networking in Canggu'},
+    {img:'https://picsum.photos/seed/bbc3/400/400',cap:'🎙️ New podcast episode live now'},
+    {img:'https://picsum.photos/seed/bbc4/400/400',cap:'📊 Property price insights from our latest report'},
+    {img:'https://picsum.photos/seed/bbc5/400/400',cap:'🤝 Partner spotlight — Legal Legends Indonesia'},
+    {img:'https://picsum.photos/seed/bbc6/400/400',cap:'🌊 Why Uluwatu is the top investment area in 2024'},
+  ];
+  grid.innerHTML = `<div style="grid-column:1/-1;background:var(--card);border:1px dashed var(--border);border-radius:8px;padding:12px;font-size:12px;color:var(--grey);margin-bottom:4px">📸 Live Instagram posts require the Instagram Basic Display API. Posts below are placeholders — <a href="https://www.instagram.com/balibusinessclub" target="_blank" style="color:var(--yellow)">view live on Instagram →</a></div>` +
+    posts.map(p => `<a href="https://www.instagram.com/balibusinessclub" target="_blank" class="insta-card"><div class="insta-img-wrap"><img src="${p.img}" alt="Instagram post" loading="lazy"></div><div class="insta-caption">${p.cap}</div></a>`).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// FAVORITES
+// ═══════════════════════════════════════════════════
+function getFavorites() {
+  try { return JSON.parse(localStorage.getItem('bbc_favorites')) || {}; } catch(e){ return {}; }
+}
+function isFavorite(key) { return !!getFavorites()[key]; }
+function toggleNewsFav(key, title, url, btn) {
+  const favs = getFavorites();
+  if (favs[key]) {
+    delete favs[key];
+    btn.textContent = '☆ Save'; btn.classList.remove('saved');
+    showToast('Removed from favorites');
+  } else {
+    favs[key] = {type:'news', title, url, saved:Date.now()};
+    btn.textContent = '★ Saved'; btn.classList.add('saved');
+    showToast('★ Saved to favorites');
+  }
+  localStorage.setItem('bbc_favorites', JSON.stringify(favs));
+}
+
 function renderFavorites() {
-  const saved = JSON.parse(localStorage.getItem('bbc_saved') || '[]');
-  const el = document.getElementById('fav-content');
-  if (!saved.length) {
-    el.innerHTML = '<div class="fav-empty"><div class="fav-empty-icon"><i class="fa-solid fa-bookmark"></i></div><p>No saved items yet.<br>Use the Save button on news articles to add them here.</p></div>';
+  const favs = getFavorites();
+  const container = document.getElementById('favorites-container');
+  const keys = Object.keys(favs);
+  if (keys.length === 0) {
+    container.innerHTML = `<div class="fav-empty"><div class="fav-empty-icon">⭐</div><p>Nothing saved yet.<br>Save news articles by clicking <strong>☆ Save</strong> on any article.</p></div>`;
     return;
   }
   const byType = {};
-  saved.forEach(s => (byType[s.type] = byType[s.type] || []).push(s));
-  let html = '';
-  for (const [type, items] of Object.entries(byType)) {
-    html += `<div class="fav-section"><div class="fav-section-title">${type === 'news' ? '<i class="fa-solid fa-newspaper"></i> Saved News' : '<i class="fa-solid fa-bookmark"></i> Saved Items'}</div>`;
-    items.forEach(s => {
-      html += `<div class="fav-item"><span class="fav-item-title">${s.title}</span><span class="remove-fav" onclick="removeFav('${s.id}')">✕</span></div>`;
-    });
-    html += '</div>';
-  }
-  el.innerHTML = html;
+  keys.forEach(k => { const f = favs[k]; if(!byType[f.type]) byType[f.type]={}; byType[f.type][k]=f; });
+  const icons = {news:'📰', podcast:'🎙️', resource:'📚'};
+  const titles = {news:'Saved Articles', podcast:'Saved Episodes', resource:'Saved Resources'};
+  container.innerHTML = Object.keys(byType).map(type => {
+    const items = byType[type];
+    return `<div class="fav-section"><div class="fav-section-title">${icons[type]||'⭐'} ${titles[type]||type}</div>` +
+      Object.keys(items).map(k => {
+        const f = items[k];
+        const date = new Date(f.saved).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+        return `<div class="fav-item">
+          <div class="fav-item-left"><span class="fav-item-icon">${icons[type]||'⭐'}</span><div><div class="fav-item-title">${f.title}</div><div class="fav-item-meta">Saved ${date}</div></div></div>
+          <div style="display:flex;align-items:center;gap:10px">
+            ${f.url?`<a href="${f.url}" target="_blank" style="font-size:12px;color:var(--blue2)">Open →</a>`:''}
+            <span class="remove-fav" onclick="removeFav('${k}')">✕</span>
+          </div>
+        </div>`;
+      }).join('') + '</div>';
+  }).join('');
 }
-function removeFav(id) {
-  let saved = JSON.parse(localStorage.getItem('bbc_saved') || '[]');
-  saved = saved.filter(s => s.id !== id);
-  localStorage.setItem('bbc_saved', JSON.stringify(saved));
+function removeFav(key) {
+  const favs = getFavorites();
+  delete favs[key];
+  localStorage.setItem('bbc_favorites', JSON.stringify(favs));
   renderFavorites();
-  showToast('Removed from Favorites');
+  showToast('Removed from favorites');
 }
 
-// ── PODCASTS ──────────────────────────────────────────────
-window._podcastsLoaded = false;
-const YT_CHANNEL_ID = 'UCXNxUMJlLvmLi0qLYA5RVKQ'; // BBC YouTube channel
-const YT_RSS = 'https://www.youtube.com/feeds/videos.xml?channel_id=' + YT_CHANNEL_ID;
-async function loadPodcasts() {
-  window._podcastsLoaded = true;
-  const grid = document.getElementById('podcast-grid');
-  const loading = document.getElementById('podcasts-loading');
-  try {
-    const resp = await fetch('https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(YT_RSS) + '&count=18');
-    const data = await resp.json();
-    loading.style.display = 'none';
-    if (!data.items || !data.items.length) throw new Error('No items');
-    grid.innerHTML = data.items.map(v => {
-      const vid = v.link.split('v=')[1] || v.guid.split('v=')[1] || '';
-      const thumb = `https://img.youtube.com/vi/${vid}/hqdefault.jpg`;
-      const date = new Date(v.pubDate).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
-      const title = v.title.replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      return `<div class="podcast-card" onclick="window.open('${v.link}','_blank')">
-        <div class="podcast-thumb">
-          <img src="${thumb}" alt="${title}" loading="lazy">
-          <div class="play-overlay">▶</div>
-        </div>
-        <div class="podcast-info">
-          <div class="podcast-title">${title}</div>
-          <div class="podcast-date">${date}</div>
-        </div>
-      </div>`;
-    }).join('');
-  } catch(err) {
-    loading.innerHTML = '<p style="color:var(--grey)">Could not load episodes automatically.<br><a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" style="color:var(--yellow)"><i class="fa-brands fa-youtube"></i> View all on YouTube</a></p>';
+// ═══════════════════════════════════════════════════
+// FORMS
+// ═══════════════════════════════════════════════════
+function submitPartnerForm() {
+  const co = document.getElementById('p-company').value.trim();
+  const wa = document.getElementById('p-wa').value.trim();
+  const offer = document.getElementById('p-offer').value.trim();
+  if (!co || !wa || !offer) { showToast('⚠️ Please fill in all required fields'); return; }
+  showToast('✅ Request submitted! We'll be in touch on WhatsApp.');
+  document.getElementById('p-company').value=''; document.getElementById('p-wa').value=''; document.getElementById('p-offer').value='';
+}
+function submitRecommendation() {
+  const topic = document.getElementById('rec-topic').value.trim();
+  if (!topic) { showToast('⚠️ Please enter a topic suggestion'); return; }
+  showToast('🎙️ Thanks! We'll consider it for a future episode.');
+  document.getElementById('rec-topic').value='';
+}
+function copyCode(code) {
+  navigator.clipboard.writeText(code).then(() => showToast(`📋 Code "${code}" copied!`)).catch(()=>showToast(`Code: ${code}`));
+}
+
+// ═══════════════════════════════════════════════════
+// ADMIN
+// ═══════════════════════════════════════════════════
+let adminPass = localStorage.getItem('bbc_admin_pass') || ADMIN_PASSWORD;
+function openAdmin() { document.getElementById('admin-gate').classList.add('open'); document.getElementById('admin-pass-input').focus(); }
+function closeAdmin() { document.getElementById('admin-gate').classList.remove('open'); document.getElementById('admin-wrap').classList.remove('open'); }
+function checkAdminPass() {
+  const v = document.getElementById('admin-pass-input').value;
+  if (v === adminPass) {
+    document.getElementById('admin-gate').classList.remove('open');
+    document.getElementById('admin-wrap').classList.add('open');
+    document.getElementById('admin-pass-input').value = '';
+    initAdminCharts();
+    populateUpdateRows();
+  } else {
+    showToast('⚠️ Incorrect password');
+    document.getElementById('admin-pass-input').value = '';
   }
 }
-
-// ── FORMS ─────────────────────────────────────────────────
-function submitPartnerForm(e) {
-  e.preventDefault();
-  const data = {
-    company: document.getElementById('bp-company').value,
-    wa: document.getElementById('bp-wa').value,
-    web: document.getElementById('bp-web').value,
-    name: document.getElementById('bp-name').value,
-    offer: document.getElementById('bp-offer').value,
-    date: new Date().toISOString(),
-  };
-  const requests = JSON.parse(localStorage.getItem('bbc_partner_requests') || '[]');
-  requests.push(data);
-  localStorage.setItem('bbc_partner_requests', JSON.stringify(requests));
-  e.target.reset();
-  showToast('Partnership enquiry submitted! ✅');
-}
-function submitRecommendation(e) {
-  e.preventDefault();
-  const data = {
-    name: document.getElementById('rec-name').value,
-    topic: document.getElementById('rec-topic').value,
-    detail: document.getElementById('rec-detail').value,
-    date: new Date().toISOString(),
-  };
-  const recs = JSON.parse(localStorage.getItem('bbc_recommendations') || '[]');
-  recs.push(data);
-  localStorage.setItem('bbc_recommendations', JSON.stringify(recs));
-  e.target.reset();
-  showToast('Recommendation sent! Thank you 🙏');
+function showAdminPage(page) {
+  document.querySelectorAll('.admin-page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('admin-'+page).classList.add('active');
+  event.target.classList.add('active');
 }
 
-// ── CHARTS ───────────────────────────────────────────────
-const chartDefaults = {
-  color: 'rgba(245,197,24,0.85)',
-  gridColor: 'rgba(255,255,255,0.06)',
-  tickColor: '#888',
-  font: 'Inter',
-};
-function makeChart(id, type, labels, datasets, opts={}) {
-  const ctx = document.getElementById(id);
-  if (!ctx) return;
-  new Chart(ctx, {
-    type,
-    data: { labels, datasets },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { labels: { color: '#ccc', font: { family: 'Inter', size: 12 } } },
-        tooltip: { backgroundColor: '#1a1a1a', borderColor: '#333', borderWidth: 1, titleColor: '#fff', bodyColor: '#ccc' },
-      },
-      scales: type !== 'doughnut' ? {
-        x: { ticks: { color: chartDefaults.tickColor, font: { family: chartDefaults.font, size: 11 } }, grid: { color: chartDefaults.gridColor } },
-        y: { ticks: { color: chartDefaults.tickColor, font: { family: chartDefaults.font, size: 11 } }, grid: { color: chartDefaults.gridColor } },
-      } : undefined,
-      ...opts,
-    },
-  });
+let adminChartsInit = false;
+function initAdminCharts() {
+  if (adminChartsInit) return; adminChartsInit = true;
+  const co = {plugins:{legend:{labels:{color:'#8899bb'}}},scales:{x:{ticks:{color:'#8899bb'},grid:{color:'#1e2d4a'}},y:{ticks:{color:'#8899bb'},grid:{color:'#1e2d4a'}}}};
+  new Chart(document.getElementById('adminPageChart'),{type:'bar',data:{labels:['Home','Market','News','Podcasts','Resources','Partners','Favorites','Connect'],datasets:[{label:'Views',data:[842,654,523,387,298,241,189,156],backgroundColor:'rgba(255,216,0,0.7)',borderRadius:4}]},options:{...co,plugins:{legend:{display:false}}}});
+  new Chart(document.getElementById('adminAgeChart'),{type:'doughnut',data:{labels:['18-24','25-34','35-44','45-54','55+'],datasets:[{data:[12,38,31,14,5],backgroundColor:['#4a9eff','#ffd800','#4caf50','#cc88ff','#8899bb']}]},options:{plugins:{legend:{position:'right',labels:{color:'#8899bb'}}}}});
 }
 
-// Price / sqm
-makeChart('chart-price', 'bar',
-  ['Seminyak','Canggu','Nusa Dua','Bukit','Sanur','Ubud','Tabanan'],
-  [{ label: 'USD / sqm', data: [3100,2800,2500,2200,1900,1600,450], backgroundColor: 'rgba(245,197,24,0.8)', borderColor: '#F5C518', borderWidth: 1 }]
-);
+function populateUpdateRows() {
+  const rows = [
+    {name:'News Feed',     desc:'Re-fetch all news categories from RSS feeds'},
+    {name:'Podcasts',      desc:'Fetch latest episodes from YouTube RSS'},
+    {name:'Market Data',   desc:'Reload REID market data and charts'},
+    {name:'Resources',     desc:'Refresh resource list'},
+    {name:'Partners',      desc:'Refresh partner information'},
+  ];
+  document.getElementById('update-rows').innerHTML = rows.map((r,i)=>`<div class="update-row"><div class="update-row-info"><h4>${r.name}</h4><p>${r.desc}</p></div><button class="update-btn" id="ubtn-${i}" onclick="triggerUpdate(${i},'${r.name}')">🔄 Update Now</button></div>`).join('');
+}
+function triggerUpdate(i, name) {
+  const btn = document.getElementById('ubtn-'+i);
+  btn.textContent = '⏳ Updating…'; btn.classList.add('running');
+  Object.keys(localStorage).filter(k=>k.startsWith('bbc_news_')||k===`bbc_pod_cache`).forEach(k=>localStorage.removeItem(k));
+  newsLoaded = {}; podcastsLoaded = false;
+  setTimeout(()=>{ btn.textContent='✅ Updated'; btn.classList.remove('running'); setTimeout(()=>{btn.textContent='🔄 Update Now';},2000); showToast(`✅ ${name} updated`); }, 1500);
+}
 
-// Yield range (min + spread)
-makeChart('chart-yield', 'bar',
-  ['Seminyak','Canggu','Ubud','Nusa Dua','Bukit','Sanur','Tabanan'],
-  [
-    { label: 'Min Yield %', data: [8,9,7,7,10,7,5], backgroundColor: 'rgba(21,101,192,0.7)', borderWidth: 0 },
-    { label: 'Max Yield %', data: [3,5,3,2,4,2,3], backgroundColor: 'rgba(245,197,24,0.7)', borderWidth: 0 },
-  ],
-  { scales: { x: { stacked: true, ticks: { color:'#888' }, grid: { color:'rgba(255,255,255,0.06)' } }, y: { stacked: true, ticks: { color:'#888', callback: v => v+'%' }, grid: { color:'rgba(255,255,255,0.06)' } } } }
-);
+function exportCSV() {
+  const data = [['Name','Email','Phone/WA','Joined'],['Sample Member','member@example.com','+62 812 3456 7890','2024-01-15']];
+  const csv = data.map(r=>r.join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'bbc-members.csv'; a.click();
+}
+function exportXLSX() { showToast('Connect Firebase to export real member data'); }
 
-// Listing volume trend
-makeChart('chart-volume', 'line',
-  ['2022','2023','2024 H1','2024 Full','2025 Q1'],
-  [{ label: 'Active Listings', data: [7200, 9400, 10800, 11600, 12300], borderColor: '#F5C518', backgroundColor: 'rgba(245,197,24,0.1)', tension: 0.4, fill: true, pointBackgroundColor: '#F5C518' }]
-);
+function saveAdminSettings() {
+  const pass = document.getElementById('new-admin-pass').value;
+  if (pass) { localStorage.setItem('bbc_admin_pass', pass); adminPass = pass; }
+  const ytId = document.getElementById('yt-channel-id').value.trim();
+  if (ytId) { localStorage.setItem('bbc_yt_channel', ytId); podcastsLoaded = false; }
+  const interval = parseInt(document.getElementById('news-interval').value);
+  if (interval >= 15) localStorage.setItem('bbc_news_interval', interval.toString());
+  showToast('✅ Settings saved');
+}
 
-// Ownership structure
-makeChart('chart-ownership', 'doughnut',
-  ['Leasehold (HGB)','PT PMA Freehold','Individual Freehold','Nominee'],
-  [{ data: [48,28,18,6], backgroundColor: ['#1565C0','#F5C518','#2E7D32','#888'], borderWidth: 0 }]
-);
+// ═══════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded', () => {
+  updateGreeting();
+  renderMarket();
+  // Close modals on overlay click
+  document.getElementById('profile-modal').addEventListener('click', function(e){ if(e.target===this) closeProfile(); });
+});
 </script>
 </body>
 </html>
