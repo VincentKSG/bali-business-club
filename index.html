@@ -295,7 +295,19 @@ input,textarea,select{font-family:inherit}
 .tag-life{background:#1a0a1a;color:#cc88ff}
 
 @media(max-width:640px){.topbar{padding:0 14px;gap:12px}.main-nav{gap:0}.nav-tab{padding:6px 10px;font-size:12px}.page{padding:20px 14px}.shortcuts-grid{grid-template-columns:1fr 1fr}.charts-row{grid-template-columns:1fr}}
+
+/* ── LUCIDE ICONS ── */
+.ico{display:inline-flex;align-items:center;justify-content:center;width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle;flex-shrink:0}
+.nav-icon{width:15px!important;height:15px!important;margin-right:5px;vertical-align:-3px}
+.shortcut-icon{font-size:36px;margin-bottom:14px;display:flex;align-items:center;justify-content:center;color:var(--yellow)}
+.shortcut-icon i,.shortcut-icon svg{width:40px!important;height:40px!important;color:var(--yellow)}
+.section-icon i,.section-icon svg{width:20px!important;height:20px!important;color:var(--yellow)}
+.resource-icon i,.resource-icon svg{width:22px!important;height:22px!important}
+.partner-logo-fallback i,.partner-logo-fallback svg{width:40px!important;height:40px!important;color:var(--yellow)}
+.fav-item-icon i,.fav-item-icon svg{width:18px!important;height:18px!important}
+.tag-ico{width:12px!important;height:12px!important;margin-right:3px;vertical-align:-1px}
 </style>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
 <body>
 
@@ -304,17 +316,17 @@ input,textarea,select{font-family:inherit}
   <img id="bbc-logo" src="Bali-Business-Club-Logo-White.svg" class="topbar-logo" alt="Bali Business Club" onerror="this.style.display='none';document.getElementById('bbc-logo-text').style.display='block'">
   <span id="bbc-logo-text" style="display:none;font-family:var(--font-head);font-size:16px;font-weight:800;color:var(--yellow);flex-shrink:0">BBC</span>
   <nav class="main-nav">
-    <button class="nav-tab active" onclick="showPage('home')">🏠 Home</button>
-    <button class="nav-tab" onclick="showPage('market')">📊 Market Insights</button>
-    <button class="nav-tab" onclick="showPage('news')">📰 News</button>
-    <button class="nav-tab" onclick="showPage('podcasts')">🎙️ Podcasts</button>
-    <button class="nav-tab" onclick="showPage('resources')">📚 Resources</button>
-    <button class="nav-tab" onclick="showPage('partners')">🤝 Partners</button>
-    <button class="nav-tab" onclick="showPage('favorites')">⭐ Favorites</button>
-    <button class="nav-tab" onclick="showPage('connect')">🌐 Connect</button>
+    <button class="nav-tab active" onclick="showPage('home')"><i data-lucide="home" class="nav-icon"></i> Home</button>
+    <button class="nav-tab" onclick="showPage('market')"><i data-lucide="bar-chart-2" class="nav-icon"></i> Market Insights</button>
+    <button class="nav-tab" onclick="showPage('news')"><i data-lucide="newspaper" class="nav-icon"></i> News</button>
+    <button class="nav-tab" onclick="showPage('podcasts')"><i data-lucide="mic" class="nav-icon"></i> Podcasts</button>
+    <button class="nav-tab" onclick="showPage('resources')"><i data-lucide="book-open" class="nav-icon"></i> Resources</button>
+    <button class="nav-tab" onclick="showPage('partners')"><i data-lucide="handshake" class="nav-icon"></i> Partners</button>
+    <button class="nav-tab" onclick="showPage('favorites')"><i data-lucide="star" class="nav-icon"></i> Favorites</button>
+    <button class="nav-tab" onclick="showPage('connect')"><i data-lucide="globe" class="nav-icon"></i> Connect</button>
   </nav>
   <div class="topbar-right">
-    <span id="bali-time" class="bali-time"></span>
+    <span style="display:flex;align-items:center;gap:5px"><i data-lucide="clock" class="ico"></i> <span id="bali-time" class="bali-time"></span></span>
     <button class="user-btn" onclick="openProfile()" id="user-btn-el" title="Profile & Settings">V</button>
   </div>
 </header>
@@ -328,37 +340,37 @@ input,textarea,select{font-family:inherit}
   </div>
   <div class="shortcuts-grid">
     <div class="shortcut-card" onclick="showPage('market')">
-      <span class="shortcut-icon">📊</span>
+      <span class="shortcut-icon"><i data-lucide="bar-chart-2"></i></span>
       <div class="shortcut-title">Market Insights</div>
       <div class="shortcut-desc">Explore Bali real estate data powered by REID — prices, yields & opportunities</div>
     </div>
     <div class="shortcut-card" onclick="showPage('news')">
-      <span class="shortcut-icon">📰</span>
+      <span class="shortcut-icon"><i data-lucide="newspaper"></i></span>
       <div class="shortcut-title">News</div>
       <div class="shortcut-desc">Latest Bali real estate, business & lifestyle news updated hourly</div>
     </div>
     <div class="shortcut-card" onclick="showPage('podcasts')">
-      <span class="shortcut-icon">🎙️</span>
+      <span class="shortcut-icon"><i data-lucide="mic"></i></span>
       <div class="shortcut-title">Podcasts</div>
       <div class="shortcut-desc">All BBC podcast episodes from our YouTube channel</div>
     </div>
     <div class="shortcut-card" onclick="showPage('resources')">
-      <span class="shortcut-icon">📚</span>
+      <span class="shortcut-icon"><i data-lucide="book-open"></i></span>
       <div class="shortcut-title">Resources</div>
       <div class="shortcut-desc">BBC ebooks, reports & guides to navigate the Bali market</div>
     </div>
     <div class="shortcut-card" onclick="showPage('partners')">
-      <span class="shortcut-icon">🤝</span>
+      <span class="shortcut-icon"><i data-lucide="handshake"></i></span>
       <div class="shortcut-title">Partners</div>
       <div class="shortcut-desc">Exclusive discounts & deals from our trusted partner network</div>
     </div>
     <div class="shortcut-card" onclick="showPage('favorites')">
-      <span class="shortcut-icon">⭐</span>
+      <span class="shortcut-icon"><i data-lucide="star"></i></span>
       <div class="shortcut-title">Favorites</div>
       <div class="shortcut-desc">Quick access to all the content you've saved</div>
     </div>
     <div class="shortcut-card" onclick="showPage('connect')">
-      <span class="shortcut-icon">🌐</span>
+      <span class="shortcut-icon"><i data-lucide="globe"></i></span>
       <div class="shortcut-title">Connect</div>
       <div class="shortcut-desc">Follow our socials, browse Instagram posts & reach out to us</div>
     </div>
@@ -367,7 +379,7 @@ input,textarea,select{font-family:inherit}
 
 <!-- ═══════════════════ MARKET INSIGHTS ═══════════════════ -->
 <div id="page-market" class="page">
-  <div class="section-header"><span class="section-icon">📊</span><h2>Market Insights</h2></div>
+  <div class="section-header"><span class="section-icon"><i data-lucide="bar-chart-2"></i></span><h2>Market Insights</h2></div>
   <p class="page-sub">Bali real estate data powered by REID — explore opportunities by area, asset type & strategy</p>
 
   <div class="filters-bar">
@@ -438,7 +450,7 @@ input,textarea,select{font-family:inherit}
     <div class="chart-card"><h3>Transaction Volume by Area (units)</h3><canvas id="chartTxn"></canvas></div>
   </div>
 
-  <div class="section-header" style="margin-top:8px"><span class="section-icon">🗺️</span><h2>Area Profile Comparison</h2></div>
+  <div class="section-header" style="margin-top:8px"><span class="section-icon"><i data-lucide="map"></i></span><h2>Area Profile Comparison</h2></div>
   <div class="table-wrap">
     <table class="area-table" id="area-table">
       <thead><tr>
@@ -449,7 +461,7 @@ input,textarea,select{font-family:inherit}
   </div>
 
   <div class="takeaways-block">
-    <h3>✍️ BBC Market Takeaways — Q2 2024</h3>
+    <h3>BBC Market Takeaways — Q2 2024</h3>
     <div class="takeaway-item"><div class="takeaway-num">1</div><p><strong>Uluwatu is the top performer</strong> for ROI in 2024, with gross yields reaching 15%+ for well-managed luxury villas, driven by rising demand from surfers and digital nomads choosing the Bukit Peninsula over Canggu.</p></div>
     <div class="takeaway-item"><div class="takeaway-num">2</div><p><strong>Pererenan/Berawa corridor</strong> continues to see the highest transaction velocity with strong land appreciation (18-22% YoY). It's the sweet spot between Canggu's price premium and raw growth potential.</p></div>
     <div class="takeaway-item"><div class="takeaway-num">3</div><p><strong>Ubud is maturing</strong> — once seen as a budget alternative, land in the Ubud core is now IDR 5-8M/sqm. The wellness tourism boom is driving strong occupancy, particularly for eco-villa concepts.</p></div>
@@ -457,41 +469,41 @@ input,textarea,select{font-family:inherit}
     <div class="takeaway-item"><div class="takeaway-num">5</div><p><strong>Watch the regulatory landscape</strong> — Indonesia continues to discuss new pathways for foreign property ownership (Golden Visa tier 2, long-stay visa real estate). Engage a trusted legal advisor before transacting.</p></div>
   </div>
 
-  <div class="section-header"><span class="section-icon">📈</span><h2>Key Market Stats</h2></div>
+  <div class="section-header"><span class="section-icon"><i data-lucide="trending-up"></i></span><h2>Key Market Stats</h2></div>
   <p style="font-size:12px;color:var(--grey);margin-bottom:16px">Data extracted from REID Bali Property Reports 2023–2024. Always verify against the latest reports.</p>
   <div class="stats-bottom" id="stats-bottom"></div>
 </div>
 
 <!-- ═══════════════════ NEWS ═══════════════════ -->
 <div id="page-news" class="page">
-  <div class="section-header"><span class="section-icon">📰</span><h2>News</h2></div>
+  <div class="section-header"><span class="section-icon"><i data-lucide="newspaper"></i></span><h2>News</h2></div>
   <p class="page-sub">Curated news from trusted sources — updated hourly. Click any article to read the summary.</p>
 
   <div class="news-filter-tabs">
-    <button class="news-filter-tab active" onclick="switchNewsTab('re')">🏠 Bali Real Estate</button>
-    <button class="news-filter-tab" onclick="switchNewsTab('biz')">💼 Bali Business</button>
-    <button class="news-filter-tab" onclick="switchNewsTab('life')">🌴 Lifestyle & Expat</button>
+    <button class="news-filter-tab active" onclick="switchNewsTab('re')"><i data-lucide="home" class="nav-icon"></i> Bali Real Estate</button>
+    <button class="news-filter-tab" onclick="switchNewsTab('biz')"><i data-lucide="briefcase" class="nav-icon"></i> Bali Business</button>
+    <button class="news-filter-tab" onclick="switchNewsTab('life')"><i data-lucide="leaf" class="nav-icon"></i> Lifestyle & Expat</button>
   </div>
 
   <div id="news-re" class="news-cat-group active">
-    <div class="news-cat-header">🏠 Bali Real Estate</div>
+    <div class="news-cat-header"><i data-lucide="home" class="nav-icon"></i> Bali Real Estate</div>
     <div id="news-list-re" class="news-loading">Loading articles…</div>
   </div>
   <div id="news-biz" class="news-cat-group">
-    <div class="news-cat-header">💼 Bali Business</div>
+    <div class="news-cat-header"><i data-lucide="briefcase" class="nav-icon"></i> Bali Business</div>
     <div id="news-list-biz" class="news-loading">Loading articles…</div>
   </div>
   <div id="news-life" class="news-cat-group">
-    <div class="news-cat-header">🌴 Lifestyle & Expat</div>
+    <div class="news-cat-header"><i data-lucide="leaf" class="nav-icon"></i> Lifestyle & Expat</div>
     <div id="news-list-life" class="news-loading">Loading articles…</div>
   </div>
 </div>
 
 <!-- ═══════════════════ PODCASTS ═══════════════════ -->
 <div id="page-podcasts" class="page">
-  <div class="section-header"><span class="section-icon">🎙️</span><h2>Podcasts</h2></div>
+  <div class="section-header"><span class="section-icon"><i data-lucide="mic"></i></span><h2>Podcasts</h2></div>
   <p class="page-sub">All episodes from the Bali Business Club YouTube channel — auto-updated with every new release.</p>
-  <a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" class="podcast-channel-btn">▶ Subscribe on YouTube</a>
+  <a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" class="podcast-channel-btn"><i data-lucide="play" class="ico"></i> Subscribe on YouTube</a>
   <div id="podcast-grid" class="podcast-grid">
     <div class="loading-spinner">Loading episodes…</div>
   </div>
@@ -499,84 +511,84 @@ input,textarea,select{font-family:inherit}
 
 <!-- ═══════════════════ RESOURCES ═══════════════════ -->
 <div id="page-resources" class="page">
-  <div class="section-header"><span class="section-icon">📚</span><h2>Resources</h2></div>
+  <div class="section-header"><span class="section-icon"><i data-lucide="book-open"></i></span><h2>Resources</h2></div>
   <p class="page-sub">Ebooks, guides and market reports — everything you need to navigate the Bali market.</p>
 
-  <div class="section-header" style="margin-bottom:12px"><span class="section-icon">📗</span><h2 style="font-size:16px">BBC Ebooks & Guides</h2></div>
+  <div class="section-header" style="margin-bottom:12px"><span class="section-icon"><i data-lucide="book"></i></span><h2 style="font-size:16px">BBC Ebooks & Guides</h2></div>
   <div class="resource-list" id="bbc-ebooks">
     <div class="resource-item">
-      <span class="resource-icon">📗</span>
+      <span class="resource-icon"><i data-lucide="book"></i></span>
       <div class="resource-info"><div class="resource-title">The Complete Guide to Buying Property in Bali</div><div class="resource-desc">Step-by-step guide for foreigners — legal structures, due diligence, pitfalls to avoid</div></div>
       <span class="resource-ext">PDF</span>
-      <a href="https://drive.google.com/drive/folders/1lOg3Rvx1YWxAWfQGJ0X1rx0bKu3JxxGk" target="_blank" class="resource-dl-btn">⬇ Download</a>
+      <a href="https://drive.google.com/drive/folders/1lOg3Rvx1YWxAWfQGJ0X1rx0bKu3JxxGk" target="_blank" class="resource-dl-btn"><i data-lucide="download" class="ico"></i> Download</a>
     </div>
     <div class="resource-item">
-      <span class="resource-icon">📗</span>
+      <span class="resource-icon"><i data-lucide="book"></i></span>
       <div class="resource-info"><div class="resource-title">Bali Villa Investment Playbook</div><div class="resource-desc">How to analyse, buy and manage a short-term rental villa from acquisition to cash flow</div></div>
       <span class="resource-ext">PDF</span>
-      <a href="https://drive.google.com/drive/folders/1lOg3Rvx1YWxAWfQGJ0X1rx0bKu3JxxGk" target="_blank" class="resource-dl-btn">⬇ Download</a>
+      <a href="https://drive.google.com/drive/folders/1lOg3Rvx1YWxAWfQGJ0X1rx0bKu3JxxGk" target="_blank" class="resource-dl-btn"><i data-lucide="download" class="ico"></i> Download</a>
     </div>
     <div class="resource-item">
-      <span class="resource-icon">📗</span>
+      <span class="resource-icon"><i data-lucide="book"></i></span>
       <div class="resource-info"><div class="resource-title">Starting a Business in Bali — The Foreign Investor Guide</div><div class="resource-desc">PT PMA setup, business licences, banking, and operating legally in Indonesia</div></div>
       <span class="resource-ext">PDF</span>
-      <a href="https://drive.google.com/drive/folders/1lOg3Rvx1YWxAWfQGJ0X1rx0bKu3JxxGk" target="_blank" class="resource-dl-btn">⬇ Download</a>
+      <a href="https://drive.google.com/drive/folders/1lOg3Rvx1YWxAWfQGJ0X1rx0bKu3JxxGk" target="_blank" class="resource-dl-btn"><i data-lucide="download" class="ico"></i> Download</a>
     </div>
     <div class="resource-item">
-      <span class="resource-icon">📗</span>
+      <span class="resource-icon"><i data-lucide="book"></i></span>
       <div class="resource-info"><div class="resource-title">Bali Market Overview 2024</div><div class="resource-desc">BBC annual market summary — key trends, opportunities and outlook for the year ahead</div></div>
       <span class="resource-ext">PDF</span>
-      <a href="https://drive.google.com/drive/folders/1lOg3Rvx1YWxAWfQGJ0X1rx0bKu3JxxGk" target="_blank" class="resource-dl-btn">⬇ Download</a>
+      <a href="https://drive.google.com/drive/folders/1lOg3Rvx1YWxAWfQGJ0X1rx0bKu3JxxGk" target="_blank" class="resource-dl-btn"><i data-lucide="download" class="ico"></i> Download</a>
     </div>
   </div>
 
   <div class="section-divider"></div>
-  <div class="section-header" style="margin-bottom:12px"><span class="section-icon">📑</span><h2 style="font-size:16px">Third-Party Reports</h2></div>
+  <div class="section-header" style="margin-bottom:12px"><span class="section-icon"><i data-lucide="file-text"></i></span><h2 style="font-size:16px">Third-Party Reports</h2></div>
   <div class="resource-list">
     <div class="resource-item">
-      <span class="resource-icon">📑</span>
+      <span class="resource-icon"><i data-lucide="file-text"></i></span>
       <div class="resource-info"><div class="resource-title">REID Bali Property Report Q4 2023</div><div class="resource-desc">Comprehensive transaction data, price indices and area analysis by REID</div></div>
       <span class="resource-ext">PDF</span>
-      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-dl-btn">⬇ Download</a>
+      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-dl-btn"><i data-lucide="download" class="ico"></i> Download</a>
     </div>
     <div class="resource-item">
-      <span class="resource-icon">📑</span>
+      <span class="resource-icon"><i data-lucide="file-text"></i></span>
       <div class="resource-info"><div class="resource-title">REID Bali Rental Market Report 2023</div><div class="resource-desc">Short-term rental yields, occupancy rates and seasonal demand patterns</div></div>
       <span class="resource-ext">PDF</span>
-      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-dl-btn">⬇ Download</a>
+      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-dl-btn"><i data-lucide="download" class="ico"></i> Download</a>
     </div>
     <div class="resource-item">
-      <span class="resource-icon">📑</span>
+      <span class="resource-icon"><i data-lucide="file-text"></i></span>
       <div class="resource-info"><div class="resource-title">Indonesia Foreign Investment Regulations 2024</div><div class="resource-desc">Updated legal framework for foreign ownership structures, visas and business formation</div></div>
       <span class="resource-ext">PDF</span>
-      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-dl-btn">⬇ Download</a>
+      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-dl-btn"><i data-lucide="download" class="ico"></i> Download</a>
     </div>
     <div class="resource-item">
-      <span class="resource-icon">📑</span>
+      <span class="resource-icon"><i data-lucide="file-text"></i></span>
       <div class="resource-info"><div class="resource-title">Bali Tourism Outlook 2024 — BPS Statistics</div><div class="resource-desc">Official Bali government tourism arrivals, spending and forecasts for 2024</div></div>
       <span class="resource-ext">PDF</span>
-      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-dl-btn">⬇ Download</a>
+      <a href="https://drive.google.com/drive/folders/159gqNAUbLn3F3NgCCL-aa7pb5PzeD83j" target="_blank" class="resource-dl-btn"><i data-lucide="download" class="ico"></i> Download</a>
     </div>
   </div>
 </div>
 
 <!-- ═══════════════════ PARTNERS ═══════════════════ -->
 <div id="page-partners" class="page">
-  <div class="section-header"><span class="section-icon">🤝</span><h2>Partners</h2></div>
+  <div class="section-header"><span class="section-icon"><i data-lucide="handshake"></i></span><h2>Partners</h2></div>
   <p class="page-sub">Exclusive deals negotiated for BBC members. Show the discount code or your BBC membership when booking.</p>
 
   <div class="partners-grid">
     <!-- Voxpop Studio -->
     <div class="partner-card">
-      <div class="partner-logo-fallback">🎙️</div>
+      <div class="partner-logo-fallback"><i data-lucide="mic"></i></div>
       <div class="partner-info">
         <div class="partner-name">Voxpop Studio</div>
         <div class="partner-tagline">Professional Podcast & Video Production Studio, Bali</div>
         <div class="partner-desc">Bali's premier podcast and video studio — state-of-the-art equipment, professional production team, and soundproof recording spaces. Perfect for entrepreneurs, coaches and content creators.</div>
-        <div class="partner-offer">🎁 10% off podcast studio online booking</div>
+        <div class="partner-offer"> 10% off podcast studio online booking</div>
         <div class="partner-code-wrap">
           <div class="partner-code" onclick="copyCode('BBCMEMBER')">
-            <span>BBCMEMBER</span><span style="font-size:16px">📋</span>
+            <span>BBCMEMBER</span><i data-lucide="copy" class="ico"></i>
           </div>
           <div class="partner-code-hint">Click to copy discount code</div>
         </div>
@@ -586,15 +598,15 @@ input,textarea,select{font-family:inherit}
 
     <!-- Legal Legends -->
     <div class="partner-card">
-      <div class="partner-logo-fallback">⚖️</div>
+      <div class="partner-logo-fallback"><i data-lucide="scale"></i></div>
       <div class="partner-info">
         <div class="partner-name">Legal Legends Indonesia</div>
         <div class="partner-tagline">Visa, KITAS & Business Legal Services</div>
         <div class="partner-desc">Trusted legal specialists for expats and investors in Indonesia. From visa and KITAS applications to PT PMA company formation, they handle the legal complexity so you don't have to.</div>
-        <div class="partner-offer">🎁 5% discount on visa, KITAS & PT PMA creation</div>
+        <div class="partner-offer"> 5% discount on visa, KITAS & PT PMA creation</div>
         <div class="partner-code-wrap">
           <div class="partner-code" onclick="copyCode('BBC5')">
-            <span>BBC5</span><span style="font-size:16px">📋</span>
+            <span>BBC5</span><i data-lucide="copy" class="ico"></i>
           </div>
           <div class="partner-code-hint">Click to copy discount code — mention BBC at contact</div>
         </div>
@@ -604,15 +616,15 @@ input,textarea,select{font-family:inherit}
 
     <!-- Bali Accounting Legends -->
     <div class="partner-card">
-      <div class="partner-logo-fallback">📊</div>
+      <div class="partner-logo-fallback"><i data-lucide="bar-chart-2"></i></div>
       <div class="partner-info">
         <div class="partner-name">Bali Accounting Legends</div>
         <div class="partner-tagline">Accounting, Tax & Financial Consulting</div>
         <div class="partner-desc">Professional accounting and tax services tailored for foreign businesses and investors in Bali. From bookkeeping and tax compliance to financial planning and business consulting.</div>
-        <div class="partner-offer">🎁 5% discount on consulting services</div>
+        <div class="partner-offer"> 5% discount on consulting services</div>
         <div class="partner-code-wrap">
           <div class="partner-code" onclick="copyCode('BBC5')">
-            <span>BBC5</span><span style="font-size:16px">📋</span>
+            <span>BBC5</span><i data-lucide="copy" class="ico"></i>
           </div>
           <div class="partner-code-hint">Click to copy — mention BBC when contacting</div>
         </div>
@@ -639,23 +651,23 @@ input,textarea,select{font-family:inherit}
 
 <!-- ═══════════════════ FAVORITES ═══════════════════ -->
 <div id="page-favorites" class="page">
-  <div class="section-header"><span class="section-icon">⭐</span><h2>Favorites</h2></div>
+  <div class="section-header"><span class="section-icon"><i data-lucide="star"></i></span><h2>Favorites</h2></div>
   <p class="page-sub">Everything you've saved — articles, podcast episodes and resources all in one place.</p>
   <div id="favorites-container"></div>
 </div>
 
 <!-- ═══════════════════ CONNECT ═══════════════════ -->
 <div id="page-connect" class="page">
-  <div class="section-header"><span class="section-icon">🌐</span><h2>Connect with Us</h2></div>
+  <div class="section-header"><span class="section-icon"><i data-lucide="globe"></i></span><h2>Connect with Us</h2></div>
 
   <div class="connect-intro">
     <h2>Bali Business Club</h2>
     <p>We are a community built for entrepreneurs, investors and professionals who are passionate about Bali and Indonesia. Our mission is to connect, educate and empower the people shaping Bali's future through events, content and exclusive resources.</p>
     <div class="social-links">
-      <a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" class="social-btn yt">▶ YouTube</a>
+      <a href="https://www.youtube.com/@BaliBusinessClub" target="_blank" class="social-btn yt"><i data-lucide="chevron-right"></i> YouTube</a>
       <a href="https://www.instagram.com/balibusinessclub" target="_blank" class="social-btn ig">📸 Instagram</a>
       <a href="https://www.linkedin.com/company/bali-business-club" target="_blank" class="social-btn li">in LinkedIn</a>
-      <a href="https://open.spotify.com/show/balibusinessclub" target="_blank" class="social-btn sp">🎵 Spotify</a>
+      <a href="https://open.spotify.com/show/balibusinessclub" target="_blank" class="social-btn sp"><i data-lucide="music"></i> Spotify</a>
     </div>
   </div>
 
@@ -666,13 +678,13 @@ input,textarea,select{font-family:inherit}
   <p style="text-align:center;margin-bottom:28px"><a href="https://www.instagram.com/balibusinessclub" target="_blank" style="color:var(--yellow);font-size:13px;font-weight:600">View all on Instagram →</a></p>
 
   <div class="wa-block">
-    <h3>💬 Have a question?</h3>
+    <h3><i data-lucide="message-circle"></i> Have a question?</h3>
     <p>Reach us directly on WhatsApp — we're happy to help with anything</p>
-    <a href="https://wa.link/zg5xw8" target="_blank" class="wa-btn">💬 Message us on WhatsApp</a>
+    <a href="https://wa.link/zg5xw8" target="_blank" class="wa-btn"><i data-lucide="message-circle"></i> Message us on WhatsApp</a>
   </div>
 
   <div class="recommend-form">
-    <h3>🎙️ Recommend a Topic</h3>
+    <h3><i data-lucide="mic"></i> Recommend a Topic</h3>
     <p>Got a topic you'd love us to cover in a future podcast episode? Let us know!</p>
     <div class="form-row">
       <div class="form-group"><label>Your Name</label><input type="text" id="rec-name" placeholder="Your name"></div>
@@ -729,14 +741,14 @@ input,textarea,select{font-family:inherit}
 <!-- ═══════════════════ ADMIN DASHBOARD ═══════════════════ -->
 <div class="admin-wrap" id="admin-wrap">
   <div class="admin-topbar">
-    <h1>⚙️ BBC Admin Dashboard</h1>
+    <h1><i data-lucide="settings"></i> BBC Admin Dashboard</h1>
     <button class="admin-exit" onclick="closeAdmin()">✕ Exit Admin</button>
   </div>
   <nav class="admin-nav">
-    <button class="admin-tab active" onclick="showAdminPage('analytics')">📈 Analytics</button>
+    <button class="admin-tab active" onclick="showAdminPage('analytics')"><i data-lucide="trending-up"></i> Analytics</button>
     <button class="admin-tab" onclick="showAdminPage('reporting')">🔄 Reporting</button>
     <button class="admin-tab" onclick="showAdminPage('database')">👥 Database</button>
-    <button class="admin-tab" onclick="showAdminPage('settings')">⚙️ Settings</button>
+    <button class="admin-tab" onclick="showAdminPage('settings')"><i data-lucide="settings"></i> Settings</button>
   </nav>
   <div class="admin-content">
 
@@ -762,8 +774,8 @@ input,textarea,select{font-family:inherit}
     <!-- DATABASE -->
     <div id="admin-database" class="admin-page">
       <div class="firebase-notice"><p>🔥 <strong>Firebase Required:</strong> User database is stored in Firestore. Connect Firebase to view and manage members.</p></div>
-      <button class="export-btn" onclick="exportCSV()">⬇ Export as CSV</button>
-      <button class="export-btn" onclick="exportXLSX()" style="background:var(--green);margin-left:8px">⬇ Export as Excel</button>
+      <button class="export-btn" onclick="exportCSV()"><i data-lucide="download"></i> Export as CSV</button>
+      <button class="export-btn" onclick="exportXLSX()" style="background:var(--green);margin-left:8px"><i data-lucide="download"></i> Export as Excel</button>
       <div class="table-wrap">
         <table class="admin-table" id="users-table">
           <thead><tr><th>Name</th><th>Email</th><th>Phone/WA</th><th>Joined</th><th>Actions</th></tr></thead>
@@ -831,6 +843,7 @@ function showPage(page) {
   if (page === 'favorites') renderFavorites();
   if (page === 'market') renderMarket();
   if (page === 'connect') renderInstagram();
+  if(window.lucide) setTimeout(()=>lucide.createIcons(),10);
 }
 
 // ═══════════════════════════════════════════════════
@@ -841,7 +854,7 @@ function updateBaliTime() {
   const bali = new Date(now.toLocaleString('en-US', {timeZone:'Asia/Makassar'}));
   const h = bali.getHours().toString().padStart(2,'0');
   const m = bali.getMinutes().toString().padStart(2,'0');
-  document.getElementById('bali-time').textContent = `🕐 ${h}:${m} WITA`;
+  document.getElementById('bali-time').textContent = `${h}:${m} WITA`;
 }
 setInterval(updateBaliTime, 1000);
 updateBaliTime();
@@ -887,7 +900,7 @@ function saveProfile() {
   localStorage.setItem('bbc_profile', JSON.stringify(p));
   updateGreeting();
   closeProfile();
-  showToast('✅ Profile saved!');
+  showToast('Profile saved!');
 }
 function switchProfileTab(tab) {
   document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
@@ -895,7 +908,7 @@ function switchProfileTab(tab) {
   event.target.classList.add('active');
   document.getElementById('profile-' + tab).style.display = 'block';
 }
-function saveNotifications() { showToast('✅ Preferences saved!'); closeProfile(); }
+function saveNotifications() { showToast('Preferences saved!'); closeProfile(); }
 
 // ═══════════════════════════════════════════════════
 // MARKET DATA (Based on REID Bali Reports 2023-2024)
@@ -932,7 +945,7 @@ let chartsInit = false;
 function renderMarket() {
   // KPIs
   const grid = document.getElementById('kpi-grid');
-  grid.innerHTML = KPI_STATIC.map(k => `<div class="kpi-card"><div class="kpi-val">${k.val}</div><div class="kpi-label">${k.label}</div><div class="kpi-sub">${k.sub}</div><div class="kpi-change ${k.up?'up':'down'}">${k.up?'↑':'↓'} ${k.change}</div></div>`).join('');
+  grid.innerHTML = KPI_STATIC.map(k => `<div class="kpi-card"><div class="kpi-val">${k.val}</div><div class="kpi-label">${k.label}</div><div class="kpi-sub">${k.sub}</div><div class="kpi-change ${k.up?'up':'down'}">${k.up?'<i data-lucide="arrow-up"></i>':'<i data-lucide="arrow-down"></i>'} ${k.change}</div></div>`).join('');
   // Table
   const tbody = document.getElementById('area-tbody');
   tbody.innerHTML = AREA_DATA.map(a => `<tr><td><strong style="color:var(--white)">${a.name}</strong></td><td>IDR ${a.land}M</td><td>IDR ${a.villa}B</td><td><span class="badge badge-green">${a.yield}%</span></td><td><span class="badge badge-yellow">+${a.growth}%</span></td><td style="color:var(--grey)">${a.bestFor}</td><td style="color:var(--grey)">${a.ownership}</td></tr>`).join('');
@@ -954,9 +967,9 @@ function applyFilters() { showToast('Filters applied'); }
 // NEWS (RSS via rss2json.com)
 // ═══════════════════════════════════════════════════
 const NEWS_FEEDS = {
-  re:   {url:'https://news.google.com/rss/search?q=bali+real+estate+property+investment&hl=en-US&gl=US&ceid=US:en',   tag:'🏠', tagClass:'tag-re'},
-  biz:  {url:'https://news.google.com/rss/search?q=bali+business+investment+indonesia+economy&hl=en-US&gl=US&ceid=US:en', tag:'💼', tagClass:'tag-biz'},
-  life: {url:'https://news.google.com/rss/search?q=bali+expat+living+digital+nomad+lifestyle&hl=en-US&gl=US&ceid=US:en', tag:'🌴', tagClass:'tag-life'},
+  re:   {url:'https://news.google.com/rss/search?q=bali+real+estate+property+investment&hl=en-US&gl=US&ceid=US:en',   tag:'RE', tagClass:'tag-re'},
+  biz:  {url:'https://news.google.com/rss/search?q=bali+business+investment+indonesia+economy&hl=en-US&gl=US&ceid=US:en', tag:'BIZ', tagClass:'tag-biz'},
+  life: {url:'https://news.google.com/rss/search?q=bali+expat+living+digital+nomad+lifestyle&hl=en-US&gl=US&ceid=US:en', tag:'LIFE', tagClass:'tag-life'},
 };
 let newsLoaded = {};
 
@@ -1020,13 +1033,13 @@ function renderNewsItems(items, cat) {
         <div class="news-title">${title}</div>
         <div class="news-teaser">${teaser}</div>
         <div class="news-actions">
-          <span class="read-more-link">Read more ↓</span>
+          <span class="read-more-link">Read more <i data-lucide="arrow-down"></i></span>
           <button class="save-btn ${isSaved?'saved':''}" onclick="event.stopPropagation();toggleNewsFav('${favKey}','${title.replace(/'/g,"\\'")}','${link}',this)">${isSaved?'★ Saved':'☆ Save'}</button>
         </div>
       </div>
       <div class="news-expand" id="ne-${cat}-${i}">
         <div class="news-body">${body}</div>
-        <a href="${link}" target="_blank" class="news-source-link">🔗 Read full article at source →</a>
+        <a href="${link}" target="_blank" class="news-source-link"><i data-lucide="link"></i> Read full article at source →</a>
       </div>
     </div>`;
   }).join('');
@@ -1083,7 +1096,7 @@ function renderPodcastItems(items) {
     const favKey = 'pod_' + btoa(link).substring(0,20);
     return `<div class="podcast-card" onclick="window.open('${link}','_blank')">
       <div class="podcast-thumb">${thumb?`<img src="${thumb}" alt="${title}" loading="lazy">`:''}
-        <div class="play-overlay">▶</div></div>
+        <div class="play-overlay"><i data-lucide="chevron-right"></i></div></div>
       <div class="podcast-info">
         <div class="podcast-title">${title}</div>
         <div class="podcast-date">${date}</div>
@@ -1102,11 +1115,11 @@ function renderStaticPodcasts() {
     {title:'Digital Nomad Visa Update — What Changed & How to Apply',date:'18 Mar 2024',img:'',id:'dQw4w9WgXcQ'},
     {title:'Short-Term vs Long-Term Rental Strategy in Bali',date:'11 Mar 2024',img:'',id:'dQw4w9WgXcQ'},
   ];
-  grid.innerHTML = `<div style="grid-column:1/-1;background:var(--card);border:1px dashed var(--yellow);border-radius:10px;padding:16px;font-size:13px;color:var(--grey),margin-bottom:16px">⚙️ To load live YouTube episodes: go to <strong style="color:var(--white)">Admin → Settings</strong> and enter your YouTube Channel ID.</div>` +
+  grid.innerHTML = `<div style="grid-column:1/-1;background:var(--card);border:1px dashed var(--yellow);border-radius:10px;padding:16px;font-size:13px;color:var(--grey);margin-bottom:16px"><i data-lucide="settings"></i> To load live YouTube episodes: go to <strong style="color:var(--white)">Admin → Settings</strong> and enter your YouTube Channel ID.</div>` +
     episodes.map(ep => `<div class="podcast-card" onclick="window.open('https://youtube.com/watch?v=${ep.id}','_blank')">
       <div class="podcast-thumb" style="background:linear-gradient(135deg,#1a0000,#330000)">
-        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:32px">🎙️</div>
-        <div class="play-overlay">▶</div></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:32px"><i data-lucide="mic"></i></div>
+        <div class="play-overlay"><i data-lucide="chevron-right"></i></div></div>
       <div class="podcast-info"><div class="podcast-title">${ep.title}</div><div class="podcast-date">${ep.date}</div></div>
     </div>`).join('');
 }
@@ -1118,11 +1131,11 @@ function renderInstagram() {
   const grid = document.getElementById('insta-grid');
   if (grid.innerHTML.trim()) return;
   const posts = [
-    {img:'https://picsum.photos/seed/bbc1/400/400',cap:'🌴 Bali real estate market update — Q2 2024'},
-    {img:'https://picsum.photos/seed/bbc2/400/400',cap:'💡 BBC Member event recap — networking in Canggu'},
-    {img:'https://picsum.photos/seed/bbc3/400/400',cap:'🎙️ New podcast episode live now'},
-    {img:'https://picsum.photos/seed/bbc4/400/400',cap:'📊 Property price insights from our latest report'},
-    {img:'https://picsum.photos/seed/bbc5/400/400',cap:'🤝 Partner spotlight — Legal Legends Indonesia'},
+    {img:'https://picsum.photos/seed/bbc1/400/400',cap:'<i data-lucide="leaf"></i> Bali real estate market update — Q2 2024'},
+    {img:'https://picsum.photos/seed/bbc2/400/400',cap:'<i data-lucide="lightbulb"></i> BBC Member event recap — networking in Canggu'},
+    {img:'https://picsum.photos/seed/bbc3/400/400',cap:'<i data-lucide="mic"></i> New podcast episode live now'},
+    {img:'https://picsum.photos/seed/bbc4/400/400',cap:'<i data-lucide="bar-chart-2"></i> Property price insights from our latest report'},
+    {img:'https://picsum.photos/seed/bbc5/400/400',cap:'<i data-lucide="handshake"></i> Partner spotlight — Legal Legends Indonesia'},
     {img:'https://picsum.photos/seed/bbc6/400/400',cap:'🌊 Why Uluwatu is the top investment area in 2024'},
   ];
   grid.innerHTML = `<div style="grid-column:1/-1;background:var(--card);border:1px dashed var(--border);border-radius:8px;padding:12px;font-size:12px;color:var(--grey);margin-bottom:4px">📸 Live Instagram posts require the Instagram Basic Display API. Posts below are placeholders — <a href="https://www.instagram.com/balibusinessclub" target="_blank" style="color:var(--yellow)">view live on Instagram →</a></div>` +
@@ -1155,21 +1168,21 @@ function renderFavorites() {
   const container = document.getElementById('favorites-container');
   const keys = Object.keys(favs);
   if (keys.length === 0) {
-    container.innerHTML = `<div class="fav-empty"><div class="fav-empty-icon">⭐</div><p>Nothing saved yet.<br>Save news articles by clicking <strong>☆ Save</strong> on any article.</p></div>`;
+    container.innerHTML = `<div class="fav-empty"><div class="fav-empty-icon"><i data-lucide="star"></i></div><p>Nothing saved yet.<br>Save news articles by clicking <strong>☆ Save</strong> on any article.</p></div>`;
     return;
   }
   const byType = {};
   keys.forEach(k => { const f = favs[k]; if(!byType[f.type]) byType[f.type]={}; byType[f.type][k]=f; });
-  const icons = {news:'📰', podcast:'🎙️', resource:'📚'};
+  const icons = {news:'News', podcast:'Podcast', resource:'Resource'};
   const titles = {news:'Saved Articles', podcast:'Saved Episodes', resource:'Saved Resources'};
   container.innerHTML = Object.keys(byType).map(type => {
     const items = byType[type];
-    return `<div class="fav-section"><div class="fav-section-title">${icons[type]||'⭐'} ${titles[type]||type}</div>` +
+    return `<div class="fav-section"><div class="fav-section-title">${icons[type]||'<i data-lucide="star"></i>'} ${titles[type]||type}</div>` +
       Object.keys(items).map(k => {
         const f = items[k];
         const date = new Date(f.saved).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
         return `<div class="fav-item">
-          <div class="fav-item-left"><span class="fav-item-icon">${icons[type]||'⭐'}</span><div><div class="fav-item-title">${f.title}</div><div class="fav-item-meta">Saved ${date}</div></div></div>
+          <div class="fav-item-left"><span class="fav-item-icon">${icons[type]||'<i data-lucide="star"></i>'}</span><div><div class="fav-item-title">${f.title}</div><div class="fav-item-meta">Saved ${date}</div></div></div>
           <div style="display:flex;align-items:center;gap:10px">
             ${f.url?`<a href="${f.url}" target="_blank" style="font-size:12px;color:var(--blue2)">Open →</a>`:''}
             <span class="remove-fav" onclick="removeFav('${k}')">✕</span>
@@ -1193,18 +1206,18 @@ function submitPartnerForm() {
   const co = document.getElementById('p-company').value.trim();
   const wa = document.getElementById('p-wa').value.trim();
   const offer = document.getElementById('p-offer').value.trim();
-  if (!co || !wa || !offer) { showToast('⚠️ Please fill in all required fields'); return; }
-  showToast('✅ Request submitted! We'll be in touch on WhatsApp.');
+  if (!co || !wa || !offer) { showToast('Please fill in all required fields'); return; }
+  showToast(' Request submitted! We'll be in touch on WhatsApp.');
   document.getElementById('p-company').value=''; document.getElementById('p-wa').value=''; document.getElementById('p-offer').value='';
 }
 function submitRecommendation() {
   const topic = document.getElementById('rec-topic').value.trim();
-  if (!topic) { showToast('⚠️ Please enter a topic suggestion'); return; }
-  showToast('🎙️ Thanks! We'll consider it for a future episode.');
+  if (!topic) { showToast('Please enter a topic suggestion'); return; }
+  showToast('<i data-lucide="mic"></i> Thanks! We'll consider it for a future episode.');
   document.getElementById('rec-topic').value='';
 }
 function copyCode(code) {
-  navigator.clipboard.writeText(code).then(() => showToast(`📋 Code "${code}" copied!`)).catch(()=>showToast(`Code: ${code}`));
+  navigator.clipboard.writeText(code).then(() => showToast(`<i data-lucide="copy"></i> Code "${code}" copied!`)).catch(()=>showToast(`Code: ${code}`));
 }
 
 // ═══════════════════════════════════════════════════
@@ -1222,7 +1235,7 @@ function checkAdminPass() {
     initAdminCharts();
     populateUpdateRows();
   } else {
-    showToast('⚠️ Incorrect password');
+    showToast('Incorrect password');
     document.getElementById('admin-pass-input').value = '';
   }
 }
@@ -1256,7 +1269,7 @@ function triggerUpdate(i, name) {
   btn.textContent = '⏳ Updating…'; btn.classList.add('running');
   Object.keys(localStorage).filter(k=>k.startsWith('bbc_news_')||k===`bbc_pod_cache`).forEach(k=>localStorage.removeItem(k));
   newsLoaded = {}; podcastsLoaded = false;
-  setTimeout(()=>{ btn.textContent='✅ Updated'; btn.classList.remove('running'); setTimeout(()=>{btn.textContent='🔄 Update Now';},2000); showToast(`✅ ${name} updated`); }, 1500);
+  setTimeout(()=>{ btn.textContent='Updated'; btn.classList.remove('running'); setTimeout(()=>{btn.textContent='🔄 Update Now';},2000); showToast(` ${name} updated`); }, 1500);
 }
 
 function exportCSV() {
@@ -1274,7 +1287,7 @@ function saveAdminSettings() {
   if (ytId) { localStorage.setItem('bbc_yt_channel', ytId); podcastsLoaded = false; }
   const interval = parseInt(document.getElementById('news-interval').value);
   if (interval >= 15) localStorage.setItem('bbc_news_interval', interval.toString());
-  showToast('✅ Settings saved');
+  showToast('Settings saved');
 }
 
 // ═══════════════════════════════════════════════════
@@ -1296,5 +1309,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('profile-modal').addEventListener('click', function(e){ if(e.target===this) closeProfile(); });
 });
 </script>
+
+<script>document.addEventListener("DOMContentLoaded",()=>{if(window.lucide)lucide.createIcons();});</script>
 </body>
 </html>
